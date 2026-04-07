@@ -1,0 +1,20 @@
+[package]
+name = "engram-ui"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[lib]
+path = "src/ui.rs"
+
+[dependencies]
+anyhow.workspace = true
+engram-theme.workspace = true
+gpui.workspace = true
+rust-embed.workspace = true
+smallvec.workspace = true
+strum.workspace = true
+unicode-segmentation.workspace = true
+
+[dev-dependencies]
+gpui = { workspace = true, features = ["test-support"] }

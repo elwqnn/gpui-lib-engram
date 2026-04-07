@@ -1,0 +1,11 @@
+[package]
+name = "engram-theme"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[lib]
+path = "src/theme.rs"
+
+[dependencies]
+gpui.workspace = true

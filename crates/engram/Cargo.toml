@@ -1,0 +1,20 @@
+[package]
+name = "engram"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[lib]
+path = "src/engram.rs"
+
+[dependencies]
+engram-theme.workspace = true
+engram-ui.workspace = true
+gpui.workspace = true
+
+[dev-dependencies]
+gpui_platform.workspace = true
+
+[[example]]
+name = "showcase"
+path = "examples/showcase.rs"
