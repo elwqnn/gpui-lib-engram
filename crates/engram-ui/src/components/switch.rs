@@ -6,12 +6,12 @@
 
 use std::rc::Rc;
 
-use engram_theme::{ActiveTheme, Color, Spacing, TextSize};
+use engram_theme::{ActiveTheme, Color, Spacing};
 use gpui::{
     App, ElementId, IntoElement, RenderOnce, SharedString, Window, div, prelude::*, px,
 };
 
-use crate::components::label::Label;
+use crate::components::label::{Label, LabelCommon, LabelSize};
 use crate::components::stack::h_flex;
 use crate::traits::{Disableable, ToggleHandler, ToggleState, Toggleable};
 
@@ -117,7 +117,7 @@ impl RenderOnce for Switch {
             .when(!self.disabled, |this| this.cursor_pointer())
             .child(switch)
             .when_some(self.label, |this, label| {
-                this.child(Label::new(label).size(TextSize::Small).color(label_color))
+                this.child(Label::new(label).size(LabelSize::Small).color(label_color))
             })
             .when_some(
                 (!self.disabled).then_some(self.on_click).flatten(),

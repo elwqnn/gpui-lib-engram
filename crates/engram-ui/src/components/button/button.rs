@@ -6,7 +6,7 @@
 //! label/icon to draw and applies the size-derived padding before handing
 //! the assembled child off to ButtonLike.
 
-use engram_theme::{Color, Spacing, TextSize};
+use engram_theme::{Color, Spacing};
 use gpui::{
     AnyView, App, ClickEvent, CursorStyle, ElementId, FocusHandle, IntoElement, ParentElement,
     RenderOnce, SharedString, Styled, Window, prelude::FluentBuilder,
@@ -16,7 +16,7 @@ use crate::components::button::button_like::{
     ButtonCommon, ButtonLike, ButtonSize, ButtonStyle, SelectableButton,
 };
 use crate::components::icon::{Icon, IconName, IconSize};
-use crate::components::label::Label;
+use crate::components::label::{Label, LabelCommon, LabelSize};
 use crate::components::stack::h_flex;
 use crate::styles::ElevationIndex;
 use crate::traits::{Clickable, Disableable, ToggleState, Toggleable};
@@ -151,11 +151,11 @@ fn padding_for(size: ButtonSize) -> (Spacing, Spacing) {
     }
 }
 
-fn text_size_for(size: ButtonSize) -> TextSize {
+fn text_size_for(size: ButtonSize) -> LabelSize {
     match size {
-        ButtonSize::Compact => TextSize::Small,
-        ButtonSize::Default => TextSize::Default,
-        ButtonSize::Large => TextSize::Large,
+        ButtonSize::Compact => LabelSize::Small,
+        ButtonSize::Default => LabelSize::Default,
+        ButtonSize::Large => LabelSize::Large,
     }
 }
 

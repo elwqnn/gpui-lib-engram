@@ -24,7 +24,7 @@ use gpui::{
 use smallvec::SmallVec;
 
 use crate::components::icon::{Icon, IconName, IconSize};
-use crate::components::label::Label;
+use crate::components::label::{Label, LabelCommon};
 use crate::components::stack::h_flex;
 use crate::traits::{ClickHandler, Disableable, ToggleState, Toggleable};
 

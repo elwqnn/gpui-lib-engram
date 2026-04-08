@@ -8,14 +8,14 @@
 
 use std::rc::Rc;
 
-use engram_theme::{ActiveTheme, Color, Radius, Spacing, TextSize};
+use engram_theme::{ActiveTheme, Color, Radius, Spacing};
 use gpui::{
     AnyElement, AnyView, App, ClickEvent, CursorStyle, ElementId, IntoElement, ParentElement,
     RenderOnce, SharedString, Window, div, prelude::*,
 };
 use smallvec::SmallVec;
 
-use crate::components::label::Label;
+use crate::components::label::{Label, LabelCommon, LabelSize};
 use crate::components::stack::{h_flex, v_flex};
 use crate::traits::{ClickHandler, Clickable, Disableable, ToggleState, Toggleable};
 
@@ -203,7 +203,7 @@ impl RenderOnce for List {
                 this.child(
                     div().px(Spacing::Medium.pixels()).py(Spacing::XSmall.pixels()).child(
                         Label::new(header)
-                            .size(TextSize::Small)
+                            .size(LabelSize::Small)
                             .color(Color::Muted),
                     ),
                 )
@@ -213,7 +213,7 @@ impl RenderOnce for List {
                     this.child(
                         div().px(Spacing::Medium.pixels()).py(Spacing::Small.pixels()).child(
                             Label::new(self.empty_message)
-                                .size(TextSize::Small)
+                                .size(LabelSize::Small)
                                 .color(Color::Muted),
                         ),
                     )

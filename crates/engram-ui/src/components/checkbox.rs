@@ -3,13 +3,13 @@
 
 use std::rc::Rc;
 
-use engram_theme::{ActiveTheme, Color, Radius, Spacing, TextSize};
+use engram_theme::{ActiveTheme, Color, Radius, Spacing};
 use gpui::{
     App, ElementId, IntoElement, RenderOnce, SharedString, Window, div, prelude::*, px,
 };
 
 use crate::components::icon::{Icon, IconName, IconSize};
-use crate::components::label::Label;
+use crate::components::label::{Label, LabelCommon, LabelSize};
 use crate::components::stack::h_flex;
 use crate::traits::{Disableable, ToggleHandler, ToggleState, Toggleable};
 
@@ -39,11 +39,11 @@ impl CheckboxSize {
         }
     }
 
-    const fn label_size(self) -> TextSize {
+    const fn label_size(self) -> LabelSize {
         match self {
-            Self::Small => TextSize::Small,
-            Self::Default => TextSize::Default,
-            Self::Large => TextSize::Large,
+            Self::Small => LabelSize::Small,
+            Self::Default => LabelSize::Default,
+            Self::Large => LabelSize::Large,
         }
     }
 }

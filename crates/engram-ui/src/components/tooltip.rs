@@ -10,13 +10,13 @@
 //!   so call sites can write `.tooltip(Tooltip::text("Save"))` without
 //!   wiring up a `cx.new(...)` every time.
 
-use engram_theme::{ActiveTheme, Color, Radius, Spacing, TextSize};
+use engram_theme::{ActiveTheme, Color, Radius, Spacing};
 use gpui::{
     AnyView, App, Context, IntoElement, ParentElement, Render, SharedString, Styled, Window, div,
     prelude::*,
 };
 
-use crate::components::label::Label;
+use crate::components::label::{Label, LabelCommon, LabelSize};
 use crate::components::stack::v_flex;
 
 /// An elevated hover card with a title and optional metadata line.
@@ -76,11 +76,11 @@ impl Render for Tooltip {
                 .bg(colors.elevated_surface_background)
                 .border_1()
                 .border_color(colors.border)
-                .child(Label::new(self.title.clone()).size(TextSize::Small))
+                .child(Label::new(self.title.clone()).size(LabelSize::Small))
                 .when_some(self.meta.clone(), |this, meta| {
                     this.child(
                         Label::new(meta)
-                            .size(TextSize::XSmall)
+                            .size(LabelSize::XSmall)
                             .color(Color::Muted),
                     )
                 }),

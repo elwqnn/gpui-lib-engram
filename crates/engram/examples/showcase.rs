@@ -205,8 +205,8 @@ impl Render for Showcase {
                     .items_center()
                     .justify_between()
                     .child(
-                        Label::new("engram showcase")
-                            .size(TextSize::Large),
+                        Headline::new("engram showcase")
+                            .size(HeadlineSize::Medium),
                     )
                     .child(
                         Button::new(
@@ -220,15 +220,14 @@ impl Render for Showcase {
             )
             // -------------------- Typography --------------------
             .child(section(
-                "Typography",
+                "Label sizes",
                 h_flex()
                     .gap(Spacing::Large.pixels())
                     .items_baseline()
-                    .child(Label::new("XSmall").size(TextSize::XSmall))
-                    .child(Label::new("Small").size(TextSize::Small))
+                    .child(Label::new("XSmall").size(LabelSize::XSmall))
+                    .child(Label::new("Small").size(LabelSize::Small))
                     .child(Label::new("Default"))
-                    .child(Label::new("Large").size(TextSize::Large))
-                    .child(Label::new("XLarge").size(TextSize::XLarge)),
+                    .child(Label::new("Large").size(LabelSize::Large)),
             ))
             .child(section(
                 "Label colors",
@@ -241,6 +240,27 @@ impl Render for Showcase {
                     .child(Label::new("Warning").color(Color::Warning))
                     .child(Label::new("Error").color(Color::Error))
                     .child(Label::new("Disabled").color(Color::Disabled)),
+            ))
+            .child(section(
+                "Label modifiers",
+                h_flex()
+                    .gap(Spacing::Large.pixels())
+                    .items_baseline()
+                    .child(Label::new("Bold").weight(gpui::FontWeight::BOLD))
+                    .child(Label::new("Italic").italic())
+                    .child(Label::new("Underline").underline())
+                    .child(Label::new("Strikethrough").strikethrough())
+                    .child(Label::new("Faded 50%").alpha(0.5)),
+            ))
+            .child(section(
+                "Headline sizes",
+                v_flex()
+                    .gap(Spacing::XSmall.pixels())
+                    .child(Headline::new("XSmall headline").size(HeadlineSize::XSmall))
+                    .child(Headline::new("Small headline").size(HeadlineSize::Small))
+                    .child(Headline::new("Medium headline (default)"))
+                    .child(Headline::new("Large headline").size(HeadlineSize::Large))
+                    .child(Headline::new("XLarge headline").size(HeadlineSize::XLarge)),
             ))
             // -------------------- Icons --------------------
             .child(section(
@@ -814,7 +834,7 @@ impl Render for Showcase {
                         } else {
                             format!("Last submitted: {}", self.submitted_value).into()
                         })
-                        .size(TextSize::Small)
+                        .size(LabelSize::Small)
                         .color(Color::Muted),
                     ),
             ))
@@ -923,7 +943,7 @@ fn section(title: &'static str, body: impl IntoElement) -> impl IntoElement {
         .gap(Spacing::Small.pixels())
         .child(
             Label::new(title)
-                .size(TextSize::Small)
+                .size(LabelSize::Small)
                 .color(Color::Muted),
         )
         .child(body)

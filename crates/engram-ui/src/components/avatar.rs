@@ -11,7 +11,7 @@
 //! - [`CountBadge`]: a numeric badge that styles small counts ("3") and
 //!   caps large ones at "99+".
 
-use engram_theme::{ActiveTheme, Color, Radius, Spacing, TextSize};
+use engram_theme::{ActiveTheme, Color, Radius, Spacing};
 use gpui::{
     App, Hsla, ImageSource, IntoElement, ParentElement, Pixels, RenderOnce, SharedString, Window,
     div, hsla, prelude::*, px,
@@ -19,7 +19,7 @@ use gpui::{
 use smallvec::SmallVec;
 
 use crate::components::image::Image;
-use crate::components::label::Label;
+use crate::components::label::{Label, LabelCommon, LabelSize};
 use crate::components::stack::h_flex;
 
 // -------------------- Avatar --------------------
@@ -42,11 +42,11 @@ impl AvatarSize {
         }
     }
 
-    fn text_size(self) -> TextSize {
+    fn text_size(self) -> LabelSize {
         match self {
-            Self::Small => TextSize::XSmall,
-            Self::Medium => TextSize::Small,
-            Self::Large => TextSize::Default,
+            Self::Small => LabelSize::XSmall,
+            Self::Medium => LabelSize::Small,
+            Self::Large => LabelSize::Default,
         }
     }
 }
@@ -246,7 +246,7 @@ impl RenderOnce for Chip {
             .bg(bg)
             .child(
                 Label::new(self.label)
-                    .size(TextSize::XSmall)
+                    .size(LabelSize::XSmall)
                     .color(label_color),
             )
     }
@@ -287,7 +287,7 @@ impl RenderOnce for CountBadge {
             .justify_center()
             .child(
                 Label::new(label)
-                    .size(TextSize::XSmall)
+                    .size(LabelSize::XSmall)
                     .color(Color::Custom(hsla(0.0, 0.0, 1.0, 1.0))),
             )
     }

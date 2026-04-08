@@ -26,13 +26,13 @@
 
 use std::cell::RefCell;
 
-use engram_theme::{self, Radius, Spacing, TextSize};
+use engram_theme::{self, Radius, Spacing};
 use engram_ui::components::{
     Avatar, AvatarSize, Banner, Button, ButtonCommon, ButtonStyle, Checkbox, CheckboxSize, Chip,
-    ChipStyle, CountBadge, Disclosure, Divider, Facepile, Icon, IconButton, IconName, IconSize,
-    Image, Indicator, KeyBinding, Label, List, ListItem, Menu, Modal, Notification, Popover,
-    Scrollbar, Severity, Switch, Tab, TabBar, TextField, TintColor, Tooltip, anchored_popover,
-    h_flex, modal_overlay, v_flex,
+    ChipStyle, CountBadge, Disclosure, Divider, Facepile, Headline, HeadlineSize, Icon,
+    IconButton, IconName, IconSize, Image, Indicator, KeyBinding, Label, LabelCommon, LabelSize,
+    List, ListItem, Menu, Modal, Notification, Popover, Scrollbar, Severity, Switch, Tab, TabBar,
+    TextField, TintColor, Tooltip, anchored_popover, h_flex, modal_overlay, v_flex,
 };
 use engram_ui::traits::{Clickable, Disableable, StyledExt, ToggleState, Toggleable};
 use gpui::{
@@ -447,12 +447,47 @@ fn labels_take_every_size_and_color(cx: &mut TestAppContext) {
     smoke(cx, |_, _| {
         v_flex()
             .gap(Spacing::XXSmall.pixels())
-            .child(Label::new("XSmall").size(TextSize::XSmall))
-            .child(Label::new("Small").size(TextSize::Small))
-            .child(Label::new("Default").size(TextSize::Default))
-            .child(Label::new("Large").size(TextSize::Large))
+            .child(Label::new("XSmall").size(LabelSize::XSmall))
+            .child(Label::new("Small").size(LabelSize::Small))
+            .child(Label::new("Default").size(LabelSize::Default))
+            .child(Label::new("Large").size(LabelSize::Large))
             .child(Label::new("muted").color(engram_theme::Color::Muted))
             .child(Label::new("accent").color(engram_theme::Color::Accent))
+            .into_any_element()
+    });
+}
+
+#[gpui::test]
+fn label_modifiers_compose(cx: &mut TestAppContext) {
+    // Phase 5 acceptance: italic + underline + truncate must compose
+    // through `LabelCommon` without any "the chain returned a different
+    // type" surprises. We also exercise alpha + strikethrough + single_line
+    // so a future refactor that drops a builder method gets caught here.
+    smoke(cx, |_, _| {
+        v_flex()
+            .gap(Spacing::XXSmall.pixels())
+            .child(
+                Label::new("very long label that should be truncated to an ellipsis")
+                    .italic()
+                    .underline()
+                    .truncate(),
+            )
+            .child(Label::new("Discounted").strikethrough().alpha(0.5))
+            .child(Label::new("Line A\nLine B\nLine C").single_line())
+            .into_any_element()
+    });
+}
+
+#[gpui::test]
+fn headline_renders_every_size(cx: &mut TestAppContext) {
+    smoke(cx, |_, _| {
+        v_flex()
+            .gap(Spacing::XSmall.pixels())
+            .child(Headline::new("XSmall").size(HeadlineSize::XSmall))
+            .child(Headline::new("Small").size(HeadlineSize::Small))
+            .child(Headline::new("Medium"))
+            .child(Headline::new("Large").size(HeadlineSize::Large))
+            .child(Headline::new("XLarge").size(HeadlineSize::XLarge))
             .into_any_element()
     });
 }

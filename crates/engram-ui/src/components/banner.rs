@@ -7,7 +7,7 @@
 
 use std::rc::Rc;
 
-use engram_theme::{ActiveTheme, Color, Radius, Spacing, TextSize};
+use engram_theme::{ActiveTheme, Color, Radius, Spacing};
 use gpui::{
     AnyElement, App, ClickEvent, IntoElement, ParentElement, RenderOnce, SharedString, Window,
     div, prelude::*, px,
@@ -15,7 +15,7 @@ use gpui::{
 use smallvec::SmallVec;
 
 use crate::components::icon::{Icon, IconName, IconSize};
-use crate::components::label::Label;
+use crate::components::label::{Label, LabelCommon, LabelSize};
 use crate::components::stack::{h_flex, v_flex};
 use crate::styles::ElevationIndex;
 use crate::traits::ClickHandler;
@@ -135,7 +135,7 @@ impl RenderOnce for Banner {
                         this.child(
                             div().pl(description_indent).child(
                                 Label::new(desc)
-                                    .size(TextSize::Small)
+                                    .size(LabelSize::Small)
                                     .color(Color::Muted),
                             ),
                         )
@@ -229,7 +229,7 @@ impl RenderOnce for Notification {
                         this.child(
                             div().pl(description_indent).child(
                                 Label::new(desc)
-                                    .size(TextSize::Small)
+                                    .size(LabelSize::Small)
                                     .color(Color::Muted),
                             ),
                         )

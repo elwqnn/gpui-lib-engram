@@ -15,7 +15,7 @@
 
 use std::rc::Rc;
 
-use engram_theme::{ActiveTheme, Color, Spacing, TextSize};
+use engram_theme::{ActiveTheme, Color, Spacing};
 use gpui::{
     AnyElement, App, ClickEvent, ElementId, IntoElement, ParentElement, RenderOnce,
     SharedString, Window, div, prelude::*, px,
@@ -24,7 +24,7 @@ use smallvec::SmallVec;
 
 use crate::components::icon::{Icon, IconName, IconSize};
 use crate::components::keybinding::KeyBinding;
-use crate::components::label::Label;
+use crate::components::label::{Label, LabelCommon, LabelSize};
 use crate::components::popover::Popover;
 use crate::components::stack::{h_flex, v_flex};
 use crate::traits::ClickHandler;
@@ -188,7 +188,7 @@ impl RenderOnce for Menu {
                     .pb(px(2.0))
                     .child(
                         Label::new(text)
-                            .size(TextSize::XSmall)
+                            .size(LabelSize::XSmall)
                             .color(Color::Muted),
                     )
                     .into_any_element(),

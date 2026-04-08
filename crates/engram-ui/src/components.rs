@@ -35,7 +35,7 @@ pub use icon::{Icon, IconName, IconSize};
 pub use image::Image;
 pub use indicator::Indicator;
 pub use keybinding::KeyBinding;
-pub use label::Label;
+pub use label::{Headline, HeadlineSize, Label, LabelCommon, LabelLike, LabelSize, LineHeightStyle};
 pub use list::{List, ListItem};
 pub use menu::{Menu, MenuItem};
 pub use modal::{Modal, modal_overlay};

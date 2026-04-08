@@ -33,14 +33,14 @@
 
 use std::rc::Rc;
 
-use engram_theme::{ActiveTheme, Radius, Spacing, TextSize};
+use engram_theme::{ActiveTheme, Radius, Spacing};
 use gpui::{
     AnyElement, App, FocusHandle, Hsla, IntoElement, MouseButton, ParentElement, Pixels,
     RenderOnce, SharedString, Window, deferred, div, hsla, prelude::*, px,
 };
 use smallvec::SmallVec;
 
-use crate::components::label::Label;
+use crate::components::label::{Label, LabelCommon, LabelSize};
 use crate::components::stack::v_flex;
 use crate::styles::ElevationIndex;
 use crate::traits::DismissHandler;
@@ -109,7 +109,7 @@ impl RenderOnce for Modal {
             .bg(colors.elevated_surface_background)
             .shadow(ElevationIndex::ModalSurface.shadow(cx))
             .when_some(self.title, |this, title| {
-                this.child(Label::new(title).size(TextSize::Large))
+                this.child(Label::new(title).size(LabelSize::Large))
             })
             .child(div().flex().flex_col().gap(Spacing::Small.pixels()).children(self.children))
             .when_some(self.footer, |this, footer| this.child(footer))
