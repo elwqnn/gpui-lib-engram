@@ -20,7 +20,7 @@
 
 use std::rc::Rc;
 
-use gpui::{App, ClickEvent, Window};
+use gpui::{App, ClickEvent, MouseDownEvent, Window};
 
 use crate::traits::ToggleState;
 
@@ -40,3 +40,13 @@ pub type ToggleHandler = Rc<dyn Fn(&ToggleState, &mut Window, &mut App) + 'stati
 /// No event payload — it's called from both mouse (backdrop click) and
 /// keyboard (Escape) paths, so there's no single meaningful event.
 pub type DismissHandler = Rc<dyn Fn(&mut Window, &mut App) + 'static>;
+
+/// Handler fired on the mouse hover-enter and hover-leave events. The
+/// boolean payload is `true` when the cursor enters and `false` when it
+/// leaves — matches gpui's `Div::on_hover` shape.
+pub type HoverHandler = Rc<dyn Fn(&bool, &mut Window, &mut App) + 'static>;
+
+/// Handler fired on a raw mouse-down event. Used by list items to bind
+/// secondary (right-click) actions where a richer event payload than
+/// [`ClickHandler`] is needed.
+pub type MouseDownHandler = Rc<dyn Fn(&MouseDownEvent, &mut Window, &mut App) + 'static>;

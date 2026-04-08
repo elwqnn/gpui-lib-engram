@@ -495,6 +495,64 @@ impl Render for Showcase {
                     .w(px(280.0))
                     .child(List::new().header("Recent").empty_message("No recent items")),
             ))
+            // -------------------- Tree list (Phase 8 fields) --------------------
+            .child(section(
+                "Tree list (indent_level + spacing + inset)",
+                v_flex().w(px(320.0)).child(
+                    List::new()
+                        .header("Project")
+                        .child(
+                            ListItem::new("tree-src")
+                                .spacing(ListItemSpacing::Dense)
+                                .inset(true)
+                                .indent_level(0)
+                                .start_slot(Icon::new(IconName::Folder))
+                                .child(Label::new("src")),
+                        )
+                        .child(
+                            ListItem::new("tree-src-main")
+                                .spacing(ListItemSpacing::Dense)
+                                .inset(true)
+                                .indent_level(1)
+                                .start_slot(Icon::new(IconName::File))
+                                .child(Label::new("main.rs")),
+                        )
+                        .child(
+                            ListItem::new("tree-src-lib")
+                                .spacing(ListItemSpacing::Dense)
+                                .inset(true)
+                                .indent_level(1)
+                                .start_slot(Icon::new(IconName::Folder))
+                                .child(Label::new("lib")),
+                        )
+                        .child(
+                            ListItem::new("tree-src-lib-mod")
+                                .spacing(ListItemSpacing::Dense)
+                                .inset(true)
+                                .indent_level(2)
+                                .start_slot(Icon::new(IconName::File))
+                                .child(Label::new("mod.rs"))
+                                .end_slot(Icon::new(IconName::Trash))
+                                .show_end_slot_on_hover(),
+                        )
+                        .child(
+                            ListItem::new("tree-src-lib-utils")
+                                .spacing(ListItemSpacing::Dense)
+                                .inset(true)
+                                .indent_level(2)
+                                .start_slot(Icon::new(IconName::File))
+                                .child(Label::new("utils.rs")),
+                        )
+                        .child(
+                            ListItem::new("tree-cargo")
+                                .spacing(ListItemSpacing::Dense)
+                                .inset(true)
+                                .indent_level(0)
+                                .start_slot(Icon::new(IconName::File))
+                                .child(Label::new("Cargo.toml")),
+                        ),
+                ),
+            ))
             .child(Divider::horizontal())
             // -------------------- Indicators --------------------
             .child(section(

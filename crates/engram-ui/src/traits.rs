@@ -33,6 +33,8 @@ mod toggleable;
 
 pub use clickable::Clickable;
 pub use disableable::Disableable;
-pub use handlers::{ClickHandler, DismissHandler, StringHandler, ToggleHandler};
+pub use handlers::{
+    ClickHandler, DismissHandler, HoverHandler, MouseDownHandler, StringHandler, ToggleHandler,
+};
 pub use styled_ext::StyledExt;
 pub use toggleable::{ToggleState, Toggleable};

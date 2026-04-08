@@ -31,8 +31,9 @@ use engram_ui::components::{
     Avatar, AvatarSize, Banner, Button, ButtonCommon, ButtonStyle, Checkbox, CheckboxSize, Chip,
     ChipStyle, CountBadge, Disclosure, Divider, Facepile, Headline, HeadlineSize, Icon,
     IconButton, IconName, IconSize, IconSource, Image, Indicator, KeyBinding, Label, LabelCommon,
-    LabelSize, List, ListItem, Menu, Modal, Notification, Popover, Scrollbar, Severity, Switch,
-    Tab, TabBar, TextField, TintColor, Tooltip, anchored_popover, h_flex, modal_overlay, v_flex,
+    LabelSize, List, ListItem, ListItemSpacing, Menu, Modal, Notification, Popover, Scrollbar,
+    Severity, Switch, Tab, TabBar, TextField, TintColor, Tooltip, anchored_popover, h_flex,
+    modal_overlay, v_flex,
 };
 use engram_ui::traits::{Clickable, Disableable, StyledExt, ToggleState, Toggleable};
 use gpui::{
@@ -255,6 +256,44 @@ fn list_renders_with_items(cx: &mut TestAppContext) {
 fn empty_list_renders(cx: &mut TestAppContext) {
     smoke(cx, |_, _| {
         List::new().empty_message("Nothing here yet").into_any_element()
+    });
+}
+
+#[gpui::test]
+fn list_item_phase8_fields_render(cx: &mut TestAppContext) {
+    // Phase 8 acceptance: a single ListItem must accept indent_level=2,
+    // dense spacing, and inset=true at once. Also exercises outlined,
+    // hover-only end slot, and the new on_hover / on_secondary_mouse_down
+    // handlers — all of which are wired through the trait/handler aliases,
+    // so a botched type alias would only blow up at draw time.
+    smoke(cx, |_, _| {
+        v_flex()
+            .gap(Spacing::Small.pixels())
+            .child(
+                ListItem::new("li-tree-leaf")
+                    .indent_level(2)
+                    .spacing(ListItemSpacing::Dense)
+                    .inset(true)
+                    .start_slot(Icon::new(IconName::File))
+                    .child(Label::new("nested.rs"))
+                    .end_slot(Icon::new(IconName::ChevronRight))
+                    .on_hover(|_, _, _| {})
+                    .on_secondary_mouse_down(|_, _, _| {}),
+            )
+            .child(
+                ListItem::new("li-outlined-card")
+                    .outlined()
+                    .rounded(false)
+                    .spacing(ListItemSpacing::ExtraDense)
+                    .child(Label::new("card-style row")),
+            )
+            .child(
+                ListItem::new("li-hover-end-slot")
+                    .show_end_slot_on_hover()
+                    .child(Label::new("hover for actions"))
+                    .end_slot(Icon::new(IconName::Trash)),
+            )
+            .into_any_element()
     });
 }
 
