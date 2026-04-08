@@ -85,11 +85,15 @@ When you add a new component, add a smoke test for it in the same PR. The whole 
 
 ### Icons
 
-`IconName` is a `strum` enum that mirrors Zed's icon set verbatim; each variant maps to `assets/icons/<snake_case>.svg`, embedded into the `engram-ui` binary via `rust-embed`. To add an icon, drop the SVG into `crates/engram-ui/assets/icons/` and add the variant to `IconName`. The `reference/zed/assets/icons/` tree is the canonical source — copy from there rather than authoring SVGs by hand.
+`IconName` is a `strum` enum of ~140 curated icons, each variant mapping to `assets/icons/<snake_case>.svg`, embedded into the `engram-ui` binary via `rust-embed`. The SVGs are sourced from [Lucide](https://lucide.dev) (ISC License — see `crates/engram-ui/assets/icons/LICENSES`). The set is permissive-licensable and ships under engram's MIT/Apache-2.0 dual license.
+
+To add an icon: pull the canonical SVG from `https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/<lucide-name>.svg`, save it under engram's snake_case name in `crates/engram-ui/assets/icons/`, and add the variant to `IconName`. A few engram-side renames exist where the component layer already speaks differently — `Close` → Lucide `x`, `Dash` → `minus`, `Warning` → `triangle-alert`, `XCircle` → `circle-x`, `MagnifyingGlass` → `search`, `Refresh` → `refresh-cw`. Don't copy from `reference/zed/assets/icons/` — those icons are 16×16 custom Zed drawings under unclear licensing, not Lucide.
+
+For brand/trademark icons (logos of AI providers, editors, languages, etc.) engram intentionally ships *none*. Consumer apps that genuinely integrate with a branded service should drop the brand SVG into their own asset source and use [`Icon::from_path`] — that's the layer where nominative fair use actually applies. See `crates/engram-ui/src/components/icon.rs:362`.
 
 ### TextField
 
-`components/text_field.rs` is a port of GPUI's `examples/input.rs` adapted to engram's theming. It is the only component with a custom `gpui::Element` impl, its own actions namespace (`engram_text_field`), and a process-global key-binding registration (done in `engram_ui::init`). Word-by-word navigation, multi-line, and undo/redo are TODO — current scope is the single-line forms-and-search-box case.
+`components/text_field.rs` is derived from `crates/gpui/examples/input.rs` in `zed-industries/zed` (Apache-2.0), adapted to engram's theming. The file header carries the explicit derivation notice required by Apache-2.0 §4(b). It is the only component with a custom `gpui::Element` impl, its own actions namespace (`engram_text_field`), and a process-global key-binding registration (done in `engram_ui::init`). Word-by-word navigation, multi-line, and undo/redo are TODO — current scope is the single-line forms-and-search-box case.
 
 ## Conventions
 

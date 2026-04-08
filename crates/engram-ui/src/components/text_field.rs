@@ -1,7 +1,13 @@
 //! TextField — single-line text input with IME, caret, selection and undo.
 //!
-//! This is a port of GPUI's `examples/input.rs` adapted to engram's theming
-//! and component shape. The heavy lifting is done by:
+//! Derived from `crates/gpui/examples/input.rs` in
+//! [zed-industries/zed](https://github.com/zed-industries/zed), licensed under
+//! Apache-2.0. This file has been modified: it has been adapted to engram's
+//! theming, component shape, handler aliases, and action namespace, and the
+//! example wiring has been removed in favour of an embeddable
+//! `TextField` entity. See `LICENSE-APACHE` at the workspace root.
+//!
+//! The heavy lifting is done by:
 //!
 //! - A [`TextField`] entity that owns the content, selection range, marked
 //!   (IME-composing) range, and focus handle.
