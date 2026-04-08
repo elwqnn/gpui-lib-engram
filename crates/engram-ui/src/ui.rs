@@ -19,12 +19,14 @@ pub use traits::*;
 
 /// Initialize engram-ui's process-global state.
 ///
-/// Today this just registers the default [`components::TextField`]
-/// keybindings (arrow navigation, selection, clipboard, submit). Call it
-/// once per `App`, after [`engram_theme::init`] and before rendering any
+/// Registers the default keybindings for components that need them — today
+/// that's [`components::TextField`] (arrow navigation, selection, clipboard,
+/// submit) and [`components::Menu`] (arrow navigation, Enter / Escape). Call
+/// it once per `App`, after [`engram_theme::init`] and before rendering any
 /// components that depend on those bindings.
 pub fn init(cx: &mut gpui::App) {
     components::text_field::bind_text_field_keys(cx);
+    components::menu::bind_menu_keys(cx);
 }
 
 /// Re-exports of the things you almost always want when building an engram UI.

@@ -33,7 +33,7 @@ use engram_ui::components::{
     IconButton, IconName, IconSize, IconSource, Image, Indicator, KeyBinding, Label, LabelCommon,
     LabelSize, List, ListItem, ListItemSpacing, Menu, Modal, Notification, Popover, Scrollbar,
     Severity, Switch, Tab, TabBar, TextField, TintColor, Tooltip, anchored_popover, h_flex,
-    modal_overlay, v_flex,
+    menu, modal_overlay, v_flex,
 };
 use engram_ui::traits::{Clickable, Disableable, StyledExt, ToggleState, Toggleable};
 use gpui::{
@@ -435,14 +435,54 @@ fn anchored_popover_renders_with_focus_handle(cx: &mut TestAppContext) {
 
 #[gpui::test]
 fn menu_renders_all_item_kinds(cx: &mut TestAppContext) {
-    smoke(cx, |_, _| {
-        Menu::new()
+    // Menu is a stateful entity (Phase 9), so it must be constructed inside
+    // `cx.new` — matching the TextField / Tooltip pattern.
+    smoke(cx, |_, cx| {
+        let menu = cx.new(|cx| {
+            Menu::new(cx)
+                .header("File")
+                .entry_with_icon("m-new", IconName::Plus, "New", |_, _, _| {})
+                .keybinding_entry("m-save", "Save", ["Ctrl", "S"], |_, _, _| {})
+                .separator()
+                .disabled_entry("m-dis", "Disabled")
+        });
+        menu.into_any_element()
+    });
+}
+
+#[gpui::test]
+fn menu_select_next_advances_cursor(cx: &mut TestAppContext) {
+    // Phase 9 acceptance: dispatching `SelectNext` on a fresh menu moves the
+    // keyboard cursor to the first selectable entry. A header counts as
+    // non-selectable, so the first landing index is 1 (the "new" entry),
+    // not 0 (the "File" header).
+    let (_root, vtx) = cx.add_window_view(|_window, cx| {
+        engram_theme::init(cx);
+        engram_ui::init(cx);
+        TestRoot {
+            build: RefCell::new(Box::new(|_, _| div().into_any_element())),
+        }
+    });
+
+    let menu = vtx.new(|cx| {
+        Menu::new(cx)
             .header("File")
-            .entry_with_icon("m-new", IconName::Plus, "New", |_, _, _| {})
-            .keybinding_entry("m-save", "Save", ["Ctrl", "S"], |_, _, _| {})
-            .separator()
-            .disabled_entry("m-dis", "Disabled")
-            .into_any_element()
+            .entry("m-new", "New", |_, _, _| {})
+            .entry("m-save", "Save", |_, _, _| {})
+    });
+
+    menu.update_in(vtx, |m, window, cx| {
+        m.select_next(&menu::SelectNext, window, cx);
+    });
+    vtx.update(|_, cx| {
+        assert_eq!(menu.read(cx).selected_index(), Some(1));
+    });
+
+    menu.update_in(vtx, |m, window, cx| {
+        m.select_next(&menu::SelectNext, window, cx);
+    });
+    vtx.update(|_, cx| {
+        assert_eq!(menu.read(cx).selected_index(), Some(2));
     });
 }
 

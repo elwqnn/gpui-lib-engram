@@ -44,10 +44,11 @@ struct Showcase {
     modal_open: bool,
     modal_focus: FocusHandle,
     // Menu open + the captured trigger button bounds (set by a `canvas`
-    // overlay during prepaint, read on the next render) + focus handle for
-    // click-outside / Escape dismissal.
+    // overlay during prepaint, read on the next render). The menu is a
+    // stateful entity that owns its own focus handle and emits
+    // `DismissEvent` — we subscribe below to flip `menu_open` back off.
     menu_open: bool,
-    menu_focus: FocusHandle,
+    menu: Entity<Menu>,
     menu_trigger_bounds: Rc<Cell<Option<Bounds<Pixels>>>>,
     // Last submitted value from the text field
     submitted_value: SharedString,
@@ -76,6 +77,35 @@ impl Showcase {
                     .ok();
                 })
         });
+        // Build the menu entity once — its contents are static, so there's
+        // no reason to reconstruct it on every render. Each entry's handler
+        // is a plain no-op: the menu emits `DismissEvent` automatically
+        // after invoking an entry, and the subscription below flips the
+        // `menu_open` flag back off.
+        let menu = cx.new(|cx| {
+            Menu::new(cx)
+                .header("File")
+                .entry_with_icon("menu-new", IconName::Plus, "New File", |_, _, _| {})
+                .keybinding_entry("menu-save", "Save", ["Ctrl", "S"], |_, _, _| {})
+                .keybinding_entry(
+                    "menu-saveas",
+                    "Save As…",
+                    ["Ctrl", "Shift", "S"],
+                    |_, _, _| {},
+                )
+                .separator()
+                .header("Edit")
+                .entry("menu-cut", "Cut", |_, _, _| {})
+                .entry("menu-copy", "Copy", |_, _, _| {})
+                .entry("menu-paste", "Paste", |_, _, _| {})
+                .separator()
+                .disabled_entry("menu-disabled", "Unavailable")
+        });
+        cx.subscribe(&menu, |this, _, _: &gpui::DismissEvent, cx| {
+            this.menu_open = false;
+            cx.notify();
+        })
+        .detach();
         Self {
             is_dark: true,
             checkbox_small: ToggleState::Selected,
@@ -94,7 +124,7 @@ impl Showcase {
             modal_open: false,
             modal_focus: cx.focus_handle(),
             menu_open: false,
-            menu_focus: cx.focus_handle(),
+            menu,
             menu_trigger_bounds: Rc::new(Cell::new(None)),
             submitted_value: SharedString::default(),
             text_field,
@@ -747,18 +777,21 @@ impl Render for Showcase {
             .child(Divider::horizontal())
             // -------------------- Menu (real anchored popover) --------------------
             .child(section(
-                "Menu (click to open — real anchored popover)",
+                "Menu (click to open — keyboard-navigable)",
                 {
                     let bounds_slot = self.menu_trigger_bounds.clone();
+                    let menu_entity = self.menu.clone();
                     let open_menu_handler = {
                         let weak = weak.clone();
                         move |_event: &gpui::ClickEvent, window: &mut Window, cx: &mut App| {
                             weak.update(cx, |this, cx| {
                                 this.menu_open = !this.menu_open;
                                 if this.menu_open {
-                                    // Focus the menu's handle so Esc and
-                                    // click-outside are routed to the overlay.
-                                    window.focus(&this.menu_focus, cx);
+                                    // Focus the menu entity's own focus
+                                    // handle so arrow keys, Enter, and Esc
+                                    // dispatch through its key context.
+                                    let handle = this.menu.read(cx).focus_handle().clone();
+                                    window.focus(&handle, cx);
                                 }
                                 cx.notify();
                             })
@@ -790,17 +823,8 @@ impl Render for Showcase {
 
                     let menu_open = self.menu_open;
                     let trigger_bounds = self.menu_trigger_bounds.get();
-                    let close_menu = {
-                        let weak_for_close = weak.clone();
-                        Rc::new(move |cx: &mut App| {
-                            weak_for_close
-                                .update(cx, |this, cx| {
-                                    this.menu_open = false;
-                                    cx.notify();
-                                })
-                                .ok();
-                        })
-                    };
+                    let anchor_focus = self.menu.read(cx).focus_handle().clone();
+                    let weak_for_dismiss = weak.clone();
 
                     v_flex()
                         .gap(Spacing::Small.pixels())
@@ -809,49 +833,18 @@ impl Render for Showcase {
                             let Some(bounds) = trigger_bounds else {
                                 return this;
                             };
-                            // Build a menu whose entries close the menu after firing.
-                            let make_close = || {
-                                let close = close_menu.clone();
-                                move |_event: &gpui::ClickEvent,
-                                      _window: &mut Window,
-                                      cx: &mut App| {
-                                    close(cx);
-                                }
-                            };
-                            let dismiss_close = close_menu.clone();
                             this.child(anchored_popover(
-                                self.menu_focus.clone(),
+                                anchor_focus,
                                 gpui::Corner::TopLeft,
                                 bounds,
-                                Menu::new()
-                                    .header("File")
-                                    .entry_with_icon(
-                                        "menu-new",
-                                        IconName::Plus,
-                                        "New File",
-                                        make_close(),
-                                    )
-                                    .keybinding_entry(
-                                        "menu-save",
-                                        "Save",
-                                        ["Ctrl", "S"],
-                                        make_close(),
-                                    )
-                                    .keybinding_entry(
-                                        "menu-saveas",
-                                        "Save As…",
-                                        ["Ctrl", "Shift", "S"],
-                                        make_close(),
-                                    )
-                                    .separator()
-                                    .header("Edit")
-                                    .entry("menu-cut", "Cut", make_close())
-                                    .entry("menu-copy", "Copy", make_close())
-                                    .entry("menu-paste", "Paste", make_close())
-                                    .separator()
-                                    .disabled_entry("menu-disabled", "Unavailable"),
+                                menu_entity,
                                 move |_window, cx| {
-                                    dismiss_close(cx);
+                                    weak_for_dismiss
+                                        .update(cx, |this, cx| {
+                                            this.menu_open = false;
+                                            cx.notify();
+                                        })
+                                        .ok();
                                 },
                             ))
                         })

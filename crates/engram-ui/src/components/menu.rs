@@ -1,24 +1,68 @@
 //! Menu — vertical list of clickable items, separators, and headers,
-//! packaged as the content of a [`Popover`](super::popover::Popover).
+//! packaged as the content of a [`Popover`](super::popover::Popover) and
+//! navigable from the keyboard.
 //!
-//! Engram's menu is intentionally far simpler than Zed's `ContextMenu`,
-//! which carries focus rings, keyboard navigation, submenus, and an
-//! action / dispatch system. Here we have:
+//! ## Why this is a stateful entity
 //!
-//! - [`Menu`] is a builder that collects [`MenuItem`]s.
-//! - Items are: `entry` (label + optional icon + click handler), `separator`,
-//!   `header`, and `keybinding_entry` (entry with a trailing key chip).
+//! Menus need persistent state — `selected_index` for the keyboard cursor,
+//! a focus handle so the dispatch tree routes Down / Up / Enter / Esc to
+//! the right element, and dismissal via [`gpui::DismissEvent`] so callers
+//! can subscribe instead of threading close-callbacks through every entry.
+//! All three demand a `Render` (entity) implementation rather than the
+//! `RenderOnce` builder this used to be.
 //!
-//! The caller is responsible for opening / closing the menu by toggling its
-//! own state field, then placing the rendered `Menu` inside an
-//! [`anchored_popover`](super::popover::anchored_popover) call.
+//! ## Building one
+//!
+//! Build the menu inside `cx.new` (so it can grab a focus handle from the
+//! current `Context`) and chain entries onto it. Then render the entity
+//! directly — `Entity<Menu>` is `IntoElement` because [`Menu`] implements
+//! [`Render`].
+//!
+//! ```ignore
+//! let menu = cx.new(|cx| {
+//!     Menu::new(cx)
+//!         .header("File")
+//!         .entry("new", "New File", |_, _, _| {})
+//!         .keybinding_entry("save", "Save", ["Ctrl", "S"], |_, _, _| {})
+//!         .separator()
+//!         .disabled_entry("dis", "Unavailable")
+//! });
+//!
+//! cx.subscribe(&menu, |this, _, _: &gpui::DismissEvent, cx| {
+//!     this.menu_open = false;
+//!     cx.notify();
+//! }).detach();
+//! ```
+//!
+//! ## Keyboard navigation
+//!
+//! While focused, the menu responds to:
+//!
+//! | Key      | Action            |
+//! |----------|-------------------|
+//! | Down     | `SelectNext`      |
+//! | Up       | `SelectPrevious`  |
+//! | Home     | `SelectFirst`     |
+//! | End      | `SelectLast`      |
+//! | Enter    | `Confirm`         |
+//! | Escape   | `Cancel`          |
+//!
+//! `Confirm` invokes the selected entry's `on_click` handler with a
+//! synthesized [`ClickEvent::default`] and emits a [`DismissEvent`].
+//! `Cancel` only emits the dismiss. The default key bindings are
+//! installed by [`crate::init`] under the `Menu` key context.
+//!
+//! Submenus, search/filter, and the `SelectChild` / `SelectParent`
+//! navigation actions from zed's `ContextMenu` are intentionally out of
+//! scope — when a real consumer needs them, port them in.
 
 use std::rc::Rc;
 
 use engram_theme::{ActiveTheme, Color, Spacing};
 use gpui::{
-    AnyElement, App, ClickEvent, ElementId, IntoElement, ParentElement, RenderOnce,
-    SharedString, Window, div, prelude::*, px,
+    AnyElement, App, ClickEvent, Context, DismissEvent, ElementId, Entity, EventEmitter,
+    FocusHandle, Focusable, IntoElement, ParentElement, Pixels, Render, SharedString, Window,
+    actions, div, prelude::*, px,
 };
 use smallvec::SmallVec;
 
@@ -28,6 +72,19 @@ use crate::components::label::{Label, LabelCommon, LabelSize};
 use crate::components::popover::Popover;
 use crate::components::stack::{h_flex, v_flex};
 use crate::traits::ClickHandler;
+
+// -----------------------------------------------------------------------
+// Actions
+// -----------------------------------------------------------------------
+//
+// Action namespace is `engram_menu` to avoid colliding with any host-app
+// `menu::*` actions (zed's own `ContextMenu` lives in the `menu` namespace,
+// so we deliberately stay out of it).
+
+actions!(
+    engram_menu,
+    [SelectFirst, SelectNext, SelectPrevious, SelectLast, Confirm, Cancel]
+);
 
 /// One row inside a [`Menu`].
 pub enum MenuItem {
@@ -47,24 +104,47 @@ pub enum MenuItem {
     Separator,
 }
 
-/// A vertical menu, rendered as the body of a popover.
-#[derive(IntoElement)]
+impl MenuItem {
+    fn is_selectable(&self) -> bool {
+        matches!(
+            self,
+            MenuItem::Entry {
+                disabled: false,
+                on_click: Some(_),
+                ..
+            }
+        )
+    }
+}
+
+/// A vertical menu, rendered as the body of a popover. See the module
+/// docs for usage.
 pub struct Menu {
+    focus_handle: FocusHandle,
     items: SmallVec<[MenuItem; 6]>,
-    min_width: Option<gpui::Pixels>,
+    min_width: Option<Pixels>,
+    selected_index: Option<usize>,
 }
 
 impl Menu {
-    pub fn new() -> Self {
+    pub fn new(cx: &mut Context<Self>) -> Self {
         Self {
+            focus_handle: cx.focus_handle(),
             items: SmallVec::new(),
             min_width: Some(px(180.0)),
+            selected_index: None,
         }
+    }
+
+    /// Convenience constructor that mirrors the old `RenderOnce` API: build
+    /// the menu inside a `cx.new` block in one call.
+    pub fn build(cx: &mut App, f: impl FnOnce(&mut Context<Self>) -> Self) -> Entity<Self> {
+        cx.new(f)
     }
 
     /// Override the popover's minimum width. The default (180px) gives
     /// menu rows a stable, non-jittery width.
-    pub fn min_width(mut self, width: gpui::Pixels) -> Self {
+    pub fn min_width(mut self, width: Pixels) -> Self {
         self.min_width = Some(width);
         self
     }
@@ -157,26 +237,136 @@ impl Menu {
         self.items.push(MenuItem::Separator);
         self
     }
-}
 
-impl Default for Menu {
-    fn default() -> Self {
-        Self::new()
+    /// Read the keyboard cursor position. `None` means nothing is selected.
+    pub fn selected_index(&self) -> Option<usize> {
+        self.selected_index
+    }
+
+    /// Borrow the focus handle so the parent overlay can route focus to it
+    /// when the menu opens.
+    pub fn focus_handle(&self) -> &FocusHandle {
+        &self.focus_handle
+    }
+
+    // ------------------------------------------------------------------
+    // Selection helpers
+    // ------------------------------------------------------------------
+
+    fn first_selectable(&self) -> Option<usize> {
+        self.items.iter().position(MenuItem::is_selectable)
+    }
+
+    fn last_selectable(&self) -> Option<usize> {
+        self.items
+            .iter()
+            .enumerate()
+            .rev()
+            .find(|(_, item)| item.is_selectable())
+            .map(|(ix, _)| ix)
+    }
+
+    // ------------------------------------------------------------------
+    // Action handlers
+    // ------------------------------------------------------------------
+
+    pub fn select_first(
+        &mut self,
+        _: &SelectFirst,
+        _window: &mut Window,
+        cx: &mut Context<Self>,
+    ) {
+        if let Some(ix) = self.first_selectable() {
+            self.selected_index = Some(ix);
+            cx.notify();
+        }
+    }
+
+    pub fn select_last(&mut self, _: &SelectLast, _window: &mut Window, cx: &mut Context<Self>) {
+        if let Some(ix) = self.last_selectable() {
+            self.selected_index = Some(ix);
+            cx.notify();
+        }
+    }
+
+    pub fn select_next(&mut self, _: &SelectNext, _window: &mut Window, cx: &mut Context<Self>) {
+        let start = self.selected_index.map(|i| i + 1).unwrap_or(0);
+        let next = (start..self.items.len()).find(|&i| {
+            self.items
+                .get(i)
+                .map(MenuItem::is_selectable)
+                .unwrap_or(false)
+        });
+        if let Some(ix) = next.or_else(|| self.first_selectable()) {
+            self.selected_index = Some(ix);
+            cx.notify();
+        }
+    }
+
+    pub fn select_previous(
+        &mut self,
+        _: &SelectPrevious,
+        _window: &mut Window,
+        cx: &mut Context<Self>,
+    ) {
+        let prev = self.selected_index.and_then(|cur| {
+            (0..cur).rev().find(|&i| {
+                self.items
+                    .get(i)
+                    .map(MenuItem::is_selectable)
+                    .unwrap_or(false)
+            })
+        });
+        if let Some(ix) = prev.or_else(|| self.last_selectable()) {
+            self.selected_index = Some(ix);
+            cx.notify();
+        }
+    }
+
+    pub fn confirm(&mut self, _: &Confirm, window: &mut Window, cx: &mut Context<Self>) {
+        let Some(ix) = self.selected_index else {
+            return;
+        };
+        let handler = match self.items.get(ix) {
+            Some(MenuItem::Entry {
+                on_click: Some(handler),
+                disabled: false,
+                ..
+            }) => handler.clone(),
+            _ => return,
+        };
+        let event = ClickEvent::default();
+        handler(&event, window, cx);
+        cx.emit(DismissEvent);
+    }
+
+    pub fn cancel(&mut self, _: &Cancel, _window: &mut Window, cx: &mut Context<Self>) {
+        cx.emit(DismissEvent);
     }
 }
 
-impl RenderOnce for Menu {
-    fn render(self, _window: &mut Window, cx: &mut App) -> impl IntoElement {
+impl EventEmitter<DismissEvent> for Menu {}
+
+impl Focusable for Menu {
+    fn focus_handle(&self, _cx: &App) -> FocusHandle {
+        self.focus_handle.clone()
+    }
+}
+
+impl Render for Menu {
+    fn render(&mut self, _window: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
         let colors = cx.theme().colors();
         let mut popover = Popover::new();
         if let Some(w) = self.min_width {
             popover = popover.min_width(w);
         }
 
+        let selected = self.selected_index;
         let rows: Vec<AnyElement> = self
             .items
-            .into_iter()
-            .map(|item| match item {
+            .iter()
+            .enumerate()
+            .map(|(ix, item)| match item {
                 MenuItem::Separator => div()
                     .my(px(2.0))
                     .h(px(1.0))
@@ -187,7 +377,7 @@ impl RenderOnce for Menu {
                     .pt(px(6.0))
                     .pb(px(2.0))
                     .child(
-                        Label::new(text)
+                        Label::new(text.clone())
                             .size(LabelSize::XSmall)
                             .color(Color::Muted),
                     )
@@ -200,16 +390,26 @@ impl RenderOnce for Menu {
                     disabled,
                     on_click,
                 } => {
+                    let disabled = *disabled;
                     let label_color = if disabled { Color::Disabled } else { Color::Default };
-                    let row = h_flex()
-                        .id(id)
+                    let is_selected = selected == Some(ix);
+                    let row_id = id.clone();
+                    let label = label.clone();
+                    let icon = *icon;
+                    let keybinding = keybinding.clone();
+                    let row_handler = on_click.clone();
+
+                    h_flex()
+                        .id(row_id)
                         .w_full()
                         .gap(Spacing::Small.pixels())
                         .px(Spacing::Medium.pixels())
                         .py(px(4.0))
                         .items_center()
+                        .when(is_selected, |this| this.bg(colors.ghost_element_selected))
                         .when(!disabled, |this| {
-                            this.cursor_pointer().hover(|s| s.bg(colors.ghost_element_hover))
+                            this.cursor_pointer()
+                                .hover(|s| s.bg(colors.ghost_element_hover))
                         })
                         .when_some(icon, |this, icon| {
                             this.child(
@@ -224,17 +424,53 @@ impl RenderOnce for Menu {
                                 .child(Label::new(label).color(label_color)),
                         )
                         .when_some(keybinding, |this, keys| this.child(KeyBinding::new(keys)))
-                        .when_some(
-                            (!disabled).then_some(on_click).flatten(),
-                            |this, handler| {
-                                this.on_click(move |event, window, cx| handler(event, window, cx))
-                            },
-                        );
-                    row.into_any_element()
+                        .when(!disabled && row_handler.is_some(), |this| {
+                            let handler = row_handler.clone().expect("guarded above");
+                            this.on_click(cx.listener(
+                                move |menu, event: &ClickEvent, window, cx| {
+                                    menu.selected_index = Some(ix);
+                                    handler(event, window, cx);
+                                    cx.emit(DismissEvent);
+                                },
+                            ))
+                        })
+                        .into_any_element()
                 }
             })
             .collect();
 
-        popover.child(v_flex().gap(Spacing::None.pixels()).children(rows))
+        // Outer interactive root: tracks focus, owns the key context, and
+        // hosts the action listeners. The popover then provides the visual
+        // chrome (background, border, shadow).
+        div()
+            .id("engram-menu")
+            .key_context("Menu")
+            .track_focus(&self.focus_handle)
+            .on_action(cx.listener(Self::select_first))
+            .on_action(cx.listener(Self::select_last))
+            .on_action(cx.listener(Self::select_next))
+            .on_action(cx.listener(Self::select_previous))
+            .on_action(cx.listener(Self::confirm))
+            .on_action(cx.listener(Self::cancel))
+            .child(popover.child(v_flex().gap(Spacing::None.pixels()).children(rows)))
     }
+}
+
+// -----------------------------------------------------------------------
+// Keybinding registration
+// -----------------------------------------------------------------------
+
+/// Register the default keyboard navigation bindings for [`Menu`]. Called
+/// from [`crate::init`]; exposed standalone in case an app wants to
+/// initialize engram without binding our keys.
+pub fn bind_menu_keys(cx: &mut App) {
+    use gpui::KeyBinding;
+    cx.bind_keys([
+        KeyBinding::new("down", SelectNext, Some("Menu")),
+        KeyBinding::new("up", SelectPrevious, Some("Menu")),
+        KeyBinding::new("home", SelectFirst, Some("Menu")),
+        KeyBinding::new("end", SelectLast, Some("Menu")),
+        KeyBinding::new("enter", Confirm, Some("Menu")),
+        KeyBinding::new("escape", Cancel, Some("Menu")),
+    ]);
 }
