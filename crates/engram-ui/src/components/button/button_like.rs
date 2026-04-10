@@ -127,25 +127,30 @@ pub(super) struct ButtonLikeStyles {
 }
 
 impl TintColor {
-    fn styles(self, cx: &App) -> ButtonLikeStyles {
+    /// The foreground status color for this tint flavor.
+    fn foreground(self, cx: &App) -> Hsla {
         let status = &cx.theme().colors().status;
         match self {
-            TintColor::Accent => ButtonLikeStyles {
-                background: status.info_background,
-                border: status.info_border,
-            },
-            TintColor::Error => ButtonLikeStyles {
-                background: status.error_background,
-                border: status.error_border,
-            },
-            TintColor::Warning => ButtonLikeStyles {
-                background: status.warning_background,
-                border: status.warning_border,
-            },
-            TintColor::Success => ButtonLikeStyles {
-                background: status.success_background,
-                border: status.success_border,
-            },
+            TintColor::Accent => status.info,
+            TintColor::Error => status.error,
+            TintColor::Warning => status.warning,
+            TintColor::Success => status.success,
+        }
+    }
+
+    fn enabled_styles(self, cx: &App) -> ButtonLikeStyles {
+        let fg = self.foreground(cx);
+        ButtonLikeStyles {
+            background: fg.opacity(0.15),
+            border: fg.opacity(0.55),
+        }
+    }
+
+    fn hovered_styles(self, cx: &App) -> ButtonLikeStyles {
+        let fg = self.foreground(cx);
+        ButtonLikeStyles {
+            background: fg.opacity(0.25),
+            border: fg.opacity(0.60),
         }
     }
 }
@@ -174,7 +179,7 @@ impl ButtonStyle {
                 background: element_bg_for_layer(layer, cx),
                 border: transparent_black(),
             },
-            ButtonStyle::Tinted(tint) => tint.styles(cx),
+            ButtonStyle::Tinted(tint) => tint.enabled_styles(cx),
             ButtonStyle::Outlined => ButtonLikeStyles {
                 background: element_bg_for_layer(layer, cx),
                 border: colors.border,
@@ -201,11 +206,10 @@ impl ButtonStyle {
                 background: colors.element_hover,
                 border: transparent_black(),
             },
-            // Engram's status tints are already alpha-blended over the
-            // background; no further darken pass is needed (zed darkens its
-            // opaque tints by 5% on hover, which would crush the contrast
-            // here).
-            ButtonStyle::Tinted(tint) => tint.styles(cx),
+            // Tinted backgrounds are alpha-blended from the status
+            // foreground color; hover bumps the alpha to give feedback
+            // without an extra darken pass.
+            ButtonStyle::Tinted(tint) => tint.hovered_styles(cx),
             ButtonStyle::Outlined => ButtonLikeStyles {
                 background: colors.ghost_element_hover,
                 border: colors.border,
@@ -232,7 +236,13 @@ impl ButtonStyle {
                 background: colors.element_active,
                 border: transparent_black(),
             },
-            ButtonStyle::Tinted(tint) => tint.styles(cx),
+            ButtonStyle::Tinted(tint) => {
+                let fg = tint.foreground(cx);
+                ButtonLikeStyles {
+                    background: fg.opacity(0.32),
+                    border: fg.opacity(0.65),
+                }
+            }
             ButtonStyle::Outlined => ButtonLikeStyles {
                 background: colors.element_active,
                 border: colors.border,

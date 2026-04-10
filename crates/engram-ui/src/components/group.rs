@@ -6,6 +6,8 @@ use gpui::{Div, div, prelude::*};
 
 use engram_theme::Spacing;
 
+use crate::traits::StyledExt as _;
+
 /// Horizontal group with small (4px) gap.
 pub fn h_group() -> Div {
     div().flex().gap(Spacing::Small.pixels())
@@ -18,10 +20,10 @@ pub fn h_group_lg() -> Div {
 
 /// Vertical group with small (4px) gap.
 pub fn v_group() -> Div {
-    div().flex().flex_col().gap(Spacing::Small.pixels())
+    div().v_flex().gap(Spacing::Small.pixels())
 }
 
 /// Vertical group with medium (8px) gap.
 pub fn v_group_lg() -> Div {
-    div().flex().flex_col().gap(Spacing::Medium.pixels())
+    div().v_flex().gap(Spacing::Medium.pixels())
 }

@@ -14,6 +14,7 @@ pub mod icon;
 pub mod image;
 pub mod indicator;
 pub mod keybinding;
+pub mod keybinding_hint;
 pub mod label;
 pub mod list;
 pub mod menu;
@@ -49,6 +50,7 @@ pub use icon::{Icon, IconName, IconSize, IconSource};
 pub use image::Image;
 pub use indicator::Indicator;
 pub use keybinding::KeyBinding;
+pub use keybinding_hint::KeybindingHint;
 pub use label::{
     Headline, HeadlineSize, HighlightedLabel, Label, LabelCommon, LabelLike, LabelSize,
     LineHeightStyle,

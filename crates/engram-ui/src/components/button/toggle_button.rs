@@ -5,11 +5,12 @@
 //! Mirrors Zed's `ToggleButtonGroup`, simplified to a single-row layout
 //! with a fixed column count via const generic.
 
+use std::rc::Rc;
+
 use gpui::{
     AnyElement, AnyView, App, ClickEvent, DefiniteLength, IntoElement, RenderOnce, SharedString,
     Styled, Window, div, prelude::*, relative,
 };
-use std::rc::Rc;
 
 use engram_theme::{ActiveTheme, Color};
 
@@ -20,6 +21,7 @@ use super::button_like::{
 use crate::components::icon::{Icon, IconName, IconSize};
 use crate::components::label::{Label, LabelCommon, LabelSize};
 use crate::components::stack::{h_flex, v_flex};
+use crate::traits::handlers::TooltipBuilder;
 use crate::traits::{Clickable, Toggleable};
 
 /// The position of a button within the group, determining which corners
@@ -48,7 +50,7 @@ pub struct ButtonConfiguration {
     icon: Option<IconName>,
     on_click: Box<dyn Fn(&ClickEvent, &mut Window, &mut App) + 'static>,
     selected: bool,
-    tooltip: Option<Rc<dyn Fn(&mut Window, &mut App) -> AnyView>>,
+    tooltip: Option<TooltipBuilder>,
 }
 
 /// Trait implemented by toggle button builder types.
@@ -68,7 +70,7 @@ pub struct ToggleButtonSimple {
     label: SharedString,
     on_click: Box<dyn Fn(&ClickEvent, &mut Window, &mut App) + 'static>,
     selected: bool,
-    tooltip: Option<Rc<dyn Fn(&mut Window, &mut App) -> AnyView>>,
+    tooltip: Option<TooltipBuilder>,
 }
 
 impl ToggleButtonSimple {
@@ -113,7 +115,7 @@ pub struct ToggleButtonWithIcon {
     icon: IconName,
     on_click: Box<dyn Fn(&ClickEvent, &mut Window, &mut App) + 'static>,
     selected: bool,
-    tooltip: Option<Rc<dyn Fn(&mut Window, &mut App) -> AnyView>>,
+    tooltip: Option<TooltipBuilder>,
 }
 
 impl ToggleButtonWithIcon {

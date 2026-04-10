@@ -32,7 +32,8 @@ use engram_ui::components::{
     Callout, Checkbox, CheckboxSize, Chip, ChipStyle, CircularProgress, CopyButton, CountBadge,
     DecoratedIcon, Disclosure, Divider, Facepile, GradientFade, Headline, HeadlineSize,
     HighlightedLabel, Icon, IconButton, IconDecoration, IconName, IconSize, IconSource, Image,
-    Indicator, KeyBinding, Label, LabelCommon, LabelSize, List, ListItem, ListItemSpacing, Menu,
+    Indicator, KeyBinding, KeybindingHint, Label, LabelCommon, LabelSize, List, ListItem,
+    ListItemSpacing, Menu,
     Modal, Navigable, Notification, Popover, ProgressBar, Scrollbar, Severity, Spinner,
     SplitButton, SplitButtonStyle, Switch, Tab, TabBar, TextField, TintColor,
     ToggleButtonGroup, ToggleButtonGroupStyle, ToggleButtonSimple, ToggleButtonWithIcon, Tooltip,
@@ -225,6 +226,18 @@ fn keybinding_renders(cx: &mut TestAppContext) {
             .gap(Spacing::Small.pixels())
             .child(KeyBinding::new(["Ctrl", "S"]))
             .child(KeyBinding::new(["Ctrl", "Shift", "P"]))
+            .into_any_element()
+    });
+}
+
+#[gpui::test]
+fn keybinding_hint_renders(cx: &mut TestAppContext) {
+    smoke(cx, |_, _| {
+        v_flex()
+            .gap(Spacing::Small.pixels())
+            .child(KeybindingHint::new(KeyBinding::new(["Enter"])))
+            .child(KeybindingHint::with_prefix("Save:", KeyBinding::new(["Ctrl", "S"])))
+            .child(KeybindingHint::with_suffix(KeyBinding::new(["Esc"]), "to cancel"))
             .into_any_element()
     });
 }

@@ -16,6 +16,8 @@ use gpui::{
     prelude::*,
 };
 
+use crate::styles::ElevationIndex;
+
 use crate::components::label::{Label, LabelCommon, LabelSize};
 use crate::components::stack::v_flex;
 
@@ -76,6 +78,7 @@ impl Render for Tooltip {
                 .bg(colors.elevated_surface_background)
                 .border_1()
                 .border_color(colors.border)
+                .shadow(ElevationIndex::ElevatedSurface.shadow(cx))
                 .child(Label::new(self.title.clone()).size(LabelSize::Small))
                 .when_some(self.meta.clone(), |this, meta| {
                     this.child(
