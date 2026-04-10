@@ -28,12 +28,15 @@ use std::cell::RefCell;
 
 use engram_theme::{self, Radius, Spacing};
 use engram_ui::components::{
-    Avatar, AvatarSize, Banner, Button, ButtonCommon, ButtonStyle, Checkbox, CheckboxSize, Chip,
-    ChipStyle, CountBadge, Disclosure, Divider, Facepile, Headline, HeadlineSize, Icon,
-    IconButton, IconName, IconSize, IconSource, Image, Indicator, KeyBinding, Label, LabelCommon,
-    LabelSize, List, ListItem, ListItemSpacing, Menu, Modal, Notification, Popover, Scrollbar,
-    Severity, Switch, Tab, TabBar, TextField, TintColor, Tooltip, anchored_popover, h_flex,
-    menu, modal_overlay, v_flex,
+    Avatar, AvatarSize, Banner, BorderPosition, Button, ButtonCommon, ButtonLink, ButtonStyle,
+    Callout, Checkbox, CheckboxSize, Chip, ChipStyle, CircularProgress, CopyButton, CountBadge,
+    DecoratedIcon, Disclosure, Divider, Facepile, GradientFade, Headline, HeadlineSize,
+    HighlightedLabel, Icon, IconButton, IconDecoration, IconName, IconSize, IconSource, Image,
+    Indicator, KeyBinding, Label, LabelCommon, LabelSize, List, ListItem, ListItemSpacing, Menu,
+    Modal, Navigable, Notification, Popover, ProgressBar, Scrollbar, Severity, Spinner,
+    SplitButton, SplitButtonStyle, Switch, Tab, TabBar, TextField, TintColor,
+    ToggleButtonGroup, ToggleButtonGroupStyle, ToggleButtonSimple, ToggleButtonWithIcon, Tooltip,
+    TreeViewItem, anchored_popover, h_flex, h_group, menu, modal_overlay, v_flex, v_group,
 };
 use engram_ui::traits::{Clickable, Disableable, StyledExt, ToggleState, Toggleable};
 use gpui::{
@@ -703,6 +706,247 @@ fn json_theme_registry_pipeline_renders(cx: &mut TestAppContext) {
             .child(Banner::new(Severity::Warning, "Warning from JSON theme"))
             .child(Banner::new(Severity::Error, "Error from JSON theme"))
             .child(Indicator::dot().color(engram_theme::Color::Accent))
+            .into_any_element()
+    });
+}
+
+// ── New component smoke tests ──────────────────────────────────────────
+
+#[gpui::test]
+fn callout_renders_every_severity(cx: &mut TestAppContext) {
+    smoke(cx, |_, _| {
+        v_flex()
+            .gap(Spacing::Small.pixels())
+            .child(Callout::new().severity(Severity::Info).title("Heads up"))
+            .child(
+                Callout::new()
+                    .severity(Severity::Warning)
+                    .title("Warning")
+                    .description("Please review your settings.")
+                    .border_position(BorderPosition::Top),
+            )
+            .child(
+                Callout::new()
+                    .severity(Severity::Error)
+                    .title("Error")
+                    .description("Something went wrong."),
+            )
+            .into_any_element()
+    });
+}
+
+#[gpui::test]
+fn progress_bar_renders(cx: &mut TestAppContext) {
+    smoke(cx, |_, _| {
+        v_flex()
+            .gap(Spacing::Small.pixels())
+            .child(ProgressBar::new(50.0, 100.0))
+            .child(ProgressBar::new(100.0, 100.0))
+            .child(ProgressBar::new(0.0, 100.0))
+            .into_any_element()
+    });
+}
+
+#[gpui::test]
+fn circular_progress_renders(cx: &mut TestAppContext) {
+    smoke(cx, |_, _| {
+        h_flex()
+            .gap(Spacing::Small.pixels())
+            .child(CircularProgress::new(0.25, 1.0, px(24.0)))
+            .child(CircularProgress::new(0.75, 1.0, px(24.0)))
+            .child(CircularProgress::new(1.0, 1.0, px(32.0)))
+            .into_any_element()
+    });
+}
+
+#[gpui::test]
+fn gradient_fade_renders(cx: &mut TestAppContext) {
+    smoke(cx, |_, _| {
+        div()
+            .relative()
+            .size(px(100.0))
+            .child(GradientFade::new(gpui::black(), gpui::black(), gpui::black()))
+            .child(
+                GradientFade::new(gpui::white(), gpui::white(), gpui::white())
+                    .right(px(10.0)),
+            )
+            .into_any_element()
+    });
+}
+
+#[gpui::test]
+fn group_helpers_render(cx: &mut TestAppContext) {
+    smoke(cx, |_, _| {
+        v_flex()
+            .child(
+                h_group()
+                    .child(Label::new("A"))
+                    .child(Label::new("B")),
+            )
+            .child(
+                v_group()
+                    .child(Label::new("C"))
+                    .child(Label::new("D")),
+            )
+            .into_any_element()
+    });
+}
+
+#[gpui::test]
+fn tree_view_item_renders(cx: &mut TestAppContext) {
+    smoke(cx, |_, _| {
+        v_flex()
+            .child(
+                TreeViewItem::new("root", "Root Folder")
+                    .root_item(true)
+                    .expanded(true)
+                    .on_toggle(|_, _, _| {}),
+            )
+            .child(TreeViewItem::new("leaf-1", "file.rs"))
+            .child(
+                TreeViewItem::new("leaf-2", "selected.rs")
+                    .toggle_state(ToggleState::Selected),
+            )
+            .into_any_element()
+    });
+}
+
+#[gpui::test]
+fn button_link_renders(cx: &mut TestAppContext) {
+    smoke(cx, |_, _| {
+        v_flex()
+            .gap(Spacing::Small.pixels())
+            .child(ButtonLink::new("Learn more", "https://example.com"))
+            .child(ButtonLink::new("No icon", "https://example.com").no_icon())
+            .into_any_element()
+    });
+}
+
+#[gpui::test]
+fn split_button_renders(cx: &mut TestAppContext) {
+    smoke(cx, |_, _| {
+        v_flex()
+            .gap(Spacing::Small.pixels())
+            .child(SplitButton::new(
+                IconButton::new("sb-left", IconName::Play),
+                IconButton::new("sb-menu", IconName::ChevronDown).into_any_element(),
+            ))
+            .child(
+                SplitButton::new(
+                    IconButton::new("sb-left2", IconName::Save),
+                    IconButton::new("sb-menu2", IconName::ChevronDown).into_any_element(),
+                )
+                .style(SplitButtonStyle::Outlined),
+            )
+            .into_any_element()
+    });
+}
+
+#[gpui::test]
+#[allow(clippy::single_range_in_vec_init)]
+fn highlighted_label_renders(cx: &mut TestAppContext) {
+    smoke(cx, |_, _| {
+        v_flex()
+            .gap(Spacing::Small.pixels())
+            .child(HighlightedLabel::new("hello world", vec![0, 1, 6, 7, 8]))
+            .child(HighlightedLabel::from_ranges("search term", vec![0..6]))
+            .into_any_element()
+    });
+}
+
+#[gpui::test]
+fn decorated_icon_renders(cx: &mut TestAppContext) {
+    smoke(cx, |_, _| {
+        h_flex()
+            .gap(Spacing::Small.pixels())
+            .child(DecoratedIcon::new(
+                Icon::new(IconName::File),
+                IconSize::Medium,
+                Some(IconDecoration::dot(gpui::red())),
+            ))
+            .child(DecoratedIcon::new(
+                Icon::new(IconName::Folder),
+                IconSize::Medium,
+                None,
+            ))
+            .into_any_element()
+    });
+}
+
+#[gpui::test]
+fn navigable_renders(cx: &mut TestAppContext) {
+    smoke(cx, |_, cx| {
+        let focus1 = cx.focus_handle();
+        let focus2 = cx.focus_handle();
+        Navigable::new(
+            div()
+                .child(
+                    div()
+                        .id("nav-1")
+                        .track_focus(&focus1)
+                        .child(Label::new("Item 1")),
+                )
+                .child(
+                    div()
+                        .id("nav-2")
+                        .track_focus(&focus2)
+                        .child(Label::new("Item 2")),
+                )
+                .into_any_element(),
+        )
+        .into_any_element()
+    });
+}
+
+#[gpui::test]
+fn copy_button_renders(cx: &mut TestAppContext) {
+    smoke(cx, |_, _| {
+        h_flex()
+            .gap(Spacing::Small.pixels())
+            .child(Label::new("some text"))
+            .child(CopyButton::new("copy-btn", "some text"))
+            .into_any_element()
+    });
+}
+
+#[gpui::test]
+fn spinner_renders(cx: &mut TestAppContext) {
+    smoke(cx, |_, _| {
+        h_flex()
+            .gap(Spacing::Small.pixels())
+            .child(Spinner::new())
+            .child(Spinner::new().size(IconSize::Small))
+            .child(Spinner::new().color(engram_theme::Color::Accent))
+            .into_any_element()
+    });
+}
+
+#[gpui::test]
+fn toggle_button_group_renders(cx: &mut TestAppContext) {
+    smoke(cx, |_window, _cx| {
+        v_flex()
+            .child(ToggleButtonGroup::new(
+                "simple",
+                [
+                    ToggleButtonSimple::new("First", |_, _, _| {}),
+                    ToggleButtonSimple::new("Second", |_, _, _| {}),
+                    ToggleButtonSimple::new("Third", |_, _, _| {}),
+                ],
+            ).selected_index(1))
+            .child(ToggleButtonGroup::new(
+                "with_icons",
+                [
+                    ToggleButtonWithIcon::new("A", IconName::Check, |_, _, _| {}),
+                    ToggleButtonWithIcon::new("B", IconName::Close, |_, _, _| {}),
+                ],
+            ).style(ToggleButtonGroupStyle::Outlined))
+            .child(ToggleButtonGroup::new(
+                "filled",
+                [
+                    ToggleButtonSimple::new("On", |_, _, _| {}),
+                    ToggleButtonSimple::new("Off", |_, _, _| {}),
+                ],
+            ).style(ToggleButtonGroupStyle::Filled))
             .into_any_element()
     });
 }

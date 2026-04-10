@@ -13,6 +13,7 @@ crates/
   engram/         umbrella facade — re-exports `engram_theme` and `engram_ui`
   engram-theme/   theme tokens (Color, Spacing, Radius, TextSize) + ActiveTheme global
   engram-ui/      component primitives + shared traits + embedded SVG assets
+  story/          per-component story gallery binary (sidebar nav + theme switching)
 reference/        excluded read-only checkout of zed-industries/zed (do NOT modify; gitignored)
 ```
 
@@ -26,10 +27,11 @@ cargo check                              # quick type-check
 cargo clippy --all-targets               # lint
 cargo test -p engram-ui                  # run engram-ui smoke tests (the only test crate)
 cargo test -p engram-ui render_smoke::button_renders_every_style   # one test
-cargo run --example showcase -p engram   # launch the live component gallery (Wayland/X11)
+cargo run -p story                       # launch the story gallery (Wayland/X11)
+cargo run --example showcase -p engram   # launch the multi-theme showcase
 ```
 
-The showcase example is the canonical way to eyeball every component in both light and dark themes.
+The story gallery (`cargo run -p story`) is the canonical way to eyeball every component — it provides a sidebar with per-component navigation and theme switching. The showcase example shows all components in a single scrollable page across both light and dark themes.
 
 ## Architecture
 
@@ -71,6 +73,10 @@ All interactive components store callbacks as `Rc<dyn Fn(...)>` via the type ali
 When adding a new handler shape, **add it here** rather than declaring a local alias in your component. This was a real maintenance trap before consolidation.
 
 `Rc` (not `Box`) is intentional: a single handler often needs to be cloned into multiple closures (e.g. an `on_click` and an `on_key_down`) within one render pass.
+
+### ButtonLike internals
+
+`ButtonLike` supports per-corner rounding via `ButtonLikeRounding` (used internally by `ToggleButtonGroup` for segmented controls) and optional fixed width via `.width()` / `.full_width()`. These are `pub(crate)` / `pub(super)` — consumer code should use the higher-level components that compose `ButtonLike`, not reach for rounding directly.
 
 ### Tests: render smoke tests
 

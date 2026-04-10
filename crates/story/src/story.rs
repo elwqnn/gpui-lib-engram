@@ -53,13 +53,19 @@ pub static STORIES: &[StoryEntry] = &[
     // Typography
     StoryEntry { name: "Label", category: StoryCategory::Typography, build: stories::label::build },
     StoryEntry { name: "Headline", category: StoryCategory::Typography, build: stories::headline::build },
+    StoryEntry { name: "HighlightedLabel", category: StoryCategory::Typography, build: stories::highlighted_label::build },
     // Icons & Images
     StoryEntry { name: "Icon", category: StoryCategory::IconsAndImages, build: stories::icon::build },
+    StoryEntry { name: "DecoratedIcon", category: StoryCategory::IconsAndImages, build: stories::decorated_icon::build },
     StoryEntry { name: "Image", category: StoryCategory::IconsAndImages, build: stories::image::build },
     StoryEntry { name: "Avatar", category: StoryCategory::IconsAndImages, build: stories::avatar::build },
     // Buttons
     StoryEntry { name: "Button", category: StoryCategory::Buttons, build: stories::button::build },
     StoryEntry { name: "IconButton", category: StoryCategory::Buttons, build: stories::icon_button::build },
+    StoryEntry { name: "ButtonLink", category: StoryCategory::Buttons, build: stories::button_link::build },
+    StoryEntry { name: "SplitButton", category: StoryCategory::Buttons, build: stories::split_button::build },
+    StoryEntry { name: "CopyButton", category: StoryCategory::Buttons, build: stories::copy_button::build },
+    StoryEntry { name: "ToggleButtonGroup", category: StoryCategory::Buttons, build: stories::toggle_button::build },
     // Inputs
     StoryEntry { name: "Checkbox", category: StoryCategory::Inputs, build: stories::checkbox::build },
     StoryEntry { name: "Switch", category: StoryCategory::Inputs, build: stories::switch::build },
@@ -67,17 +73,22 @@ pub static STORIES: &[StoryEntry] = &[
     StoryEntry { name: "Disclosure", category: StoryCategory::Inputs, build: stories::disclosure::build },
     // Data Display
     StoryEntry { name: "List", category: StoryCategory::DataDisplay, build: stories::list::build },
+    StoryEntry { name: "TreeView", category: StoryCategory::DataDisplay, build: stories::tree_view::build },
+    StoryEntry { name: "Progress", category: StoryCategory::DataDisplay, build: stories::progress::build },
     StoryEntry { name: "Indicator", category: StoryCategory::DataDisplay, build: stories::indicator::build },
     StoryEntry { name: "Chip", category: StoryCategory::DataDisplay, build: stories::chip::build },
     StoryEntry { name: "KeyBinding", category: StoryCategory::DataDisplay, build: stories::keybinding::build },
     // Feedback
     StoryEntry { name: "Banner", category: StoryCategory::Feedback, build: stories::banner::build },
+    StoryEntry { name: "Callout", category: StoryCategory::Feedback, build: stories::callout::build },
+    StoryEntry { name: "Spinner", category: StoryCategory::Feedback, build: stories::spinner::build },
     StoryEntry { name: "Tooltip", category: StoryCategory::Feedback, build: stories::tooltip::build },
     // Navigation
     StoryEntry { name: "Tab", category: StoryCategory::Navigation, build: stories::tab::build },
     StoryEntry { name: "Menu", category: StoryCategory::Navigation, build: stories::menu::build },
     // Layout
     StoryEntry { name: "Divider", category: StoryCategory::Layout, build: stories::divider::build },
+    StoryEntry { name: "GradientFade", category: StoryCategory::Layout, build: stories::gradient_fade::build },
     StoryEntry { name: "Modal", category: StoryCategory::Layout, build: stories::modal::build },
     StoryEntry { name: "Popover", category: StoryCategory::Layout, build: stories::popover::build },
 ];

@@ -23,9 +23,9 @@ use std::rc::Rc;
 
 use engram_theme::{ActiveTheme, Radius};
 use gpui::{
-    AnyElement, AnyView, App, ClickEvent, CursorStyle, Div, ElementId, FocusHandle, Hsla,
-    IntoElement, ParentElement, Pixels, RenderOnce, StyleRefinement, Window, div, prelude::*,
-    transparent_black,
+    AnyElement, AnyView, App, ClickEvent, CursorStyle, DefiniteLength, Div, ElementId, FocusHandle,
+    Hsla, IntoElement, ParentElement, Pixels, RenderOnce, StyleRefinement, Window, div, prelude::*,
+    relative, transparent_black,
 };
 use smallvec::SmallVec;
 
@@ -300,6 +300,24 @@ pub enum ButtonSize {
     Large,
 }
 
+/// Per-corner rounding control for buttons in segmented groups.
+#[derive(Debug, PartialEq, Eq, Clone, Copy)]
+pub(crate) struct ButtonLikeRounding {
+    pub top_left: bool,
+    pub top_right: bool,
+    pub bottom_right: bool,
+    pub bottom_left: bool,
+}
+
+impl ButtonLikeRounding {
+    pub const ALL: Self = Self {
+        top_left: true,
+        top_right: true,
+        bottom_right: true,
+        bottom_left: true,
+    };
+}
+
 /// Shared chrome behind every engram button. See the module docs.
 #[derive(IntoElement)]
 pub struct ButtonLike {
@@ -319,6 +337,8 @@ pub struct ButtonLike {
     pub(super) children: SmallVec<[AnyElement; 2]>,
     pub(super) horizontal_padding: Option<Pixels>,
     pub(super) vertical_padding: Option<Pixels>,
+    pub(super) rounding: Option<ButtonLikeRounding>,
+    pub(super) width: Option<DefiniteLength>,
 }
 
 impl ButtonLike {
@@ -340,7 +360,27 @@ impl ButtonLike {
             children: SmallVec::new(),
             horizontal_padding: None,
             vertical_padding: None,
+            rounding: Some(ButtonLikeRounding::ALL),
+            width: None,
         }
+    }
+
+    /// Set per-corner rounding. `None` means no rounding at all.
+    pub(crate) fn rounding(mut self, rounding: impl Into<Option<ButtonLikeRounding>>) -> Self {
+        self.rounding = rounding.into();
+        self
+    }
+
+    /// Set a fixed width for this button.
+    pub fn width(mut self, width: impl Into<DefiniteLength>) -> Self {
+        self.width = Some(width.into());
+        self
+    }
+
+    /// Set the button to fill its parent width.
+    pub fn full_width(mut self) -> Self {
+        self.width = Some(relative(1.));
+        self
     }
 
     /// Set the inner padding (horizontal, vertical) of this button. Used by
@@ -457,7 +497,18 @@ impl RenderOnce for ButtonLike {
         self.base
             .id(self.id)
             .h_flex()
-            .rounded(Radius::Medium.pixels())
+            .when_some(self.width, |this, w| this.w(w).justify_center())
+            .map(|this| {
+                let r = Radius::Medium.pixels();
+                match self.rounding {
+                    Some(rounding) => this
+                        .when(rounding.top_left, |e| e.rounded_tl(r))
+                        .when(rounding.top_right, |e| e.rounded_tr(r))
+                        .when(rounding.bottom_right, |e| e.rounded_br(r))
+                        .when(rounding.bottom_left, |e| e.rounded_bl(r)),
+                    None => this,
+                }
+            })
             .when_some(horizontal_padding, |this, p| this.px(p))
             .when_some(vertical_padding, |this, p| this.py(p))
             .when(is_outlined, |this| this.border_1())
