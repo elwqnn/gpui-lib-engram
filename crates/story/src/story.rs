@@ -68,6 +68,9 @@ pub static STORIES: &[StoryEntry] = &[
     StoryEntry { name: "ToggleButtonGroup", category: StoryCategory::Buttons, build: stories::toggle_button::build },
     // Inputs
     StoryEntry { name: "Checkbox", category: StoryCategory::Inputs, build: stories::checkbox::build },
+    StoryEntry { name: "Radio", category: StoryCategory::Inputs, build: stories::radio::build },
+    StoryEntry { name: "Slider", category: StoryCategory::Inputs, build: stories::slider::build },
+    StoryEntry { name: "Stepper", category: StoryCategory::Inputs, build: stories::stepper::build },
     StoryEntry { name: "Switch", category: StoryCategory::Inputs, build: stories::switch::build },
     StoryEntry { name: "TextField", category: StoryCategory::Inputs, build: stories::text_field::build },
     StoryEntry { name: "Disclosure", category: StoryCategory::Inputs, build: stories::disclosure::build },
@@ -83,16 +86,21 @@ pub static STORIES: &[StoryEntry] = &[
     // Feedback
     StoryEntry { name: "Banner", category: StoryCategory::Feedback, build: stories::banner::build },
     StoryEntry { name: "Callout", category: StoryCategory::Feedback, build: stories::callout::build },
+    StoryEntry { name: "Skeleton", category: StoryCategory::Feedback, build: stories::skeleton::build },
     StoryEntry { name: "Spinner", category: StoryCategory::Feedback, build: stories::spinner::build },
+    StoryEntry { name: "HoverCard", category: StoryCategory::Feedback, build: stories::hover_card::build },
     StoryEntry { name: "Tooltip", category: StoryCategory::Feedback, build: stories::tooltip::build },
     // Navigation
+    StoryEntry { name: "Breadcrumb", category: StoryCategory::Navigation, build: stories::breadcrumb::build },
     StoryEntry { name: "Tab", category: StoryCategory::Navigation, build: stories::tab::build },
     StoryEntry { name: "Menu", category: StoryCategory::Navigation, build: stories::menu::build },
     // Layout
+    StoryEntry { name: "Accordion", category: StoryCategory::Layout, build: stories::accordion::build },
     StoryEntry { name: "Divider", category: StoryCategory::Layout, build: stories::divider::build },
     StoryEntry { name: "GradientFade", category: StoryCategory::Layout, build: stories::gradient_fade::build },
     StoryEntry { name: "Modal", category: StoryCategory::Layout, build: stories::modal::build },
     StoryEntry { name: "Popover", category: StoryCategory::Layout, build: stories::popover::build },
+    StoryEntry { name: "Sheet", category: StoryCategory::Layout, build: stories::sheet::build },
 ];
 
 // ---------------------------------------------------------------------------

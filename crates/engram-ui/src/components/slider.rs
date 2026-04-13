@@ -1,0 +1,238 @@
+//! Slider — a draggable range input for selecting a numeric value.
+//!
+//! The slider is stateless (`RenderOnce`): the parent owns the value and
+//! receives changes via a handler. Drag interaction uses a `canvas` overlay
+//! with `on_mouse_down` / `on_mouse_up` / `on_mouse_move` to track pointer
+//! position, computing the value from the horizontal offset within the
+//! track bounds.
+
+use std::cell::Cell;
+use std::rc::Rc;
+
+use engram_theme::{ActiveTheme, Color, Spacing};
+use gpui::{
+    App, Bounds, ElementId, IntoElement, MouseButton, Pixels, RenderOnce, SharedString, Styled,
+    Window, canvas, div, point, prelude::*, px, relative, size,
+};
+
+use crate::components::label::{Label, LabelCommon, LabelSize};
+use crate::components::stack::h_flex;
+use crate::traits::Disableable;
+
+/// Handler invoked when the slider value changes. Receives the new value.
+pub type SliderHandler = Rc<dyn Fn(f32, &mut Window, &mut App) + 'static>;
+
+/// A horizontal slider for selecting a numeric value within a range.
+#[derive(IntoElement)]
+pub struct Slider {
+    id: ElementId,
+    value: f32,
+    min: f32,
+    max: f32,
+    step: Option<f32>,
+    disabled: bool,
+    label: Option<SharedString>,
+    show_value: bool,
+    on_change: Option<SliderHandler>,
+}
+
+impl Slider {
+    pub fn new(id: impl Into<ElementId>, value: f32) -> Self {
+        Self {
+            id: id.into(),
+            value,
+            min: 0.0,
+            max: 100.0,
+            step: None,
+            disabled: false,
+            label: None,
+            show_value: false,
+            on_change: None,
+        }
+    }
+
+    pub fn min(mut self, min: f32) -> Self {
+        self.min = min;
+        self
+    }
+
+    pub fn max(mut self, max: f32) -> Self {
+        self.max = max;
+        self
+    }
+
+    pub fn step(mut self, step: f32) -> Self {
+        self.step = Some(step);
+        self
+    }
+
+    pub fn label(mut self, label: impl Into<SharedString>) -> Self {
+        self.label = Some(label.into());
+        self
+    }
+
+    /// Show the current numeric value next to the slider.
+    pub fn show_value(mut self, show: bool) -> Self {
+        self.show_value = show;
+        self
+    }
+
+    /// Register a change handler, invoked with the new value when dragged.
+    pub fn on_change(
+        mut self,
+        handler: impl Fn(f32, &mut Window, &mut App) + 'static,
+    ) -> Self {
+        self.on_change = Some(Rc::new(handler));
+        self
+    }
+}
+
+impl Disableable for Slider {
+    fn disabled(mut self, disabled: bool) -> Self {
+        self.disabled = disabled;
+        self
+    }
+}
+
+impl RenderOnce for Slider {
+    fn render(self, _window: &mut Window, cx: &mut App) -> impl IntoElement {
+        let colors = cx.theme().colors();
+        let range = self.max - self.min;
+        let fraction = if range > 0.0 {
+            ((self.value - self.min) / range).clamp(0.0, 1.0)
+        } else {
+            0.0
+        };
+
+        let track_bg = if self.disabled {
+            colors.element_disabled
+        } else {
+            colors.ghost_element_background
+        };
+        let fill_bg = if self.disabled {
+            colors.text_disabled
+        } else {
+            colors.accent
+        };
+        let thumb_bg = if self.disabled {
+            colors.text_disabled
+        } else {
+            colors.background
+        };
+        let thumb_border = if self.disabled {
+            colors.border_variant
+        } else {
+            colors.accent
+        };
+        let label_color = if self.disabled {
+            Color::Disabled
+        } else {
+            Color::Default
+        };
+
+        let track_height = px(6.0);
+        let thumb_size = px(16.0);
+
+        // Capture the track bounds during paint so the click handler can
+        // compute a value from the pointer's X position.
+        let track_bounds: Rc<Cell<Bounds<Pixels>>> = Rc::new(Cell::new(Bounds {
+            origin: point(px(0.0), px(0.0)),
+            size: size(px(1.0), px(1.0)),
+        }));
+
+        let paint_bounds = track_bounds.clone();
+
+        // The track with fill and thumb.
+        let track = div()
+            .id(self.id.clone())
+            .w_full()
+            .h(thumb_size)
+            .flex()
+            .items_center()
+            .child(
+                div()
+                    .w_full()
+                    .h(track_height)
+                    .rounded_full()
+                    .bg(track_bg)
+                    .relative()
+                    // Invisible canvas that captures its own bounds during paint.
+                    .child(
+                        canvas(
+                            move |bounds, _, _| {
+                                paint_bounds.set(bounds);
+                            },
+                            |_, _, _, _| {},
+                        )
+                        .absolute()
+                        .size_full(),
+                    )
+                    // Filled portion
+                    .child(
+                        div()
+                            .absolute()
+                            .left_0()
+                            .top_0()
+                            .h_full()
+                            .w(relative(fraction))
+                            .rounded_full()
+                            .bg(fill_bg),
+                    )
+                    // Thumb
+                    .child(
+                        div()
+                            .absolute()
+                            .top(-(thumb_size - track_height) / 2.0)
+                            .left(relative(fraction))
+                            .ml(-thumb_size / 2.0)
+                            .size(thumb_size)
+                            .rounded_full()
+                            .bg(thumb_bg)
+                            .border_2()
+                            .border_color(thumb_border)
+                            .when(!self.disabled, |this| {
+                                this.cursor_pointer()
+                                    .hover(|s| s.border_color(colors.border_focused))
+                            }),
+                    ),
+            )
+            .when_some(
+                (!self.disabled).then_some(self.on_change).flatten(),
+                |this, handler| {
+                    let min = self.min;
+                    let max = self.max;
+                    let step = self.step;
+                    let bounds_ref = track_bounds;
+                    this.on_mouse_down(MouseButton::Left, move |event, window, cx| {
+                        let b = bounds_ref.get();
+                        let w = b.size.width.max(px(1.0));
+                        let x = event.position.x - b.origin.x;
+                        let frac = (x / w).clamp(0.0, 1.0);
+                        let mut val = min + frac * (max - min);
+                        if let Some(s) = step {
+                            val = (val / s).round() * s;
+                        }
+                        handler(val.clamp(min, max), window, cx);
+                    })
+                },
+            );
+
+        let value_label = self.show_value.then(|| {
+            let text = if self.step.is_some_and(|s| s == s.round()) {
+                format!("{}", self.value as i64)
+            } else {
+                format!("{:.1}", self.value)
+            };
+            Label::new(text).size(LabelSize::Small).color(label_color)
+        });
+
+        h_flex()
+            .gap(Spacing::Small.pixels())
+            .w_full()
+            .when_some(self.label, |this, label| {
+                this.child(Label::new(label).size(LabelSize::Default).color(label_color))
+            })
+            .child(track)
+            .when_some(value_label, |this, label| this.child(label))
+    }
+}

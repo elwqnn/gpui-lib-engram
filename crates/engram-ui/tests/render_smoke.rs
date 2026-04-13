@@ -28,15 +28,18 @@ use std::cell::RefCell;
 
 use engram_theme::{self, Radius, Spacing};
 use engram_ui::components::{
-    Avatar, AvatarSize, Banner, BorderPosition, Button, ButtonCommon, ButtonLink, ButtonStyle,
+    Accordion, AccordionItem, Avatar, AvatarSize, Banner, BorderPosition, Breadcrumb,
+    BreadcrumbItem, Button, ButtonCommon, ButtonLink, ButtonStyle,
     Callout, Checkbox, CheckboxSize, Chip, ChipStyle, CircularProgress, CopyButton, CountBadge,
     DecoratedIcon, Disclosure, Divider, DropdownMenu, Facepile, GradientFade, Headline,
     HeadlineSize,
-    HighlightedLabel, Icon, IconButton, IconDecoration, IconName, IconSize, IconSource, Image,
+    HighlightedLabel, HoverCard, Icon, IconButton, IconDecoration, IconName, IconSize, IconSource,
+    Image,
     Indicator, KeyBinding, KeybindingHint, Label, LabelCommon, LabelSize, List, ListItem,
     ListItemSpacing, Menu,
-    Modal, Navigable, Notification, Popover, ProgressBar, Scrollbar, Severity, Spinner,
-    SplitButton, SplitButtonStyle, Switch, Tab, TabBar, TextField, TintColor,
+    Modal, Navigable, Notification, Popover, ProgressBar, Radio, Scrollbar, Severity, Sheet,
+    SheetSide, Skeleton, Slider, Spinner,
+    SplitButton, SplitButtonStyle, Stepper, Switch, Tab, TabBar, TextField, TintColor,
     ToggleButtonGroup, ToggleButtonGroupStyle, ToggleButtonSimple, ToggleButtonWithIcon, Tooltip,
     TreeViewItem, anchored_popover, h_flex, h_group, menu, modal_overlay, v_flex, v_group,
 };
@@ -974,6 +977,158 @@ fn toggle_button_group_renders(cx: &mut TestAppContext) {
                     ToggleButtonSimple::new("Off", |_, _, _| {}),
                 ],
             ).style(ToggleButtonGroupStyle::Filled))
+            .into_any_element()
+    });
+}
+
+#[gpui::test]
+fn stepper_renders(cx: &mut TestAppContext) {
+    smoke(cx, |_, _| {
+        v_flex()
+            .gap(Spacing::Small.pixels())
+            .child(Stepper::new("st-basic", 5.0).min(0.0).max(10.0))
+            .child(
+                Stepper::new("st-labeled", 3.0)
+                    .label("Quantity")
+                    .min(1.0)
+                    .max(99.0)
+                    .on_change(|_, _, _| {}),
+            )
+            .child(Stepper::new("st-dis", 0.0).disabled(true))
+            .into_any_element()
+    });
+}
+
+#[gpui::test]
+fn sheet_renders(cx: &mut TestAppContext) {
+    smoke(cx, |_, _| {
+        Sheet::new()
+            .side(SheetSide::Right)
+            .title("Details")
+            .child(Label::new("Panel content goes here."))
+            .into_any_element()
+    });
+}
+
+#[gpui::test]
+fn sheet_overlay_renders(cx: &mut TestAppContext) {
+    smoke(cx, |_, cx| {
+        let focus_handle = cx.focus_handle();
+        engram_ui::components::sheet_overlay(
+            focus_handle,
+            Sheet::new()
+                .side(SheetSide::Left)
+                .title("Settings")
+                .child(Label::new("Some settings.")),
+            |_, _| {},
+        )
+        .into_any_element()
+    });
+}
+
+#[gpui::test]
+fn breadcrumb_renders(cx: &mut TestAppContext) {
+    smoke(cx, |_, _| {
+        Breadcrumb::new()
+            .child(
+                BreadcrumbItem::new("bc-home", "Home")
+                    .icon(IconName::Home)
+                    .on_click(|_, _, _| {}),
+            )
+            .child(
+                BreadcrumbItem::new("bc-docs", "Documents")
+                    .on_click(|_, _, _| {}),
+            )
+            .child(
+                BreadcrumbItem::new("bc-file", "report.pdf")
+                    .current(true),
+            )
+            .into_any_element()
+    });
+}
+
+#[gpui::test]
+fn slider_renders(cx: &mut TestAppContext) {
+    smoke(cx, |_, _| {
+        v_flex()
+            .gap(Spacing::Small.pixels())
+            .child(Slider::new("s-basic", 50.0))
+            .child(
+                Slider::new("s-labeled", 75.0)
+                    .label("Volume")
+                    .show_value(true)
+                    .on_change(|_, _, _| {}),
+            )
+            .child(
+                Slider::new("s-stepped", 30.0)
+                    .min(0.0)
+                    .max(100.0)
+                    .step(10.0)
+                    .show_value(true),
+            )
+            .child(Slider::new("s-disabled", 40.0).disabled(true))
+            .into_any_element()
+    });
+}
+
+#[gpui::test]
+fn hover_card_renders(cx: &mut TestAppContext) {
+    smoke(cx, |_, cx| {
+        let card = cx.new(|_| {
+            HoverCard::new()
+                .title("User Profile")
+                .min_width(px(200.0))
+                .child(Label::new("Alice Smith"))
+                .child(Label::new("alice@example.com").color(engram_theme::Color::Muted))
+        });
+        card.into_any_element()
+    });
+}
+
+#[gpui::test]
+fn accordion_renders(cx: &mut TestAppContext) {
+    smoke(cx, |_, _| {
+        Accordion::new()
+            .child(
+                AccordionItem::new("a-1", "Section One", true)
+                    .body(Label::new("Content of section one."))
+                    .on_toggle(|_, _, _| {}),
+            )
+            .child(
+                AccordionItem::new("a-2", "Section Two", false)
+                    .body(Label::new("Content of section two."))
+                    .on_toggle(|_, _, _| {}),
+            )
+            .child(
+                AccordionItem::new("a-3", "Disabled", false)
+                    .body(Label::new("Hidden."))
+                    .disabled(true),
+            )
+            .into_any_element()
+    });
+}
+
+#[gpui::test]
+fn skeleton_renders(cx: &mut TestAppContext) {
+    smoke(cx, |_, _| {
+        v_flex()
+            .gap(Spacing::Small.pixels())
+            .child(Skeleton::new())
+            .child(Skeleton::new().width(px(200.0)).height(px(24.0)))
+            .child(Skeleton::circle(px(40.0)))
+            .child(engram_ui::components::skeleton_text(3, px(180.0)))
+            .into_any_element()
+    });
+}
+
+#[gpui::test]
+fn radio_renders(cx: &mut TestAppContext) {
+    smoke(cx, |_, _| {
+        v_flex()
+            .gap(Spacing::Small.pixels())
+            .child(Radio::new("r-off", ToggleState::Unselected).label("Option A"))
+            .child(Radio::new("r-on", ToggleState::Selected).label("Option B"))
+            .child(Radio::new("r-dis", ToggleState::Unselected).label("Disabled").disabled(true))
             .into_any_element()
     });
 }
