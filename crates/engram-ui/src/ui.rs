@@ -39,7 +39,7 @@ pub mod prelude {
     pub use crate::components::{
         Accordion, AccordionItem, Avatar, AvatarSize, Banner, BorderPosition, Breadcrumb,
         BreadcrumbItem, Button, ButtonCommon, ButtonLike, ButtonLink,
-        ButtonSize, ButtonStyle, Callout, Checkbox, CheckboxSize, Chip, ChipStyle,
+        ButtonSize, ButtonStyle, Callout, Checkbox, CheckboxSize, Chip, ChipSize, ChipStyle,
         CircularProgress, CopyButton, CountBadge, DecoratedIcon, Disclosure, Divider,
         DividerOrientation, DropdownMenu, EndSlotVisibility, Facepile, GradientFade, Headline,
         HeadlineSize,
@@ -50,8 +50,7 @@ pub mod prelude {
         ListItem, ListItemSpacing, Menu, MenuItem, Modal, Navigable, NavigableEntry, Notification,
         Popover, ProgressBar, Radio, Scrollbar, ScrollbarAxis, SelectableButton, Severity,
         Sheet, SheetSide, Skeleton, SkeletonShape, Slider, Spinner,
-        SplitButton, SplitButtonKind, SplitButtonStyle, Stepper, Switch, Tab, TabBar, Tag, TagSize,
-        TextField,
+        SplitButton, SplitButtonKind, SplitButtonStyle, Stepper, Switch, Tab, TabBar, TextField,
         TextFieldSubmitEvent, TintColor, ToggleButtonGroup, ToggleButtonGroupStyle,
         ToggleButtonSimple, ToggleButtonWithIcon, Tooltip, TreeViewItem, anchored_popover, h_flex,
         h_group, h_group_lg, modal_overlay, sheet_overlay, skeleton_text, text_field, v_flex,

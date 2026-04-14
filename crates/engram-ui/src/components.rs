@@ -36,13 +36,12 @@ pub mod stack;
 pub mod stepper;
 pub mod switch;
 pub mod tab;
-pub mod tag;
 pub mod text_field;
 pub mod tooltip;
 pub mod tree_view_item;
 
 pub use accordion::{Accordion, AccordionItem};
-pub use avatar::{Avatar, AvatarSize, Chip, ChipStyle, CountBadge, Facepile};
+pub use avatar::{Avatar, AvatarSize, Chip, ChipSize, ChipStyle, CountBadge, Facepile};
 pub use banner::{Banner, Notification, Severity};
 pub use breadcrumb::{Breadcrumb, BreadcrumbItem};
 pub use button::{
@@ -85,7 +84,6 @@ pub use stack::{h_flex, v_flex};
 pub use stepper::Stepper;
 pub use switch::Switch;
 pub use tab::{Tab, TabBar};
-pub use tag::{Tag, TagSize};
 pub use text_field::{TextField, TextFieldSubmitEvent, text_field};
 pub use tooltip::Tooltip;
 pub use tree_view_item::TreeViewItem;

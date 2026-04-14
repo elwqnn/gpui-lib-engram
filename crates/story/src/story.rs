@@ -81,7 +81,6 @@ pub static STORIES: &[StoryEntry] = &[
     StoryEntry { name: "Progress", category: StoryCategory::DataDisplay, build: stories::progress::build },
     StoryEntry { name: "Indicator", category: StoryCategory::DataDisplay, build: stories::indicator::build },
     StoryEntry { name: "Chip", category: StoryCategory::DataDisplay, build: stories::chip::build },
-    StoryEntry { name: "Tag", category: StoryCategory::DataDisplay, build: stories::tag::build },
     StoryEntry { name: "KeyBinding", category: StoryCategory::DataDisplay, build: stories::keybinding::build },
     StoryEntry { name: "KeybindingHint", category: StoryCategory::DataDisplay, build: stories::keybinding_hint::build },
     // Feedback

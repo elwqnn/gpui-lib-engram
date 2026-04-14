@@ -37,7 +37,6 @@ pub mod split_button;
 pub mod stepper;
 pub mod switch;
 pub mod tab;
-pub mod tag;
 pub mod toggle_button;
 pub mod text_field;
 pub mod tooltip;

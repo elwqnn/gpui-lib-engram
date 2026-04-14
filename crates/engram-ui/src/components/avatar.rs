@@ -7,14 +7,15 @@
 //!   [`Avatar::image`].
 //! - [`Facepile`]: a horizontal stack of overlapping `Avatar`s.
 //! - [`Chip`]: a compact rounded badge for a single label, optionally
-//!   colored by status (Default / Accent / Success / Warning / Error).
+//!   colored by status (Default / Accent / Success / Warning / Error / Info).
+//!   Supports size variants and an outline mode.
 //! - [`CountBadge`]: a numeric badge that styles small counts ("3") and
 //!   caps large ones at "99+".
 
 use engram_theme::{ActiveTheme, Color, Radius, Spacing};
 use gpui::{
     App, Hsla, ImageSource, IntoElement, ParentElement, Pixels, RenderOnce, SharedString, Styled,
-    Window, div, hsla, img, prelude::*, px,
+    Window, div, hsla, img, prelude::*, px, transparent_black,
 };
 use smallvec::SmallVec;
 
@@ -207,13 +208,29 @@ pub enum ChipStyle {
     Success,
     Warning,
     Error,
+    Info,
+}
+
+/// Display size of a [`Chip`].
+#[derive(Debug, Default, Clone, Copy, PartialEq, Eq)]
+pub enum ChipSize {
+    /// Compact — `LabelSize::XSmall`, tight padding.
+    Small,
+    /// Default — `LabelSize::Small`, standard padding.
+    #[default]
+    Medium,
 }
 
 /// A small rounded label, useful for tags / pills / status markers.
+///
+/// Chips default to a fully rounded (pill) shape. Use `.outline(true)` for
+/// a transparent-background variant with a colored border.
 #[derive(IntoElement)]
 pub struct Chip {
     label: SharedString,
     style: ChipStyle,
+    size: ChipSize,
+    outline: bool,
 }
 
 impl Chip {
@@ -221,11 +238,24 @@ impl Chip {
         Self {
             label: label.into(),
             style: ChipStyle::Default,
+            size: ChipSize::default(),
+            outline: false,
         }
     }
 
     pub fn style(mut self, style: ChipStyle) -> Self {
         self.style = style;
+        self
+    }
+
+    pub fn size(mut self, size: ChipSize) -> Self {
+        self.size = size;
+        self
+    }
+
+    /// Render as an outlined chip (transparent background, colored border).
+    pub fn outline(mut self, outline: bool) -> Self {
+        self.outline = outline;
         self
     }
 }
@@ -234,36 +264,47 @@ impl RenderOnce for Chip {
     fn render(self, _window: &mut Window, cx: &mut App) -> impl IntoElement {
         let colors = cx.theme().colors();
         let status = &colors.status;
-        // The three status flavors pull their bg + border from `StatusColors`
-        // so the chip chrome reinforces the label color. `Default` and
-        // `Accent` keep the neutral element background — there's no
-        // "accent_background" token and a chip with a colored label on a
-        // neutral chip reads cleanly enough for those two cases.
-        let (label_color, bg, border) = match self.style {
-            ChipStyle::Default => (Color::Default, colors.element_background, colors.border),
-            ChipStyle::Accent => (Color::Accent, colors.element_background, colors.border),
-            ChipStyle::Success => (
-                Color::Success,
-                status.success_background,
-                status.success_border,
-            ),
-            ChipStyle::Warning => (
-                Color::Warning,
-                status.warning_background,
-                status.warning_border,
-            ),
-            ChipStyle::Error => (Color::Error, status.error_background, status.error_border),
+
+        let label_color = match self.style {
+            ChipStyle::Default => Color::Default,
+            ChipStyle::Accent => Color::Accent,
+            ChipStyle::Success => Color::Success,
+            ChipStyle::Warning => Color::Warning,
+            ChipStyle::Error => Color::Error,
+            ChipStyle::Info => Color::Info,
         };
+
+        // In outline mode the background is transparent and the border
+        // takes the label's resolved color. In filled mode the status
+        // flavors pull bg + border from StatusColors; Default and Accent
+        // keep the neutral element background.
+        let (bg, border) = if self.outline {
+            (transparent_black(), label_color.hsla(&colors))
+        } else {
+            match self.style {
+                ChipStyle::Success => (status.success_background, status.success_border),
+                ChipStyle::Warning => (status.warning_background, status.warning_border),
+                ChipStyle::Error => (status.error_background, status.error_border),
+                ChipStyle::Info => (status.info_background, status.info_border),
+                _ => (colors.element_background, colors.border),
+            }
+        };
+
+        let (label_size, px_x, px_y) = match self.size {
+            ChipSize::Small => (LabelSize::XSmall, Spacing::XSmall, Spacing::XXSmall),
+            ChipSize::Medium => (LabelSize::Small, Spacing::Small, Spacing::XXSmall),
+        };
+
         div()
-            .px(Spacing::Small.pixels())
-            .py(px(1.0))
+            .px(px_x.pixels())
+            .py(px_y.pixels())
             .rounded(Radius::Full.pixels())
             .border_1()
             .border_color(border)
             .bg(bg)
             .child(
                 Label::new(self.label)
-                    .size(LabelSize::XSmall)
+                    .size(label_size)
                     .color(label_color),
             )
     }
