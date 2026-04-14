@@ -26,7 +26,7 @@
 
 use std::cell::RefCell;
 
-use engram_theme::{self, Radius, Spacing};
+use engram_theme::{self, Color, Radius, Spacing};
 use engram_ui::components::{
     Accordion, AccordionItem, Avatar, AvatarSize, Banner, BorderPosition, Breadcrumb,
     BreadcrumbItem, Button, ButtonCommon, ButtonLink, ButtonStyle,
@@ -39,7 +39,7 @@ use engram_ui::components::{
     ListItemSpacing, Menu,
     Modal, Navigable, Notification, Popover, ProgressBar, Radio, Scrollbar, Severity, Sheet,
     SheetSide, Skeleton, Slider, Spinner,
-    SplitButton, SplitButtonStyle, Stepper, Switch, Tab, TabBar, TextField, TintColor,
+    SplitButton, SplitButtonStyle, Stepper, Switch, Tab, TabBar, Tag, TagSize, TextField, TintColor,
     ToggleButtonGroup, ToggleButtonGroupStyle, ToggleButtonSimple, ToggleButtonWithIcon, Tooltip,
     TreeViewItem, anchored_popover, h_flex, h_group, menu, modal_overlay, v_flex, v_group,
 };
@@ -1129,6 +1129,19 @@ fn radio_renders(cx: &mut TestAppContext) {
             .child(Radio::new("r-off", ToggleState::Unselected).label("Option A"))
             .child(Radio::new("r-on", ToggleState::Selected).label("Option B"))
             .child(Radio::new("r-dis", ToggleState::Unselected).label("Disabled").disabled(true))
+            .into_any_element()
+    });
+}
+
+#[gpui::test]
+fn tag_renders(cx: &mut TestAppContext) {
+    smoke(cx, |_, _| {
+        v_flex()
+            .gap(Spacing::Small.pixels())
+            .child(Tag::new("Default"))
+            .child(Tag::new("Success").color(Color::Success))
+            .child(Tag::new("Warning").color(Color::Warning).size(TagSize::Small))
+            .child(Tag::new("Outlined").color(Color::Error).outline(true))
             .into_any_element()
     });
 }
