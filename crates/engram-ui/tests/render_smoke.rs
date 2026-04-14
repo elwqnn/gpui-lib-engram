@@ -31,13 +31,13 @@ use engram_ui::components::{
     Accordion, AccordionItem, Avatar, AvatarSize, Banner, BorderPosition, Breadcrumb,
     BreadcrumbItem, Button, ButtonCommon, ButtonLink, ButtonStyle,
     Callout, Checkbox, CheckboxSize, Chip, ChipSize, ChipStyle, CircularProgress, CopyButton, CountBadge,
-    DecoratedIcon, Disclosure, Divider, DropdownMenu, Facepile, GradientFade, Headline,
+    DecoratedIcon, DescriptionList, Disclosure, Divider, DropdownMenu, Facepile, GradientFade, Headline,
     HeadlineSize,
     HighlightedLabel, HoverCard, Icon, IconButton, IconDecoration, IconName, IconSize, IconSource,
     Image,
     Indicator, KeyBinding, KeybindingHint, Label, LabelCommon, LabelSize, List, ListItem,
     ListItemSpacing, Menu,
-    Modal, Navigable, Notification, Popover, ProgressBar, Radio, Scrollbar, Severity, Sheet,
+    Modal, Navigable, Notification, Pagination, Popover, ProgressBar, Radio, Scrollbar, Severity, Sheet,
     SheetSide, Skeleton, Slider, Spinner,
     SplitButton, SplitButtonStyle, Stepper, Switch, Tab, TabBar, TextField, TintColor,
     ToggleButtonGroup, ToggleButtonGroupStyle, ToggleButtonSimple, ToggleButtonWithIcon, Tooltip,
@@ -1142,6 +1142,45 @@ fn chip_renders_outline_and_sizes(cx: &mut TestAppContext) {
             .child(Chip::new("Medium").size(ChipSize::Medium))
             .child(Chip::new("Info").style(ChipStyle::Info))
             .child(Chip::new("Outline").style(ChipStyle::Error).outline(true))
+            .into_any_element()
+    });
+}
+
+#[gpui::test]
+fn description_list_renders(cx: &mut TestAppContext) {
+    smoke(cx, |_, _| {
+        DescriptionList::new()
+            .bordered(true)
+            .label_width(100.0)
+            .entry("Name", Label::new("Alice"))
+            .entry("Role", Label::new("Engineer"))
+            .entry("Status", Label::new("Active"))
+            .into_any_element()
+    });
+}
+
+#[gpui::test]
+fn pagination_renders(cx: &mut TestAppContext) {
+    smoke(cx, |_, _| {
+        v_flex()
+            .gap(Spacing::Small.pixels())
+            .child(
+                Pagination::new("pg-small")
+                    .current_page(1)
+                    .total_pages(3),
+            )
+            .child(
+                Pagination::new("pg-large")
+                    .current_page(5)
+                    .total_pages(20)
+                    .visible_pages(7),
+            )
+            .child(
+                Pagination::new("pg-disabled")
+                    .current_page(1)
+                    .total_pages(10)
+                    .disabled(true),
+            )
             .into_any_element()
     });
 }

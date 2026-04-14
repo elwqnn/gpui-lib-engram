@@ -81,6 +81,7 @@ pub static STORIES: &[StoryEntry] = &[
     StoryEntry { name: "Progress", category: StoryCategory::DataDisplay, build: stories::progress::build },
     StoryEntry { name: "Indicator", category: StoryCategory::DataDisplay, build: stories::indicator::build },
     StoryEntry { name: "Chip", category: StoryCategory::DataDisplay, build: stories::chip::build },
+    StoryEntry { name: "DescriptionList", category: StoryCategory::DataDisplay, build: stories::description_list::build },
     StoryEntry { name: "KeyBinding", category: StoryCategory::DataDisplay, build: stories::keybinding::build },
     StoryEntry { name: "KeybindingHint", category: StoryCategory::DataDisplay, build: stories::keybinding_hint::build },
     // Feedback
@@ -92,6 +93,7 @@ pub static STORIES: &[StoryEntry] = &[
     StoryEntry { name: "Tooltip", category: StoryCategory::Feedback, build: stories::tooltip::build },
     // Navigation
     StoryEntry { name: "Breadcrumb", category: StoryCategory::Navigation, build: stories::breadcrumb::build },
+    StoryEntry { name: "Pagination", category: StoryCategory::Navigation, build: stories::pagination::build },
     StoryEntry { name: "Tab", category: StoryCategory::Navigation, build: stories::tab::build },
     StoryEntry { name: "Menu", category: StoryCategory::Navigation, build: stories::menu::build },
     // Layout
