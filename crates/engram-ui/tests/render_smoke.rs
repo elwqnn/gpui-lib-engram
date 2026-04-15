@@ -41,7 +41,8 @@ use engram_ui::components::{
     SheetSide, Skeleton, Slider, Spinner,
     SplitButton, SplitButtonStyle, Stepper, Switch, Tab, TabBar, TextField, TintColor,
     ToggleButtonGroup, ToggleButtonGroupStyle, ToggleButtonSimple, ToggleButtonWithIcon, Tooltip,
-    TreeViewItem, VirtualList, VirtualListScrollHandle, anchored_popover, h_flex, h_group, menu,
+    TreeViewItem, VariableList, VariableListScrollHandle, VirtualList, VirtualListScrollHandle,
+    anchored_popover, h_flex, h_group, menu,
     modal_overlay, v_flex, v_group,
 };
 use engram_ui::traits::{Clickable, Disableable, StyledExt, ToggleState, Toggleable};
@@ -1196,6 +1197,19 @@ fn virtual_list_renders(cx: &mut TestAppContext) {
                 .collect()
         })
         .track_scroll(handle)
+        .with_scrollbar()
+        .h_full()
+        .into_any_element()
+    });
+}
+
+#[gpui::test]
+fn variable_list_renders(cx: &mut TestAppContext) {
+    smoke(cx, |_, _| {
+        let handle = VariableListScrollHandle::new(500);
+        VariableList::new(handle, |ix, _window, _cx| {
+            Label::new(format!("row {ix}")).into_any_element()
+        })
         .with_scrollbar()
         .h_full()
         .into_any_element()

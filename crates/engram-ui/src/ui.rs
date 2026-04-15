@@ -54,8 +54,9 @@ pub mod prelude {
         Sheet, SheetSide, Skeleton, SkeletonShape, Slider, Spinner,
         SplitButton, SplitButtonKind, SplitButtonStyle, Stepper, Switch, Tab, TabBar, TextField,
         TextFieldSubmitEvent, TintColor, ToggleButtonGroup, ToggleButtonGroupStyle,
-        ToggleButtonSimple, ToggleButtonWithIcon, Tooltip, TreeViewItem, VirtualList,
-        VirtualListScrollHandle, anchored_popover, h_flex, h_group, h_group_lg, modal_overlay,
+        ToggleButtonSimple, ToggleButtonWithIcon, Tooltip, TreeViewItem, VariableList,
+        VariableListAlignment, VariableListScrollHandle, VirtualList, VirtualListScrollHandle,
+        anchored_popover, h_flex, h_group, h_group_lg, modal_overlay,
         sheet_overlay, skeleton_text, text_field, v_flex, v_group, v_group_lg,
     };
     pub use crate::styles::ElevationIndex;

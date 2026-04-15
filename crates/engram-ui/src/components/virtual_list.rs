@@ -40,6 +40,8 @@ use gpui::{
     UniformListScrollHandle, Window, div, px, uniform_list,
 };
 
+use super::scroll_metrics::{SCROLLBAR_THICKNESS, ThumbMetrics};
+
 pub use gpui::ScrollStrategy;
 
 /// Scroll handle for a [`VirtualList`]. Clones share state.
@@ -190,46 +192,6 @@ impl IntoElement for VirtualList {
 
 struct VirtualListScrollbar {
     handle: VirtualListScrollHandle,
-}
-
-const SCROLLBAR_THICKNESS: Pixels = px(10.0);
-const SCROLLBAR_MIN_THUMB_RATIO: f32 = 0.08;
-
-/// Thumb sizing + mapping from thumb-top to content scroll offset.
-/// Single source of truth shared by the decoration (to paint the thumb)
-/// and the drag handler (to translate cursor delta back to offset).
-#[derive(Clone, Copy)]
-struct ThumbMetrics {
-    thumb_h: f32,
-    travel: f32,
-    max_scroll: f32,
-}
-
-impl ThumbMetrics {
-    fn compute(viewport: Pixels, content: Pixels) -> Option<Self> {
-        let viewport = viewport.as_f32();
-        let content = content.as_f32();
-        let max_scroll = content - viewport;
-        if viewport <= 0.0 || max_scroll <= 0.0 {
-            return None;
-        }
-        let ratio = (viewport / content).clamp(SCROLLBAR_MIN_THUMB_RATIO, 1.0);
-        let thumb_h = viewport * ratio;
-        let travel = (viewport - thumb_h).max(0.0);
-        Some(Self { thumb_h, travel, max_scroll })
-    }
-
-    fn thumb_top_for_scroll(&self, scroll: f32) -> f32 {
-        let r = (scroll / self.max_scroll).clamp(0.0, 1.0);
-        self.travel * r
-    }
-
-    fn scroll_for_thumb_top(&self, thumb_top: Pixels) -> Pixels {
-        if self.travel <= 0.0 {
-            return px(0.0);
-        }
-        px((thumb_top.as_f32() / self.travel).clamp(0.0, 1.0) * self.max_scroll)
-    }
 }
 
 impl UniformListDecoration for VirtualListScrollbar {

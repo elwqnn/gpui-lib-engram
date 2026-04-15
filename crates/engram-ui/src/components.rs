@@ -41,7 +41,10 @@ pub mod tab;
 pub mod text_field;
 pub mod tooltip;
 pub mod tree_view_item;
+pub mod variable_list;
 pub mod virtual_list;
+
+mod scroll_metrics;
 
 pub use accordion::{Accordion, AccordionItem};
 pub use avatar::{Avatar, AvatarSize, Chip, ChipSize, ChipStyle, CountBadge, Facepile};
@@ -92,4 +95,5 @@ pub use tab::{Tab, TabBar};
 pub use text_field::{TextField, TextFieldSubmitEvent, text_field};
 pub use tooltip::Tooltip;
 pub use tree_view_item::TreeViewItem;
+pub use variable_list::{VariableList, VariableListAlignment, VariableListScrollHandle};
 pub use virtual_list::{ScrollStrategy, VirtualList, VirtualListScrollHandle};
