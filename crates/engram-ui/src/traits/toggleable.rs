@@ -17,6 +17,10 @@ impl ToggleState {
         matches!(self, Self::Selected)
     }
 
+    pub fn indeterminate(self) -> bool {
+        matches!(self, Self::Indeterminate)
+    }
+
     pub fn inverse(self) -> Self {
         match self {
             Self::Selected => Self::Unselected,
@@ -62,6 +66,13 @@ mod tests {
         assert!(ToggleState::Selected.selected());
         assert!(!ToggleState::Unselected.selected());
         assert!(!ToggleState::Indeterminate.selected());
+    }
+
+    #[test]
+    fn indeterminate_only_true_for_indeterminate() {
+        assert!(ToggleState::Indeterminate.indeterminate());
+        assert!(!ToggleState::Selected.indeterminate());
+        assert!(!ToggleState::Unselected.indeterminate());
     }
 
     #[test]
