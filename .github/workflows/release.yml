@@ -1,0 +1,57 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+env:
+  CARGO_TERM_COLOR: always
+  RUSTFLAGS: "-D warnings"
+
+jobs:
+  publish:
+    name: cargo publish (engram-theme, engram-ui, engram)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install system deps (gpui Wayland/X11)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            libwayland-dev libxkbcommon-dev libxkbcommon-x11-dev \
+            libx11-dev libxi-dev libxrandr-dev libxcursor-dev \
+            libfontconfig1-dev libssl-dev pkg-config mold
+
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          components: rustfmt, clippy
+          cache: true
+          cache-workspaces: |
+            . -> target
+
+      - name: cargo fmt --check
+        run: cargo fmt --all -- --check
+
+      - name: cargo clippy
+        run: cargo clippy --workspace --lib --tests --bins -- -D warnings
+
+      - name: cargo test
+        run: cargo test --workspace --no-fail-fast
+
+      - name: Publish engram-theme
+        run: cargo publish -p engram-theme --token ${{ secrets.CARGO_REGISTRY_TOKEN }}
+
+      - name: Wait for engram-theme to appear on crates.io
+        run: sleep 30
+
+      - name: Publish engram-ui
+        run: cargo publish -p engram-ui --token ${{ secrets.CARGO_REGISTRY_TOKEN }}
+
+      - name: Wait for engram-ui to appear on crates.io
+        run: sleep 30
+
+      - name: Publish engram
+        run: cargo publish -p engram --token ${{ secrets.CARGO_REGISTRY_TOKEN }}
