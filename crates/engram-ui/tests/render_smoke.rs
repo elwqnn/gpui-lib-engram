@@ -26,24 +26,20 @@
 
 use std::cell::RefCell;
 
-use engram_theme::{self, Color, Radius, Spacing};
+use engram_theme::{self, Radius, Spacing};
 use engram_ui::components::{
     Accordion, AccordionItem, Avatar, AvatarSize, Banner, BorderPosition, Breadcrumb,
-    BreadcrumbItem, Button, ButtonCommon, ButtonLink, ButtonStyle,
-    Callout, Checkbox, CheckboxSize, Chip, ChipSize, ChipStyle, CircularProgress, CopyButton, CountBadge,
-    DecoratedIcon, DescriptionList, Disclosure, Divider, DropdownMenu, Facepile, GradientFade, Headline,
-    HeadlineSize,
-    HighlightedLabel, HoverCard, Icon, IconButton, IconDecoration, IconName, IconSize, IconSource,
-    Image,
-    Indicator, KeyBinding, KeybindingHint, Label, LabelCommon, LabelSize, List, ListItem,
-    ListItemSpacing, Menu,
-    Modal, Navigable, Notification, Pagination, Popover, ProgressBar, Radio, Scrollbar, Severity, Sheet,
-    SheetSide, Skeleton, Slider, Spinner,
+    BreadcrumbItem, Button, ButtonCommon, ButtonLink, ButtonStyle, Callout, Checkbox, CheckboxSize,
+    Chip, ChipSize, ChipStyle, CircularProgress, CopyButton, CountBadge, DecoratedIcon,
+    DescriptionList, Disclosure, Divider, DropdownMenu, Facepile, GradientFade, Headline,
+    HeadlineSize, HighlightedLabel, HoverCard, Icon, IconButton, IconDecoration, IconName,
+    IconSize, IconSource, Image, Indicator, KeyBinding, KeybindingHint, Label, LabelCommon,
+    LabelSize, List, ListItem, ListItemSpacing, Menu, Modal, Navigable, Notification, Pagination,
+    Popover, ProgressBar, Radio, Scrollbar, Severity, Sheet, SheetSide, Skeleton, Slider, Spinner,
     SplitButton, SplitButtonStyle, Stepper, Switch, Tab, TabBar, TextField, TintColor,
     ToggleButtonGroup, ToggleButtonGroupStyle, ToggleButtonSimple, ToggleButtonWithIcon, Tooltip,
     TreeViewItem, VariableList, VariableListScrollHandle, VirtualList, VirtualListScrollHandle,
-    anchored_popover, h_flex, h_group, menu,
-    modal_overlay, v_flex, v_group,
+    anchored_popover, h_flex, h_group, menu, modal_overlay, v_flex, v_group,
 };
 use engram_ui::traits::{Clickable, Disableable, StyledExt, ToggleState, Toggleable};
 use gpui::{
@@ -64,7 +60,10 @@ struct TestRoot {
 impl Render for TestRoot {
     fn render(&mut self, window: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
         let mut build = self.build.borrow_mut();
-        div().size_full().p(Spacing::Medium.pixels()).child(build(window, cx))
+        div()
+            .size_full()
+            .p(Spacing::Medium.pixels())
+            .child(build(window, cx))
     }
 }
 
@@ -151,7 +150,9 @@ fn icon_source_variants_render(cx: &mut TestAppContext) {
         h_flex()
             .gap(Spacing::Small.pixels())
             .child(Icon::new(IconName::Check))
-            .child(Icon::new(IconSource::ExternalSvg("file:///mock/icon.svg".into())))
+            .child(Icon::new(IconSource::ExternalSvg(
+                "file:///mock/icon.svg".into(),
+            )))
             .child(Icon::from_path("brand/engram.svg"))
             .into_any_element()
     });
@@ -242,8 +243,14 @@ fn keybinding_hint_renders(cx: &mut TestAppContext) {
         v_flex()
             .gap(Spacing::Small.pixels())
             .child(KeybindingHint::new(KeyBinding::new(["Enter"])))
-            .child(KeybindingHint::with_prefix("Save:", KeyBinding::new(["Ctrl", "S"])))
-            .child(KeybindingHint::with_suffix(KeyBinding::new(["Esc"]), "to cancel"))
+            .child(KeybindingHint::with_prefix(
+                "Save:",
+                KeyBinding::new(["Ctrl", "S"]),
+            ))
+            .child(KeybindingHint::with_suffix(
+                KeyBinding::new(["Esc"]),
+                "to cancel",
+            ))
             .into_any_element()
     });
 }
@@ -277,7 +284,9 @@ fn list_renders_with_items(cx: &mut TestAppContext) {
 #[gpui::test]
 fn empty_list_renders(cx: &mut TestAppContext) {
     smoke(cx, |_, _| {
-        List::new().empty_message("Nothing here yet").into_any_element()
+        List::new()
+            .empty_message("Nothing here yet")
+            .into_any_element()
     });
 }
 
@@ -797,11 +806,12 @@ fn gradient_fade_renders(cx: &mut TestAppContext) {
         div()
             .relative()
             .size(px(100.0))
-            .child(GradientFade::new(gpui::black(), gpui::black(), gpui::black()))
-            .child(
-                GradientFade::new(gpui::white(), gpui::white(), gpui::white())
-                    .right(px(10.0)),
-            )
+            .child(GradientFade::new(
+                gpui::black(),
+                gpui::black(),
+                gpui::black(),
+            ))
+            .child(GradientFade::new(gpui::white(), gpui::white(), gpui::white()).right(px(10.0)))
             .into_any_element()
     });
 }
@@ -810,16 +820,8 @@ fn gradient_fade_renders(cx: &mut TestAppContext) {
 fn group_helpers_render(cx: &mut TestAppContext) {
     smoke(cx, |_, _| {
         v_flex()
-            .child(
-                h_group()
-                    .child(Label::new("A"))
-                    .child(Label::new("B")),
-            )
-            .child(
-                v_group()
-                    .child(Label::new("C"))
-                    .child(Label::new("D")),
-            )
+            .child(h_group().child(Label::new("A")).child(Label::new("B")))
+            .child(v_group().child(Label::new("C")).child(Label::new("D")))
             .into_any_element()
     });
 }
@@ -835,10 +837,7 @@ fn tree_view_item_renders(cx: &mut TestAppContext) {
                     .on_toggle(|_, _, _| {}),
             )
             .child(TreeViewItem::new("leaf-1", "file.rs"))
-            .child(
-                TreeViewItem::new("leaf-2", "selected.rs")
-                    .toggle_state(ToggleState::Selected),
-            )
+            .child(TreeViewItem::new("leaf-2", "selected.rs").toggle_state(ToggleState::Selected))
             .into_any_element()
     });
 }
@@ -957,28 +956,37 @@ fn spinner_renders(cx: &mut TestAppContext) {
 fn toggle_button_group_renders(cx: &mut TestAppContext) {
     smoke(cx, |_window, _cx| {
         v_flex()
-            .child(ToggleButtonGroup::new(
-                "simple",
-                [
-                    ToggleButtonSimple::new("First", |_, _, _| {}),
-                    ToggleButtonSimple::new("Second", |_, _, _| {}),
-                    ToggleButtonSimple::new("Third", |_, _, _| {}),
-                ],
-            ).selected_index(1))
-            .child(ToggleButtonGroup::new(
-                "with_icons",
-                [
-                    ToggleButtonWithIcon::new("A", IconName::Check, |_, _, _| {}),
-                    ToggleButtonWithIcon::new("B", IconName::Close, |_, _, _| {}),
-                ],
-            ).style(ToggleButtonGroupStyle::Outlined))
-            .child(ToggleButtonGroup::new(
-                "filled",
-                [
-                    ToggleButtonSimple::new("On", |_, _, _| {}),
-                    ToggleButtonSimple::new("Off", |_, _, _| {}),
-                ],
-            ).style(ToggleButtonGroupStyle::Filled))
+            .child(
+                ToggleButtonGroup::new(
+                    "simple",
+                    [
+                        ToggleButtonSimple::new("First", |_, _, _| {}),
+                        ToggleButtonSimple::new("Second", |_, _, _| {}),
+                        ToggleButtonSimple::new("Third", |_, _, _| {}),
+                    ],
+                )
+                .selected_index(1),
+            )
+            .child(
+                ToggleButtonGroup::new(
+                    "with_icons",
+                    [
+                        ToggleButtonWithIcon::new("A", IconName::Check, |_, _, _| {}),
+                        ToggleButtonWithIcon::new("B", IconName::Close, |_, _, _| {}),
+                    ],
+                )
+                .style(ToggleButtonGroupStyle::Outlined),
+            )
+            .child(
+                ToggleButtonGroup::new(
+                    "filled",
+                    [
+                        ToggleButtonSimple::new("On", |_, _, _| {}),
+                        ToggleButtonSimple::new("Off", |_, _, _| {}),
+                    ],
+                )
+                .style(ToggleButtonGroupStyle::Filled),
+            )
             .into_any_element()
     });
 }
@@ -1037,14 +1045,8 @@ fn breadcrumb_renders(cx: &mut TestAppContext) {
                     .icon(IconName::Home)
                     .on_click(|_, _, _| {}),
             )
-            .child(
-                BreadcrumbItem::new("bc-docs", "Documents")
-                    .on_click(|_, _, _| {}),
-            )
-            .child(
-                BreadcrumbItem::new("bc-file", "report.pdf")
-                    .current(true),
-            )
+            .child(BreadcrumbItem::new("bc-docs", "Documents").on_click(|_, _, _| {}))
+            .child(BreadcrumbItem::new("bc-file", "report.pdf").current(true))
             .into_any_element()
     });
 }
@@ -1130,7 +1132,11 @@ fn radio_renders(cx: &mut TestAppContext) {
             .gap(Spacing::Small.pixels())
             .child(Radio::new("r-off", ToggleState::Unselected).label("Option A"))
             .child(Radio::new("r-on", ToggleState::Selected).label("Option B"))
-            .child(Radio::new("r-dis", ToggleState::Unselected).label("Disabled").disabled(true))
+            .child(
+                Radio::new("r-dis", ToggleState::Unselected)
+                    .label("Disabled")
+                    .disabled(true),
+            )
             .into_any_element()
     });
 }
@@ -1166,11 +1172,7 @@ fn pagination_renders(cx: &mut TestAppContext) {
     smoke(cx, |_, _| {
         v_flex()
             .gap(Spacing::Small.pixels())
-            .child(
-                Pagination::new("pg-small")
-                    .current_page(1)
-                    .total_pages(3),
-            )
+            .child(Pagination::new("pg-small").current_page(1).total_pages(3))
             .child(
                 Pagination::new("pg-large")
                     .current_page(5)
