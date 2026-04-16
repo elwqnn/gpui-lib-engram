@@ -17,7 +17,7 @@ the project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 - `TextField`: opt-in multi-line mode via `TextField::multi_line()` + `min_lines(n)` — Shift+Enter inserts a newline, Enter still submits, Up/Down navigate with preserved goal column, paste preserves newlines, height auto-grows. Hard-wrap only (no soft-wrap on width overflow).
 
 ### Changed
-- `gpui` / `gpui_platform` now pinned by `rev` (`3a5dc8e`) instead of `branch = "main"`, so builds are reproducible across contributors without relying on `Cargo.lock` catching drift.
+- `gpui` / `gpui_platform` pinned by `rev` (`302e591`, latest zed `main` as of 2026-04-17) instead of `branch = "main"`, so builds are reproducible across contributors without relying on `Cargo.lock` catching drift.
 - Workspace `engram` added to `[workspace.dependencies]` so `story` no longer uses a one-off `path = ...` override.
 
 ## [0.1.0] — pre-release (on `v0.1` branch)
