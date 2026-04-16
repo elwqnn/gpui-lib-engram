@@ -1,6 +1,8 @@
 //! Theme foundation for engram: color tokens, spacing, typography, and
 //! the [`ActiveTheme`] accessor registered as a GPUI global.
 
+#![forbid(unsafe_code)]
+
 mod colors;
 mod default;
 pub mod hot_reload;

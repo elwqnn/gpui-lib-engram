@@ -7,6 +7,8 @@
 //! Apps should call [`init`] during startup (alongside `engram_theme::init`)
 //! so the built-in components can register their default keybindings.
 
+#![forbid(unsafe_code)]
+
 pub mod assets;
 pub mod components;
 pub mod styles;
