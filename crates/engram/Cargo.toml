@@ -1,8 +1,15 @@
 [package]
 name = "engram"
+description = "Umbrella facade for the engram GPUI component library — re-exports engram-theme and engram-ui."
 version.workspace = true
 edition.workspace = true
 license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+readme = "../../README.md"
+keywords.workspace = true
+categories.workspace = true
+publish = true
 
 [lib]
 path = "src/engram.rs"
