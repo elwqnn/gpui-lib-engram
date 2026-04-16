@@ -130,16 +130,14 @@ impl RenderOnce for Button {
             Color::Default
         };
 
-        self.base
-            .padding(pad_x.pixels(), pad_y.pixels())
-            .child(
-                h_flex()
-                    .gap(Spacing::XSmall.pixels())
-                    .when_some(self.icon, |this, icon| {
-                        this.child(Icon::new(icon).size(icon_size).color(label_color))
-                    })
-                    .child(Label::new(self.label).size(text_size).color(label_color)),
-            )
+        self.base.padding(pad_x.pixels(), pad_y.pixels()).child(
+            h_flex()
+                .gap(Spacing::XSmall.pixels())
+                .when_some(self.icon, |this, icon| {
+                    this.child(Icon::new(icon).size(icon_size).color(label_color))
+                })
+                .child(Label::new(self.label).size(text_size).color(label_color)),
+        )
     }
 }
 

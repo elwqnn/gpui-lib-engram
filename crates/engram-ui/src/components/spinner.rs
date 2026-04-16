@@ -74,9 +74,7 @@ impl RenderOnce for Spinner {
             .with_animation(
                 "spinner-rotate",
                 Animation::new(Duration::from_secs(1)).repeat(),
-                |svg, delta| {
-                    svg.with_transformation(Transformation::rotate(percentage(delta)))
-                },
+                |svg, delta| svg.with_transformation(Transformation::rotate(percentage(delta))),
             )
     }
 }

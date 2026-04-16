@@ -1,5 +1,5 @@
-use crate::prelude::*;
 use crate::layout::{example, example_group};
+use crate::prelude::*;
 
 pub struct SkeletonStory;
 
@@ -10,10 +10,7 @@ impl Render for SkeletonStory {
             .child(example_group(
                 "Shapes",
                 vec![
-                    example(
-                        "Rectangle (default)",
-                        Skeleton::new().into_any_element(),
-                    ),
+                    example("Rectangle (default)", Skeleton::new().into_any_element()),
                     example(
                         "Wide bar",
                         Skeleton::new()
@@ -30,10 +27,7 @@ impl Render for SkeletonStory {
             .child(example_group(
                 "Compositions",
                 vec![
-                    example(
-                        "Text block",
-                        skeleton_text(4, px(220.0)).into_any_element(),
-                    ),
+                    example("Text block", skeleton_text(4, px(220.0)).into_any_element()),
                     example(
                         "Card placeholder",
                         v_flex()
@@ -45,8 +39,12 @@ impl Render for SkeletonStory {
                                     .child(
                                         v_flex()
                                             .gap(px(4.0))
-                                            .child(Skeleton::new().width(px(100.0)).height(px(12.0)))
-                                            .child(Skeleton::new().width(px(60.0)).height(px(10.0))),
+                                            .child(
+                                                Skeleton::new().width(px(100.0)).height(px(12.0)),
+                                            )
+                                            .child(
+                                                Skeleton::new().width(px(60.0)).height(px(10.0)),
+                                            ),
                                     ),
                             )
                             .child(skeleton_text(3, px(200.0)))

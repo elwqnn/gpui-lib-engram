@@ -14,8 +14,8 @@
 
 use gpui::SharedString;
 
-use crate::{Appearance, Theme};
 use crate::colors::{StatusColors, ThemeColors, hsl, hsla};
+use crate::{Appearance, Theme};
 
 /// The default dark theme — shadcn neutral grayscale base, status colors
 /// kept tinted so severity surfaces remain readable.

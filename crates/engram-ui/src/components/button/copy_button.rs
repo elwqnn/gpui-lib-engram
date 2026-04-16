@@ -10,8 +10,7 @@ use engram_theme::Color;
 use std::time::Instant;
 
 use gpui::{
-    App, ClipboardItem, Context, ElementId, Entity, IntoElement, RenderOnce, SharedString,
-    Window,
+    App, ClipboardItem, Context, ElementId, Entity, IntoElement, RenderOnce, SharedString, Window,
 };
 
 use crate::components::button::button_like::{ButtonCommon, ButtonStyle};

@@ -1,7 +1,7 @@
 pub mod accordion;
 pub mod avatar;
-pub mod breadcrumb;
 pub mod banner;
+pub mod breadcrumb;
 pub mod button;
 pub mod button_link;
 pub mod callout;
@@ -39,8 +39,8 @@ pub mod split_button;
 pub mod stepper;
 pub mod switch;
 pub mod tab;
-pub mod toggle_button;
 pub mod text_field;
+pub mod toggle_button;
 pub mod tooltip;
 pub mod tree_view;
 pub mod variable_list;

@@ -198,20 +198,14 @@ impl ListItem {
 
     /// Attach a tooltip builder. Typically used with
     /// [`Tooltip::text`](crate::components::Tooltip::text).
-    pub fn tooltip(
-        mut self,
-        tooltip: impl Fn(&mut Window, &mut App) -> AnyView + 'static,
-    ) -> Self {
+    pub fn tooltip(mut self, tooltip: impl Fn(&mut Window, &mut App) -> AnyView + 'static) -> Self {
         self.tooltip = Some(Rc::new(tooltip));
         self
     }
 }
 
 impl Clickable for ListItem {
-    fn on_click(
-        mut self,
-        handler: impl Fn(&ClickEvent, &mut Window, &mut App) + 'static,
-    ) -> Self {
+    fn on_click(mut self, handler: impl Fn(&ClickEvent, &mut Window, &mut App) + 'static) -> Self {
         self.on_click = Some(Rc::new(handler));
         self
     }
@@ -310,9 +304,7 @@ impl RenderOnce for ListItem {
             })
             .when_some(
                 (!self.disabled).then_some(self.on_click).flatten(),
-                |this, handler| {
-                    this.on_click(move |event, window, cx| handler(event, window, cx))
-                },
+                |this, handler| this.on_click(move |event, window, cx| handler(event, window, cx)),
             )
             .when_some(self.tooltip, |this, builder| {
                 this.tooltip(move |window, cx| builder(window, cx))
@@ -382,21 +374,27 @@ impl RenderOnce for List {
             .gap(Spacing::XXSmall.pixels())
             .when_some(self.header, |this, header| {
                 this.child(
-                    div().px(Spacing::Medium.pixels()).py(Spacing::XSmall.pixels()).child(
-                        Label::new(header)
-                            .size(LabelSize::Small)
-                            .color(Color::Muted),
-                    ),
+                    div()
+                        .px(Spacing::Medium.pixels())
+                        .py(Spacing::XSmall.pixels())
+                        .child(
+                            Label::new(header)
+                                .size(LabelSize::Small)
+                                .color(Color::Muted),
+                        ),
                 )
             })
             .map(|this| {
                 if is_empty {
                     this.child(
-                        div().px(Spacing::Medium.pixels()).py(Spacing::Small.pixels()).child(
-                            Label::new(self.empty_message)
-                                .size(LabelSize::Small)
-                                .color(Color::Muted),
-                        ),
+                        div()
+                            .px(Spacing::Medium.pixels())
+                            .py(Spacing::Small.pixels())
+                            .child(
+                                Label::new(self.empty_message)
+                                    .size(LabelSize::Small)
+                                    .color(Color::Muted),
+                            ),
                     )
                 } else {
                     this.children(self.children)

@@ -8,9 +8,7 @@
 use std::rc::Rc;
 
 use engram_theme::{ActiveTheme, Color, Spacing};
-use gpui::{
-    App, ElementId, IntoElement, RenderOnce, SharedString, Window, div, prelude::*, px,
-};
+use gpui::{App, ElementId, IntoElement, RenderOnce, SharedString, Window, div, prelude::*, px};
 
 use crate::components::label::{Label, LabelCommon, LabelSize};
 use crate::components::stack::h_flex;
@@ -93,7 +91,11 @@ impl RenderOnce for Radio {
             colors.accent
         };
 
-        let label_color = if self.disabled { Color::Disabled } else { Color::Default };
+        let label_color = if self.disabled {
+            Color::Disabled
+        } else {
+            Color::Default
+        };
 
         let outer = px(16.0);
         let dot = px(8.0);
@@ -127,7 +129,11 @@ impl RenderOnce for Radio {
             .gap(Spacing::Small.pixels())
             .child(radio_circle)
             .when_some(self.label, |this, label| {
-                this.child(Label::new(label).size(LabelSize::Default).color(label_color))
+                this.child(
+                    Label::new(label)
+                        .size(LabelSize::Default)
+                        .color(label_color),
+                )
             })
     }
 }

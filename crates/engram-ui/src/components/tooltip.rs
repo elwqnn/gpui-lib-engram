@@ -69,24 +69,23 @@ impl Render for Tooltip {
         let colors = cx.theme().colors();
 
         // Outer offset keeps the card from appearing directly under the cursor.
-        div().pl(Spacing::XSmall.pixels()).pt(Spacing::Small.pixels()).child(
-            v_flex()
-                .gap(Spacing::XXSmall.pixels())
-                .px(Spacing::Small.pixels())
-                .py(Spacing::XSmall.pixels())
-                .rounded(Radius::Small.pixels())
-                .bg(colors.elevated_surface_background)
-                .border_1()
-                .border_color(colors.border)
-                .shadow(ElevationIndex::ElevatedSurface.shadow(cx))
-                .child(Label::new(self.title.clone()).size(LabelSize::Small))
-                .when_some(self.meta.clone(), |this, meta| {
-                    this.child(
-                        Label::new(meta)
-                            .size(LabelSize::XSmall)
-                            .color(Color::Muted),
-                    )
-                }),
-        )
+        div()
+            .pl(Spacing::XSmall.pixels())
+            .pt(Spacing::Small.pixels())
+            .child(
+                v_flex()
+                    .gap(Spacing::XXSmall.pixels())
+                    .px(Spacing::Small.pixels())
+                    .py(Spacing::XSmall.pixels())
+                    .rounded(Radius::Small.pixels())
+                    .bg(colors.elevated_surface_background)
+                    .border_1()
+                    .border_color(colors.border)
+                    .shadow(ElevationIndex::ElevatedSurface.shadow(cx))
+                    .child(Label::new(self.title.clone()).size(LabelSize::Small))
+                    .when_some(self.meta.clone(), |this, meta| {
+                        this.child(Label::new(meta).size(LabelSize::XSmall).color(Color::Muted))
+                    }),
+            )
     }
 }

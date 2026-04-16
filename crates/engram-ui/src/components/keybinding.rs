@@ -48,11 +48,7 @@ impl RenderOnce for KeyBinding {
                     .border_1()
                     .border_color(colors.border)
                     .bg(colors.element_background)
-                    .child(
-                        Label::new(key)
-                            .size(LabelSize::XSmall)
-                            .color(Color::Muted),
-                    )
+                    .child(Label::new(key).size(LabelSize::XSmall).color(Color::Muted))
             }))
     }
 }

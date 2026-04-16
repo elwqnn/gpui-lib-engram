@@ -9,9 +9,7 @@
 use std::rc::Rc;
 
 use engram_theme::Color;
-use gpui::{
-    App, ClickEvent, CursorStyle, ElementId, IntoElement, RenderOnce, Window, prelude::*,
-};
+use gpui::{App, ClickEvent, CursorStyle, ElementId, IntoElement, RenderOnce, Window, prelude::*};
 
 use crate::components::button::{ButtonCommon, ButtonSize, ButtonStyle, IconButton};
 use crate::components::icon::{IconName, IconSize};
@@ -69,10 +67,7 @@ impl Toggleable for Disclosure {
 }
 
 impl Clickable for Disclosure {
-    fn on_click(
-        mut self,
-        handler: impl Fn(&ClickEvent, &mut Window, &mut App) + 'static,
-    ) -> Self {
+    fn on_click(mut self, handler: impl Fn(&ClickEvent, &mut Window, &mut App) + 'static) -> Self {
         self.on_toggle = Some(Rc::new(handler));
         self
     }

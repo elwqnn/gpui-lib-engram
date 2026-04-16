@@ -68,15 +68,13 @@ impl Render for SwitchStory {
             ))
             .child(example_group(
                 "States",
-                vec![
-                    example(
-                        "Disabled",
-                        Switch::new("sw-dis", false)
-                            .label("Disabled")
-                            .disabled(true)
-                            .into_any_element(),
-                    ),
-                ],
+                vec![example(
+                    "Disabled",
+                    Switch::new("sw-dis", false)
+                        .label("Disabled")
+                        .disabled(true)
+                        .into_any_element(),
+                )],
             ))
     }
 }

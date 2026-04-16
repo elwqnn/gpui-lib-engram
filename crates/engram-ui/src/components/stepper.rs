@@ -66,10 +66,7 @@ impl Stepper {
     }
 
     /// Register a change handler, invoked with the new value when +/− is clicked.
-    pub fn on_change(
-        mut self,
-        handler: impl Fn(f64, &mut Window, &mut App) + 'static,
-    ) -> Self {
+    pub fn on_change(mut self, handler: impl Fn(f64, &mut Window, &mut App) + 'static) -> Self {
         self.on_change = Some(Rc::new(handler));
         self
     }
@@ -171,7 +168,11 @@ impl RenderOnce for Stepper {
             .gap(Spacing::Small.pixels())
             .items_center()
             .when_some(self.label, |this, label| {
-                this.child(Label::new(label).size(LabelSize::Default).color(label_color))
+                this.child(
+                    Label::new(label)
+                        .size(LabelSize::Default)
+                        .color(label_color),
+                )
             })
             .child(
                 h_flex()
@@ -179,11 +180,11 @@ impl RenderOnce for Stepper {
                     .items_center()
                     .child(dec)
                     .child(
-                        div()
-                            .min_w(px(32.0))
-                            .flex()
-                            .justify_center()
-                            .child(Label::new(value_text).size(LabelSize::Default).color(label_color)),
+                        div().min_w(px(32.0)).flex().justify_center().child(
+                            Label::new(value_text)
+                                .size(LabelSize::Default)
+                                .color(label_color),
+                        ),
                     )
                     .child(inc),
             )

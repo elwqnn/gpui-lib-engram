@@ -17,11 +17,15 @@ pub struct Divider {
 
 impl Divider {
     pub fn horizontal() -> Self {
-        Self { orientation: DividerOrientation::Horizontal }
+        Self {
+            orientation: DividerOrientation::Horizontal,
+        }
     }
 
     pub fn vertical() -> Self {
-        Self { orientation: DividerOrientation::Vertical }
+        Self {
+            orientation: DividerOrientation::Vertical,
+        }
     }
 }
 

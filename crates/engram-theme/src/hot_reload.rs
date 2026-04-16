@@ -63,11 +63,7 @@ pub fn watch_themes_dir(dir: impl AsRef<Path>, cx: &mut App) -> Result<ThemeWatc
     })
 }
 
-fn spawn_poll_task(
-    dir: PathBuf,
-    rx: Receiver<notify::Result<Event>>,
-    cx: &mut App,
-) -> Task<()> {
+fn spawn_poll_task(dir: PathBuf, rx: Receiver<notify::Result<Event>>, cx: &mut App) -> Task<()> {
     cx.spawn(async move |cx| {
         loop {
             // Drain every event that's queued up since the last tick.
@@ -122,10 +118,7 @@ fn load_all_themes(dir: &Path, cx: &mut App) {
                 }
             }
             Err(err) => {
-                eprintln!(
-                    "engram-theme: failed to reload `{}`: {err}",
-                    path.display()
-                );
+                eprintln!("engram-theme: failed to reload `{}`: {err}", path.display());
             }
         }
     }

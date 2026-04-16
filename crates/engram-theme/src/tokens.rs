@@ -154,16 +154,11 @@ mod tests {
     fn radius_full_is_pill_sized() {
         // The "Full" radius should swallow any reasonable element height,
         // i.e. be larger than every other named radius combined.
-        let other_max = [
-            Radius::None,
-            Radius::Small,
-            Radius::Medium,
-            Radius::Large,
-        ]
-        .iter()
-        .map(|r| r.pixels())
-        .max()
-        .unwrap();
+        let other_max = [Radius::None, Radius::Small, Radius::Medium, Radius::Large]
+            .iter()
+            .map(|r| r.pixels())
+            .max()
+            .unwrap();
         assert!(Radius::Full.pixels() > other_max);
     }
 

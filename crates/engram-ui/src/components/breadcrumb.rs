@@ -9,8 +9,8 @@ use std::rc::Rc;
 
 use engram_theme::{Color, Spacing};
 use gpui::{
-    AnyElement, App, ClickEvent, ElementId, IntoElement, RenderOnce, SharedString, Styled,
-    Window, prelude::*,
+    AnyElement, App, ClickEvent, ElementId, IntoElement, RenderOnce, SharedString, Styled, Window,
+    prelude::*,
 };
 
 use crate::components::icon::{Icon, IconName, IconSize};
@@ -58,10 +58,7 @@ impl BreadcrumbItem {
 }
 
 impl Clickable for BreadcrumbItem {
-    fn on_click(
-        mut self,
-        handler: impl Fn(&ClickEvent, &mut Window, &mut App) + 'static,
-    ) -> Self {
+    fn on_click(mut self, handler: impl Fn(&ClickEvent, &mut Window, &mut App) + 'static) -> Self {
         self.on_click = Some(Rc::new(handler));
         self
     }
@@ -96,11 +93,7 @@ impl RenderOnce for BreadcrumbItem {
             .gap(Spacing::XXSmall.pixels())
             .when(clickable, |this| this.cursor_pointer())
             .when_some(self.icon, |this, icon| {
-                this.child(
-                    Icon::new(icon)
-                        .size(IconSize::Small)
-                        .color(icon_color),
-                )
+                this.child(Icon::new(icon).size(IconSize::Small).color(icon_color))
             })
             .child(
                 Label::new(self.label)
@@ -112,9 +105,7 @@ impl RenderOnce for BreadcrumbItem {
                 (!self.disabled && !self.current)
                     .then_some(self.on_click)
                     .flatten(),
-                |this, handler| {
-                    this.on_click(move |event, window, cx| handler(event, window, cx))
-                },
+                |this, handler| this.on_click(move |event, window, cx| handler(event, window, cx)),
             )
     }
 }
@@ -159,17 +150,11 @@ impl RenderOnce for Breadcrumb {
     fn render(self, _window: &mut Window, _cx: &mut App) -> impl IntoElement {
         let sep = self.separator;
 
-        let mut row = h_flex()
-            .gap(Spacing::XXSmall.pixels())
-            .items_center();
+        let mut row = h_flex().gap(Spacing::XXSmall.pixels()).items_center();
 
         for (i, item) in self.items.into_iter().enumerate() {
             if i > 0 {
-                row = row.child(
-                    Icon::new(sep)
-                        .size(IconSize::XSmall)
-                        .color(Color::Muted),
-                );
+                row = row.child(Icon::new(sep).size(IconSize::XSmall).color(Color::Muted));
             }
             row = row.child(item);
         }

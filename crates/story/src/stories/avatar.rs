@@ -10,8 +10,7 @@ pub struct AvatarStory {
 impl AvatarStory {
     fn new() -> Self {
         Self {
-            avatar_source: center_crop_square(BALCONY)
-                .expect("failed to load balcony.jpg"),
+            avatar_source: center_crop_square(BALCONY).expect("failed to load balcony.jpg"),
         }
     }
 }
@@ -25,17 +24,42 @@ impl Render for AvatarStory {
             .child(example_group(
                 "Sizes (monogram)",
                 vec![
-                    example("Small", Avatar::new("Ada").size(AvatarSize::Small).into_any_element()),
+                    example(
+                        "Small",
+                        Avatar::new("Ada")
+                            .size(AvatarSize::Small)
+                            .into_any_element(),
+                    ),
                     example("Medium (default)", Avatar::new("Linus").into_any_element()),
-                    example("Large", Avatar::new("Grace").size(AvatarSize::Large).into_any_element()),
+                    example(
+                        "Large",
+                        Avatar::new("Grace")
+                            .size(AvatarSize::Large)
+                            .into_any_element(),
+                    ),
                 ],
             ))
             .child(example_group(
                 "With image",
                 vec![
-                    example("Small", Avatar::new("Ada").size(AvatarSize::Small).image(src.clone()).into_any_element()),
-                    example("Medium", Avatar::new("Linus").image(src.clone()).into_any_element()),
-                    example("Large", Avatar::new("Grace").size(AvatarSize::Large).image(src.clone()).into_any_element()),
+                    example(
+                        "Small",
+                        Avatar::new("Ada")
+                            .size(AvatarSize::Small)
+                            .image(src.clone())
+                            .into_any_element(),
+                    ),
+                    example(
+                        "Medium",
+                        Avatar::new("Linus").image(src.clone()).into_any_element(),
+                    ),
+                    example(
+                        "Large",
+                        Avatar::new("Grace")
+                            .size(AvatarSize::Large)
+                            .image(src.clone())
+                            .into_any_element(),
+                    ),
                 ],
             ))
             .child(example_group(

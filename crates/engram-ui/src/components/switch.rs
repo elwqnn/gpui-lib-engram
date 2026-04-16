@@ -7,9 +7,7 @@
 use std::rc::Rc;
 
 use engram_theme::{ActiveTheme, Color, Spacing};
-use gpui::{
-    App, ElementId, IntoElement, RenderOnce, SharedString, Window, div, prelude::*, px,
-};
+use gpui::{App, ElementId, IntoElement, RenderOnce, SharedString, Window, div, prelude::*, px};
 
 use crate::components::label::{Label, LabelCommon, LabelSize};
 use crate::components::stack::h_flex;
@@ -88,7 +86,11 @@ impl RenderOnce for Switch {
             colors.text_muted
         };
 
-        let label_color = if self.disabled { Color::Disabled } else { Color::Default };
+        let label_color = if self.disabled {
+            Color::Disabled
+        } else {
+            Color::Default
+        };
 
         // Track / thumb dimensions: 28x16 track with a 12px thumb leaves
         // ~2px of padding on every side.

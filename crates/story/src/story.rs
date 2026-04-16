@@ -20,9 +20,9 @@ pub mod prelude {
 
 use std::ops::DerefMut;
 
-use prelude::*;
 use gpui::{Bounds, Subscription, WindowBounds, WindowOptions, size};
 use gpui_platform::application;
+use prelude::*;
 use strum::{Display, EnumIter, IntoEnumIterator};
 
 // ---------------------------------------------------------------------------
@@ -51,60 +51,248 @@ pub struct StoryEntry {
 
 pub static STORIES: &[StoryEntry] = &[
     // Typography
-    StoryEntry { name: "Label", category: StoryCategory::Typography, build: stories::label::build },
-    StoryEntry { name: "Headline", category: StoryCategory::Typography, build: stories::headline::build },
-    StoryEntry { name: "HighlightedLabel", category: StoryCategory::Typography, build: stories::highlighted_label::build },
+    StoryEntry {
+        name: "Label",
+        category: StoryCategory::Typography,
+        build: stories::label::build,
+    },
+    StoryEntry {
+        name: "Headline",
+        category: StoryCategory::Typography,
+        build: stories::headline::build,
+    },
+    StoryEntry {
+        name: "HighlightedLabel",
+        category: StoryCategory::Typography,
+        build: stories::highlighted_label::build,
+    },
     // Icons & Images
-    StoryEntry { name: "Icon", category: StoryCategory::IconsAndImages, build: stories::icon::build },
-    StoryEntry { name: "DecoratedIcon", category: StoryCategory::IconsAndImages, build: stories::decorated_icon::build },
-    StoryEntry { name: "Image", category: StoryCategory::IconsAndImages, build: stories::image::build },
-    StoryEntry { name: "Avatar", category: StoryCategory::IconsAndImages, build: stories::avatar::build },
+    StoryEntry {
+        name: "Icon",
+        category: StoryCategory::IconsAndImages,
+        build: stories::icon::build,
+    },
+    StoryEntry {
+        name: "DecoratedIcon",
+        category: StoryCategory::IconsAndImages,
+        build: stories::decorated_icon::build,
+    },
+    StoryEntry {
+        name: "Image",
+        category: StoryCategory::IconsAndImages,
+        build: stories::image::build,
+    },
+    StoryEntry {
+        name: "Avatar",
+        category: StoryCategory::IconsAndImages,
+        build: stories::avatar::build,
+    },
     // Buttons
-    StoryEntry { name: "Button", category: StoryCategory::Buttons, build: stories::button::build },
-    StoryEntry { name: "IconButton", category: StoryCategory::Buttons, build: stories::icon_button::build },
-    StoryEntry { name: "ButtonLink", category: StoryCategory::Buttons, build: stories::button_link::build },
-    StoryEntry { name: "SplitButton", category: StoryCategory::Buttons, build: stories::split_button::build },
-    StoryEntry { name: "CopyButton", category: StoryCategory::Buttons, build: stories::copy_button::build },
-    StoryEntry { name: "ToggleButtonGroup", category: StoryCategory::Buttons, build: stories::toggle_button::build },
+    StoryEntry {
+        name: "Button",
+        category: StoryCategory::Buttons,
+        build: stories::button::build,
+    },
+    StoryEntry {
+        name: "IconButton",
+        category: StoryCategory::Buttons,
+        build: stories::icon_button::build,
+    },
+    StoryEntry {
+        name: "ButtonLink",
+        category: StoryCategory::Buttons,
+        build: stories::button_link::build,
+    },
+    StoryEntry {
+        name: "SplitButton",
+        category: StoryCategory::Buttons,
+        build: stories::split_button::build,
+    },
+    StoryEntry {
+        name: "CopyButton",
+        category: StoryCategory::Buttons,
+        build: stories::copy_button::build,
+    },
+    StoryEntry {
+        name: "ToggleButtonGroup",
+        category: StoryCategory::Buttons,
+        build: stories::toggle_button::build,
+    },
     // Inputs
-    StoryEntry { name: "Checkbox", category: StoryCategory::Inputs, build: stories::checkbox::build },
-    StoryEntry { name: "Radio", category: StoryCategory::Inputs, build: stories::radio::build },
-    StoryEntry { name: "Slider", category: StoryCategory::Inputs, build: stories::slider::build },
-    StoryEntry { name: "Stepper", category: StoryCategory::Inputs, build: stories::stepper::build },
-    StoryEntry { name: "Switch", category: StoryCategory::Inputs, build: stories::switch::build },
-    StoryEntry { name: "TextField", category: StoryCategory::Inputs, build: stories::text_field::build },
-    StoryEntry { name: "Disclosure", category: StoryCategory::Inputs, build: stories::disclosure::build },
-    StoryEntry { name: "DropdownMenu", category: StoryCategory::Inputs, build: stories::dropdown_menu::build },
+    StoryEntry {
+        name: "Checkbox",
+        category: StoryCategory::Inputs,
+        build: stories::checkbox::build,
+    },
+    StoryEntry {
+        name: "Radio",
+        category: StoryCategory::Inputs,
+        build: stories::radio::build,
+    },
+    StoryEntry {
+        name: "Slider",
+        category: StoryCategory::Inputs,
+        build: stories::slider::build,
+    },
+    StoryEntry {
+        name: "Stepper",
+        category: StoryCategory::Inputs,
+        build: stories::stepper::build,
+    },
+    StoryEntry {
+        name: "Switch",
+        category: StoryCategory::Inputs,
+        build: stories::switch::build,
+    },
+    StoryEntry {
+        name: "TextField",
+        category: StoryCategory::Inputs,
+        build: stories::text_field::build,
+    },
+    StoryEntry {
+        name: "Disclosure",
+        category: StoryCategory::Inputs,
+        build: stories::disclosure::build,
+    },
+    StoryEntry {
+        name: "DropdownMenu",
+        category: StoryCategory::Inputs,
+        build: stories::dropdown_menu::build,
+    },
     // Data Display
-    StoryEntry { name: "List", category: StoryCategory::DataDisplay, build: stories::list::build },
-    StoryEntry { name: "VirtualList", category: StoryCategory::DataDisplay, build: stories::virtual_list::build },
-    StoryEntry { name: "VariableList", category: StoryCategory::DataDisplay, build: stories::variable_list::build },
-    StoryEntry { name: "TreeView", category: StoryCategory::DataDisplay, build: stories::tree_view::build },
-    StoryEntry { name: "Progress", category: StoryCategory::DataDisplay, build: stories::progress::build },
-    StoryEntry { name: "Indicator", category: StoryCategory::DataDisplay, build: stories::indicator::build },
-    StoryEntry { name: "Chip", category: StoryCategory::DataDisplay, build: stories::chip::build },
-    StoryEntry { name: "DescriptionList", category: StoryCategory::DataDisplay, build: stories::description_list::build },
-    StoryEntry { name: "KeyBinding", category: StoryCategory::DataDisplay, build: stories::keybinding::build },
-    StoryEntry { name: "KeybindingHint", category: StoryCategory::DataDisplay, build: stories::keybinding_hint::build },
+    StoryEntry {
+        name: "List",
+        category: StoryCategory::DataDisplay,
+        build: stories::list::build,
+    },
+    StoryEntry {
+        name: "VirtualList",
+        category: StoryCategory::DataDisplay,
+        build: stories::virtual_list::build,
+    },
+    StoryEntry {
+        name: "VariableList",
+        category: StoryCategory::DataDisplay,
+        build: stories::variable_list::build,
+    },
+    StoryEntry {
+        name: "TreeView",
+        category: StoryCategory::DataDisplay,
+        build: stories::tree_view::build,
+    },
+    StoryEntry {
+        name: "Progress",
+        category: StoryCategory::DataDisplay,
+        build: stories::progress::build,
+    },
+    StoryEntry {
+        name: "Indicator",
+        category: StoryCategory::DataDisplay,
+        build: stories::indicator::build,
+    },
+    StoryEntry {
+        name: "Chip",
+        category: StoryCategory::DataDisplay,
+        build: stories::chip::build,
+    },
+    StoryEntry {
+        name: "DescriptionList",
+        category: StoryCategory::DataDisplay,
+        build: stories::description_list::build,
+    },
+    StoryEntry {
+        name: "KeyBinding",
+        category: StoryCategory::DataDisplay,
+        build: stories::keybinding::build,
+    },
+    StoryEntry {
+        name: "KeybindingHint",
+        category: StoryCategory::DataDisplay,
+        build: stories::keybinding_hint::build,
+    },
     // Feedback
-    StoryEntry { name: "Banner", category: StoryCategory::Feedback, build: stories::banner::build },
-    StoryEntry { name: "Callout", category: StoryCategory::Feedback, build: stories::callout::build },
-    StoryEntry { name: "Skeleton", category: StoryCategory::Feedback, build: stories::skeleton::build },
-    StoryEntry { name: "Spinner", category: StoryCategory::Feedback, build: stories::spinner::build },
-    StoryEntry { name: "HoverCard", category: StoryCategory::Feedback, build: stories::hover_card::build },
-    StoryEntry { name: "Tooltip", category: StoryCategory::Feedback, build: stories::tooltip::build },
+    StoryEntry {
+        name: "Banner",
+        category: StoryCategory::Feedback,
+        build: stories::banner::build,
+    },
+    StoryEntry {
+        name: "Callout",
+        category: StoryCategory::Feedback,
+        build: stories::callout::build,
+    },
+    StoryEntry {
+        name: "Skeleton",
+        category: StoryCategory::Feedback,
+        build: stories::skeleton::build,
+    },
+    StoryEntry {
+        name: "Spinner",
+        category: StoryCategory::Feedback,
+        build: stories::spinner::build,
+    },
+    StoryEntry {
+        name: "HoverCard",
+        category: StoryCategory::Feedback,
+        build: stories::hover_card::build,
+    },
+    StoryEntry {
+        name: "Tooltip",
+        category: StoryCategory::Feedback,
+        build: stories::tooltip::build,
+    },
     // Navigation
-    StoryEntry { name: "Breadcrumb", category: StoryCategory::Navigation, build: stories::breadcrumb::build },
-    StoryEntry { name: "Pagination", category: StoryCategory::Navigation, build: stories::pagination::build },
-    StoryEntry { name: "Tab", category: StoryCategory::Navigation, build: stories::tab::build },
-    StoryEntry { name: "Menu", category: StoryCategory::Navigation, build: stories::menu::build },
+    StoryEntry {
+        name: "Breadcrumb",
+        category: StoryCategory::Navigation,
+        build: stories::breadcrumb::build,
+    },
+    StoryEntry {
+        name: "Pagination",
+        category: StoryCategory::Navigation,
+        build: stories::pagination::build,
+    },
+    StoryEntry {
+        name: "Tab",
+        category: StoryCategory::Navigation,
+        build: stories::tab::build,
+    },
+    StoryEntry {
+        name: "Menu",
+        category: StoryCategory::Navigation,
+        build: stories::menu::build,
+    },
     // Layout
-    StoryEntry { name: "Accordion", category: StoryCategory::Layout, build: stories::accordion::build },
-    StoryEntry { name: "Divider", category: StoryCategory::Layout, build: stories::divider::build },
-    StoryEntry { name: "GradientFade", category: StoryCategory::Layout, build: stories::gradient_fade::build },
-    StoryEntry { name: "Modal", category: StoryCategory::Layout, build: stories::modal::build },
-    StoryEntry { name: "Popover", category: StoryCategory::Layout, build: stories::popover::build },
-    StoryEntry { name: "Sheet", category: StoryCategory::Layout, build: stories::sheet::build },
+    StoryEntry {
+        name: "Accordion",
+        category: StoryCategory::Layout,
+        build: stories::accordion::build,
+    },
+    StoryEntry {
+        name: "Divider",
+        category: StoryCategory::Layout,
+        build: stories::divider::build,
+    },
+    StoryEntry {
+        name: "GradientFade",
+        category: StoryCategory::Layout,
+        build: stories::gradient_fade::build,
+    },
+    StoryEntry {
+        name: "Modal",
+        category: StoryCategory::Layout,
+        build: stories::modal::build,
+    },
+    StoryEntry {
+        name: "Popover",
+        category: StoryCategory::Layout,
+        build: stories::popover::build,
+    },
+    StoryEntry {
+        name: "Sheet",
+        category: StoryCategory::Layout,
+        build: stories::sheet::build,
+    },
 ];
 
 // ---------------------------------------------------------------------------
@@ -144,8 +332,7 @@ impl Render for Gallery {
     fn render(&mut self, window: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
         // Lazily rebuild the story view when the selection changed.
         if self.current_view.is_none() {
-            self.current_view =
-                Some((STORIES[self.selected_index].build)(window, cx.deref_mut()));
+            self.current_view = Some((STORIES[self.selected_index].build)(window, cx.deref_mut()));
         }
         let view = self.current_view.clone().unwrap();
         let colors = cx.theme().colors();
@@ -167,10 +354,7 @@ impl Render for Gallery {
                         v_flex()
                             .p(Spacing::Medium.pixels())
                             .gap(Spacing::Medium.pixels())
-                            .child(
-                                Headline::new("engram stories")
-                                    .size(HeadlineSize::Small),
-                            )
+                            .child(Headline::new("engram stories").size(HeadlineSize::Small))
                             .child(self.render_theme_switcher(cx))
                             .child(Divider::horizontal()),
                     )
@@ -195,8 +379,7 @@ impl Render for Gallery {
                     .p(Spacing::XXLarge.pixels())
                     .gap(Spacing::Large.pixels())
                     .child(
-                        Headline::new(STORIES[self.selected_index].name)
-                            .size(HeadlineSize::Medium),
+                        Headline::new(STORIES[self.selected_index].name).size(HeadlineSize::Medium),
                     )
                     .child(Divider::horizontal())
                     .child(view),
@@ -205,10 +388,7 @@ impl Render for Gallery {
 }
 
 impl Gallery {
-    fn render_sidebar_groups(
-        &self,
-        weak: &gpui::WeakEntity<Self>,
-    ) -> Vec<impl IntoElement> {
+    fn render_sidebar_groups(&self, weak: &gpui::WeakEntity<Self>) -> Vec<impl IntoElement> {
         let mut groups = Vec::new();
 
         for category in StoryCategory::iter() {
@@ -262,28 +442,25 @@ impl Gallery {
                 let is_current = name == self.selected_theme;
                 let weak = weak.clone();
                 let target = name.clone();
-                Button::new(
-                    SharedString::from(format!("theme-{name}")),
-                    name.clone(),
-                )
-                .size(ButtonSize::Compact)
-                .style(if is_current {
-                    ButtonStyle::Filled
-                } else {
-                    ButtonStyle::Subtle
-                })
-                .toggle_state(is_current)
-                .on_click(move |_event, _window, cx| {
-                    let target = target.clone();
-                    weak.update(cx, |this, cx| {
-                        this._appearance_sub = None;
-                        if engram::theme::activate_theme(&target, cx).is_ok() {
-                            this.selected_theme = target;
-                            cx.notify();
-                        }
+                Button::new(SharedString::from(format!("theme-{name}")), name.clone())
+                    .size(ButtonSize::Compact)
+                    .style(if is_current {
+                        ButtonStyle::Filled
+                    } else {
+                        ButtonStyle::Subtle
                     })
-                    .ok();
-                })
+                    .toggle_state(is_current)
+                    .on_click(move |_event, _window, cx| {
+                        let target = target.clone();
+                        weak.update(cx, |this, cx| {
+                            this._appearance_sub = None;
+                            if engram::theme::activate_theme(&target, cx).is_ok() {
+                                this.selected_theme = target;
+                                cx.notify();
+                            }
+                        })
+                        .ok();
+                    })
             }))
     }
 }
@@ -335,18 +512,14 @@ fn main() {
         engram::ui::init(cx);
         register_embedded_themes(cx);
 
-        let themes_dir = concat!(
-            env!("CARGO_MANIFEST_DIR"),
-            "/../engram-ui/assets/themes"
-        );
-        let mut theme_watcher =
-            match engram::theme::hot_reload::watch_themes_dir(themes_dir, cx) {
-                Ok(watcher) => Some(watcher),
-                Err(err) => {
-                    eprintln!("story: hot reload disabled: {err}");
-                    None
-                }
-            };
+        let themes_dir = concat!(env!("CARGO_MANIFEST_DIR"), "/../engram-ui/assets/themes");
+        let mut theme_watcher = match engram::theme::hot_reload::watch_themes_dir(themes_dir, cx) {
+            Ok(watcher) => Some(watcher),
+            Err(err) => {
+                eprintln!("story: hot reload disabled: {err}");
+                None
+            }
+        };
 
         let bounds = Bounds::centered(None, size(px(1100.0), px(760.0)), cx);
         cx.open_window(
@@ -355,11 +528,8 @@ fn main() {
                 ..Default::default()
             },
             |window, cx| {
-                let appearance_sub = engram::theme::sync_with_system_appearance(
-                    Default::default(),
-                    window,
-                    cx,
-                );
+                let appearance_sub =
+                    engram::theme::sync_with_system_appearance(Default::default(), window, cx);
                 let entity: Entity<Gallery> = cx.new(|cx| Gallery::new(window, cx));
                 entity.update(cx, |gallery, cx| {
                     gallery.selected_theme = cx.theme().name.clone();

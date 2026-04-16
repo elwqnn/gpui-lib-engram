@@ -41,11 +41,7 @@ impl RenderOnce for StoryExample {
                 v_flex()
                     .child(Label::new(self.name).size(LabelSize::Small))
                     .when_some(self.description, |this, desc| {
-                        this.child(
-                            Label::new(desc)
-                                .size(LabelSize::XSmall)
-                                .color(Color::Muted),
-                        )
+                        this.child(Label::new(desc).size(LabelSize::XSmall).color(Color::Muted))
                     }),
             )
             .child(
@@ -94,12 +90,7 @@ impl RenderOnce for StoryExampleGroup {
                             .size(LabelSize::XSmall)
                             .color(Color::Muted),
                     )
-                    .child(
-                        div()
-                            .h(px(1.0))
-                            .flex_1()
-                            .bg(colors.border_variant),
-                    ),
+                    .child(div().h(px(1.0)).flex_1().bg(colors.border_variant)),
             )
             .children(self.examples)
     }

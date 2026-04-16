@@ -82,8 +82,8 @@ impl RenderOnce for AccordionItem {
             Color::Default
         };
 
-        let mut disclosure = Disclosure::new(self.id.clone(), self.is_expanded)
-            .disabled(self.disabled);
+        let mut disclosure =
+            Disclosure::new(self.id.clone(), self.is_expanded).disabled(self.disabled);
         if let Some(handler) = self.on_toggle {
             disclosure = disclosure.on_click(move |ev, window, cx| handler(ev, window, cx));
         }
@@ -93,7 +93,11 @@ impl RenderOnce for AccordionItem {
             .gap(Spacing::XSmall.pixels())
             .py(Spacing::Small.pixels())
             .child(disclosure)
-            .child(Label::new(self.title).size(LabelSize::Default).color(label_color));
+            .child(
+                Label::new(self.title)
+                    .size(LabelSize::Default)
+                    .color(label_color),
+            );
 
         v_flex()
             .border_b_1()

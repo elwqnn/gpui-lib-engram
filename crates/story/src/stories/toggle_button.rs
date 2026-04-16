@@ -29,11 +29,7 @@ impl Render for ToggleButtonStory {
                             [
                                 ToggleButtonWithIcon::new("List", IconName::Menu, |_, _, _| {}),
                                 ToggleButtonWithIcon::new("Grid", IconName::Layout, |_, _, _| {}),
-                                ToggleButtonWithIcon::new(
-                                    "Board",
-                                    IconName::Table,
-                                    |_, _, _| {},
-                                ),
+                                ToggleButtonWithIcon::new("Board", IconName::Table, |_, _, _| {}),
                             ],
                         )
                         .selected_index(0)
@@ -95,16 +91,8 @@ impl Render for ToggleButtonStory {
                         ToggleButtonGroup::new(
                             "filled_icons",
                             [
-                                ToggleButtonWithIcon::new(
-                                    "Code",
-                                    IconName::Code,
-                                    |_, _, _| {},
-                                ),
-                                ToggleButtonWithIcon::new(
-                                    "Preview",
-                                    IconName::Eye,
-                                    |_, _, _| {},
-                                ),
+                                ToggleButtonWithIcon::new("Code", IconName::Code, |_, _, _| {}),
+                                ToggleButtonWithIcon::new("Preview", IconName::Eye, |_, _, _| {}),
                             ],
                         )
                         .style(ToggleButtonGroupStyle::Filled)

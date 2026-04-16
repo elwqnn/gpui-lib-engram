@@ -222,44 +222,36 @@ impl Render for Showcase {
                     .w_full()
                     .items_center()
                     .justify_between()
-                    .child(
-                        Headline::new("engram showcase")
-                            .size(HeadlineSize::Medium),
-                    )
-                    .child(
-                        h_flex()
-                            .gap(Spacing::Small.pixels())
-                            .children(theme_names.into_iter().map(|name| {
-                                let is_current = name == selected_theme;
-                                let id =
-                                    SharedString::from(format!("btn-theme-{name}"));
-                                let label = name.clone();
-                                let weak = weak.clone();
-                                let target = name.clone();
-                                Button::new(id, label)
-                                    .style(if is_current {
-                                        ButtonStyle::Filled
-                                    } else {
-                                        ButtonStyle::Subtle
+                    .child(Headline::new("engram showcase").size(HeadlineSize::Medium))
+                    .child(h_flex().gap(Spacing::Small.pixels()).children(
+                        theme_names.into_iter().map(|name| {
+                            let is_current = name == selected_theme;
+                            let id = SharedString::from(format!("btn-theme-{name}"));
+                            let label = name.clone();
+                            let weak = weak.clone();
+                            let target = name.clone();
+                            Button::new(id, label)
+                                .style(if is_current {
+                                    ButtonStyle::Filled
+                                } else {
+                                    ButtonStyle::Subtle
+                                })
+                                .toggle_state(is_current)
+                                .on_click(move |_event, _window, cx| {
+                                    let target = target.clone();
+                                    weak.update(cx, |this, cx| {
+                                        // Stop mirroring the OS appearance
+                                        // so an explicit user pick sticks.
+                                        this._appearance_sub = None;
+                                        if engram::theme::activate_theme(&target, cx).is_ok() {
+                                            this.selected_theme = target;
+                                            cx.notify();
+                                        }
                                     })
-                                    .toggle_state(is_current)
-                                    .on_click(move |_event, _window, cx| {
-                                        let target = target.clone();
-                                        weak.update(cx, |this, cx| {
-                                            // Stop mirroring the OS appearance
-                                            // so an explicit user pick sticks.
-                                            this._appearance_sub = None;
-                                            if engram::theme::activate_theme(&target, cx)
-                                                .is_ok()
-                                            {
-                                                this.selected_theme = target;
-                                                cx.notify();
-                                            }
-                                        })
-                                        .ok();
-                                    })
-                            })),
-                    ),
+                                    .ok();
+                                })
+                        }),
+                    )),
             )
             // -------------------- Typography --------------------
             .child(section(
@@ -388,11 +380,18 @@ impl Render for Showcase {
                     .child(Button::new("btn-icon", "Save").icon(IconName::Check))
                     .child(Button::new("btn-disabled", "Disabled").disabled(true))
                     .child(
-                        Button::new("btn-pin", if self.button_pin_toggled { "Pinned" } else { "Pin" })
-                            .icon(IconName::Pin)
-                            .style(ButtonStyle::Subtle)
-                            .toggle_state(self.button_pin_toggled)
-                            .on_click(bool_toggle(&weak, |this| &mut this.button_pin_toggled)),
+                        Button::new(
+                            "btn-pin",
+                            if self.button_pin_toggled {
+                                "Pinned"
+                            } else {
+                                "Pin"
+                            },
+                        )
+                        .icon(IconName::Pin)
+                        .style(ButtonStyle::Subtle)
+                        .toggle_state(self.button_pin_toggled)
+                        .on_click(bool_toggle(&weak, |this| &mut this.button_pin_toggled)),
                     ),
             ))
             .child(section(
@@ -518,12 +517,7 @@ impl Render for Showcase {
                             "Search",
                             &weak,
                         ))
-                        .child(self.nav_item(
-                            "nav-settings",
-                            IconName::Settings,
-                            "Settings",
-                            &weak,
-                        ))
+                        .child(self.nav_item("nav-settings", IconName::Settings, "Settings", &weak))
                         .child(
                             ListItem::new("nav-disabled")
                                 .start_slot(Icon::new(IconName::Close))
@@ -534,9 +528,11 @@ impl Render for Showcase {
             ))
             .child(section(
                 "Empty list",
-                v_flex()
-                    .w(px(280.0))
-                    .child(List::new().header("Recent").empty_message("No recent items")),
+                v_flex().w(px(280.0)).child(
+                    List::new()
+                        .header("Recent")
+                        .empty_message("No recent items"),
+                ),
             ))
             // -------------------- Tree list (Phase 8 fields) --------------------
             .child(section(
@@ -625,9 +621,8 @@ impl Render for Showcase {
                             .gap(Spacing::XSmall.pixels())
                             .items_center()
                             .child(
-                                Disclosure::new("disc-1", self.disclosure_open).on_click(
-                                    bool_toggle(&weak, |this| &mut this.disclosure_open),
-                                ),
+                                Disclosure::new("disc-1", self.disclosure_open)
+                                    .on_click(bool_toggle(&weak, |this| &mut this.disclosure_open)),
                             )
                             .child(Label::new("Advanced settings")),
                     )
@@ -789,102 +784,94 @@ impl Render for Showcase {
             ))
             .child(Divider::horizontal())
             // -------------------- Menu (real anchored popover) --------------------
-            .child(section(
-                "Menu (click to open — keyboard-navigable)",
-                {
-                    let bounds_slot = self.menu_trigger_bounds.clone();
-                    let menu_entity = self.menu.clone();
-                    let open_menu_handler = {
-                        let weak = weak.clone();
-                        move |_event: &gpui::ClickEvent, window: &mut Window, cx: &mut App| {
-                            weak.update(cx, |this, cx| {
-                                this.menu_open = !this.menu_open;
-                                if this.menu_open {
-                                    // Focus the menu entity's own focus
-                                    // handle so arrow keys, Enter, and Esc
-                                    // dispatch through its key context.
-                                    let handle = this.menu.read(cx).focus_handle().clone();
-                                    window.focus(&handle, cx);
-                                }
-                                cx.notify();
-                            })
-                            .ok();
-                        }
-                    };
-                    let trigger_button = Button::new("btn-menu-trigger", "Open menu")
-                        .icon(IconName::ChevronDown)
-                        .style(ButtonStyle::Outlined)
-                        .on_click(open_menu_handler);
-                    // Wrap the trigger in a relatively-positioned container
-                    // and overlay a `canvas` that captures the trigger's
-                    // bounds. The canvas paint callback is empty — we only
-                    // need its prepaint hook to grab `bounds`.
-                    let trigger_with_capture = div()
-                        .relative()
-                        .child(trigger_button)
-                        .child(
-                            canvas(
-                                move |bounds, _window, _cx| {
-                                    bounds_slot.set(Some(bounds));
-                                },
-                                |_, _, _, _| {},
-                            )
-                            .absolute()
-                            .inset_0()
-                            .size_full(),
-                        );
-
-                    let menu_open = self.menu_open;
-                    let trigger_bounds = self.menu_trigger_bounds.get();
-                    let anchor_focus = self.menu.read(cx).focus_handle().clone();
-                    let weak_for_dismiss = weak.clone();
-
-                    v_flex()
-                        .gap(Spacing::Small.pixels())
-                        .child(trigger_with_capture)
-                        .when(menu_open, |this| {
-                            let Some(bounds) = trigger_bounds else {
-                                return this;
-                            };
-                            this.child(anchored_popover(
-                                anchor_focus,
-                                gpui::Corner::TopLeft,
-                                bounds,
-                                menu_entity,
-                                move |_window, cx| {
-                                    weak_for_dismiss
-                                        .update(cx, |this, cx| {
-                                            this.menu_open = false;
-                                            cx.notify();
-                                        })
-                                        .ok();
-                                },
-                            ))
+            .child(section("Menu (click to open — keyboard-navigable)", {
+                let bounds_slot = self.menu_trigger_bounds.clone();
+                let menu_entity = self.menu.clone();
+                let open_menu_handler = {
+                    let weak = weak.clone();
+                    move |_event: &gpui::ClickEvent, window: &mut Window, cx: &mut App| {
+                        weak.update(cx, |this, cx| {
+                            this.menu_open = !this.menu_open;
+                            if this.menu_open {
+                                // Focus the menu entity's own focus
+                                // handle so arrow keys, Enter, and Esc
+                                // dispatch through its key context.
+                                let handle = this.menu.read(cx).focus_handle().clone();
+                                window.focus(&handle, cx);
+                            }
+                            cx.notify();
                         })
-                },
-            ))
-            // -------------------- Modal --------------------
-            .child(section(
-                "Modal",
+                        .ok();
+                    }
+                };
+                let trigger_button = Button::new("btn-menu-trigger", "Open menu")
+                    .icon(IconName::ChevronDown)
+                    .style(ButtonStyle::Outlined)
+                    .on_click(open_menu_handler);
+                // Wrap the trigger in a relatively-positioned container
+                // and overlay a `canvas` that captures the trigger's
+                // bounds. The canvas paint callback is empty — we only
+                // need its prepaint hook to grab `bounds`.
+                let trigger_with_capture = div().relative().child(trigger_button).child(
+                    canvas(
+                        move |bounds, _window, _cx| {
+                            bounds_slot.set(Some(bounds));
+                        },
+                        |_, _, _, _| {},
+                    )
+                    .absolute()
+                    .inset_0()
+                    .size_full(),
+                );
+
+                let menu_open = self.menu_open;
+                let trigger_bounds = self.menu_trigger_bounds.get();
+                let anchor_focus = self.menu.read(cx).focus_handle().clone();
+                let weak_for_dismiss = weak.clone();
+
                 v_flex()
                     .gap(Spacing::Small.pixels())
-                    .child(
-                        Button::new("btn-open-modal", "Open modal")
-                            .style(ButtonStyle::Tinted(TintColor::Accent))
-                            .on_click({
-                                let weak = weak.clone();
-                                move |_event, window, cx| {
-                                    weak.update(cx, |this, cx| {
-                                        this.modal_open = true;
-                                        // Focus the modal's handle so Escape
-                                        // and backdrop clicks route here.
-                                        window.focus(&this.modal_focus, cx);
+                    .child(trigger_with_capture)
+                    .when(menu_open, |this| {
+                        let Some(bounds) = trigger_bounds else {
+                            return this;
+                        };
+                        this.child(anchored_popover(
+                            anchor_focus,
+                            gpui::Corner::TopLeft,
+                            bounds,
+                            menu_entity,
+                            move |_window, cx| {
+                                weak_for_dismiss
+                                    .update(cx, |this, cx| {
+                                        this.menu_open = false;
                                         cx.notify();
                                     })
                                     .ok();
-                                }
-                            }),
-                    ),
+                            },
+                        ))
+                    })
+            }))
+            // -------------------- Modal --------------------
+            .child(section(
+                "Modal",
+                v_flex().gap(Spacing::Small.pixels()).child(
+                    Button::new("btn-open-modal", "Open modal")
+                        .style(ButtonStyle::Tinted(TintColor::Accent))
+                        .on_click({
+                            let weak = weak.clone();
+                            move |_event, window, cx| {
+                                weak.update(cx, |this, cx| {
+                                    this.modal_open = true;
+                                    // Focus the modal's handle so Escape
+                                    // and backdrop clicks route here.
+                                    window.focus(&this.modal_focus, cx);
+                                    cx.notify();
+                                })
+                                .ok();
+                            }
+                        }),
+                ),
             ))
             // -------------------- TextField --------------------
             .child(section(
@@ -910,10 +897,7 @@ impl Render for Showcase {
                     self.modal_focus.clone(),
                     Modal::new()
                         .title("Delete file?")
-                        .child(
-                            Label::new("This action cannot be undone.")
-                                .color(Color::Muted),
-                        )
+                        .child(Label::new("This action cannot be undone.").color(Color::Muted))
                         .footer(
                             h_flex()
                                 .gap(Spacing::Small.pixels())
@@ -921,20 +905,16 @@ impl Render for Showcase {
                                 .child(
                                     Button::new("modal-cancel", "Cancel")
                                         .style(ButtonStyle::Subtle)
-                                        .on_click(set_field(
-                                            &weak_for_buttons,
-                                            false,
-                                            |this| &mut this.modal_open,
-                                        )),
+                                        .on_click(set_field(&weak_for_buttons, false, |this| {
+                                            &mut this.modal_open
+                                        })),
                                 )
                                 .child(
                                     Button::new("modal-delete", "Delete")
                                         .style(ButtonStyle::Tinted(TintColor::Accent))
-                                        .on_click(set_field(
-                                            &weak_for_buttons,
-                                            false,
-                                            |this| &mut this.modal_open,
-                                        )),
+                                        .on_click(set_field(&weak_for_buttons, false, |this| {
+                                            &mut this.modal_open
+                                        })),
                                 ),
                         ),
                     move |_window, cx| {
@@ -1000,7 +980,6 @@ impl Showcase {
     }
 }
 
-
 /// Walk every JSON file under `themes/` in the embedded `Assets` source,
 /// parse it as a [`engram::theme::Theme`], and insert it into the global
 /// [`engram::theme::ThemeRegistry`]. The built-in `Engram Dark` /
@@ -1043,11 +1022,7 @@ fn register_embedded_themes(cx: &mut App) {
 fn section(title: &'static str, body: impl IntoElement) -> impl IntoElement {
     v_flex()
         .gap(Spacing::Small.pixels())
-        .child(
-            Label::new(title)
-                .size(LabelSize::Small)
-                .color(Color::Muted),
-        )
+        .child(Label::new(title).size(LabelSize::Small).color(Color::Muted))
         .child(body)
 }
 
@@ -1064,18 +1039,14 @@ fn main() {
 
         // Watch the repo's canonical themes directory so edits to the
         // JSON fixtures show up instantly in the showcase.
-        let themes_dir = concat!(
-            env!("CARGO_MANIFEST_DIR"),
-            "/../engram-ui/assets/themes"
-        );
-        let mut theme_watcher =
-            match engram::theme::hot_reload::watch_themes_dir(themes_dir, cx) {
-                Ok(watcher) => Some(watcher),
-                Err(err) => {
-                    eprintln!("engram showcase: hot reload disabled: {err}");
-                    None
-                }
-            };
+        let themes_dir = concat!(env!("CARGO_MANIFEST_DIR"), "/../engram-ui/assets/themes");
+        let mut theme_watcher = match engram::theme::hot_reload::watch_themes_dir(themes_dir, cx) {
+            Ok(watcher) => Some(watcher),
+            Err(err) => {
+                eprintln!("engram showcase: hot reload disabled: {err}");
+                None
+            }
+        };
 
         let bounds = Bounds::centered(None, size(px(960.0), px(760.0)), cx);
         cx.open_window(
@@ -1086,11 +1057,8 @@ fn main() {
             |window, cx| {
                 // Mirror the OS light/dark appearance onto the active
                 // theme from the first frame onwards.
-                let appearance_sub = engram::theme::sync_with_system_appearance(
-                    Default::default(),
-                    window,
-                    cx,
-                );
+                let appearance_sub =
+                    engram::theme::sync_with_system_appearance(Default::default(), window, cx);
                 let entity = cx.new(Showcase::new);
                 entity.update(cx, |showcase, cx| {
                     showcase.selected_theme = cx.theme().name.clone();

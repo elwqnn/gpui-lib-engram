@@ -257,10 +257,13 @@ impl<T: ButtonBuilder, const N: usize> RenderOnce for ToggleButtonGroup<T, N> {
 
                 let btn = ButtonLike::new((self.group_name.clone(), i))
                     .when(!self.auto_width, |this| this.full_width())
-                    .rounding(Some(ToggleButtonPosition {
-                        leftmost: i == 0,
-                        rightmost: i == N - 1,
-                    }.to_rounding()))
+                    .rounding(Some(
+                        ToggleButtonPosition {
+                            leftmost: i == 0,
+                            rightmost: i == N - 1,
+                        }
+                        .to_rounding(),
+                    ))
                     .style(inner_style)
                     .when(is_selected, |this| {
                         this.toggle_state(true)
@@ -276,13 +279,13 @@ impl<T: ButtonBuilder, const N: usize> RenderOnce for ToggleButtonGroup<T, N> {
                             .flex_none()
                             .when_some(icon, |this, icon_name| {
                                 this.py_2().child(
-                                    Icon::new(icon_name)
-                                        .size(IconSize::XSmall)
-                                        .color(if is_selected {
+                                    Icon::new(icon_name).size(IconSize::XSmall).color(
+                                        if is_selected {
                                             Color::Accent
                                         } else {
                                             Color::Muted
-                                        }),
+                                        },
+                                    ),
                                 )
                             })
                             .child(
@@ -303,9 +306,7 @@ impl<T: ButtonBuilder, const N: usize> RenderOnce for ToggleButtonGroup<T, N> {
                     .when(is_outlined && !last_item, |this| {
                         this.border_r_1().border_color(border_color)
                     })
-                    .when(!self.auto_width, |this| {
-                        this.w(relative(1. / N as f32))
-                    })
+                    .when(!self.auto_width, |this| this.w(relative(1. / N as f32)))
                     .overflow_hidden()
                     .child(btn)
                     .into_any_element()

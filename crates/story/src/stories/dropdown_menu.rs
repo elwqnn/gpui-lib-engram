@@ -1,5 +1,5 @@
-use crate::prelude::*;
 use crate::layout::{example, example_group};
+use crate::prelude::*;
 
 pub struct DropdownMenuStory {
     basic: Entity<DropdownMenu>,
@@ -40,8 +40,11 @@ impl DropdownMenuStory {
 
         let no_chevron = cx.new(|cx| {
             DropdownMenu::new("dd-nochev", "More", cx, |menu| {
-                menu.entry("dd-settings", "Settings", |_, _, _| {})
-                    .entry("dd-about", "About", |_, _, _| {})
+                menu.entry("dd-settings", "Settings", |_, _, _| {}).entry(
+                    "dd-about",
+                    "About",
+                    |_, _, _| {},
+                )
             })
             .style(ButtonStyle::Subtle)
             .no_icon()
@@ -57,25 +60,23 @@ impl DropdownMenuStory {
 
 impl Render for DropdownMenuStory {
     fn render(&mut self, _window: &mut Window, _cx: &mut Context<Self>) -> impl IntoElement {
-        v_flex()
-            .gap(Spacing::Large.pixels())
-            .child(example_group(
-                "DropdownMenu variants",
-                vec![
-                    example(
-                        "Outlined (default)",
-                        h_flex().child(self.basic.clone()).into_any_element(),
-                    ),
-                    example(
-                        "Filled + compact",
-                        h_flex().child(self.styled.clone()).into_any_element(),
-                    ),
-                    example(
-                        "Subtle, no chevron",
-                        h_flex().child(self.no_chevron.clone()).into_any_element(),
-                    ),
-                ],
-            ))
+        v_flex().gap(Spacing::Large.pixels()).child(example_group(
+            "DropdownMenu variants",
+            vec![
+                example(
+                    "Outlined (default)",
+                    h_flex().child(self.basic.clone()).into_any_element(),
+                ),
+                example(
+                    "Filled + compact",
+                    h_flex().child(self.styled.clone()).into_any_element(),
+                ),
+                example(
+                    "Subtle, no chevron",
+                    h_flex().child(self.no_chevron.clone()).into_any_element(),
+                ),
+            ],
+        ))
     }
 }
 

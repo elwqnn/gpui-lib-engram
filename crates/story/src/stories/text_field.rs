@@ -29,30 +29,25 @@ impl TextFieldStory {
 
 impl Render for TextFieldStory {
     fn render(&mut self, _window: &mut Window, _cx: &mut Context<Self>) -> impl IntoElement {
-        v_flex()
-            .gap(Spacing::Large.pixels())
-            .child(example_group(
-                "Text input (click to focus, type, Enter to submit)",
-                vec![example(
-                    "Default",
-                    v_flex()
-                        .gap(Spacing::Small.pixels())
-                        .child(self.field.clone())
-                        .child(
-                            Label::new(if self.submitted.is_empty() {
-                                SharedString::from("Last submitted: (none yet)")
-                            } else {
-                                SharedString::from(format!(
-                                    "Last submitted: {}",
-                                    self.submitted
-                                ))
-                            })
-                            .size(LabelSize::Small)
-                            .color(Color::Muted),
-                        )
-                        .into_any_element(),
-                )],
-            ))
+        v_flex().gap(Spacing::Large.pixels()).child(example_group(
+            "Text input (click to focus, type, Enter to submit)",
+            vec![example(
+                "Default",
+                v_flex()
+                    .gap(Spacing::Small.pixels())
+                    .child(self.field.clone())
+                    .child(
+                        Label::new(if self.submitted.is_empty() {
+                            SharedString::from("Last submitted: (none yet)")
+                        } else {
+                            SharedString::from(format!("Last submitted: {}", self.submitted))
+                        })
+                        .size(LabelSize::Small)
+                        .color(Color::Muted),
+                    )
+                    .into_any_element(),
+            )],
+        ))
     }
 }
 

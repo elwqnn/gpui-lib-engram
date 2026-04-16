@@ -62,10 +62,7 @@ pub struct SplitButton {
 }
 
 impl SplitButton {
-    pub fn new(
-        left: impl Into<SplitButtonKind>,
-        right: impl Into<SplitButtonKind>,
-    ) -> Self {
+    pub fn new(left: impl Into<SplitButtonKind>, right: impl Into<SplitButtonKind>) -> Self {
         Self {
             left: left.into(),
             right: right.into(),
@@ -97,12 +94,8 @@ impl RenderOnce for SplitButton {
         let right = self.right.with_style(ButtonStyle::Transparent);
 
         let render_kind = |k: SplitButtonKind| match k {
-            SplitButtonKind::ButtonLike(b) => {
-                b.layer(ElevationIndex::Surface).into_any_element()
-            }
-            SplitButtonKind::IconButton(b) => {
-                b.layer(ElevationIndex::Surface).into_any_element()
-            }
+            SplitButtonKind::ButtonLike(b) => b.layer(ElevationIndex::Surface).into_any_element(),
+            SplitButtonKind::IconButton(b) => b.layer(ElevationIndex::Surface).into_any_element(),
         };
 
         h_flex()

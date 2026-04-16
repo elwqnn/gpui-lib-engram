@@ -64,10 +64,7 @@ impl DescriptionList {
     }
 
     /// Add multiple entries at once.
-    pub fn entries(
-        mut self,
-        entries: impl IntoIterator<Item = DescriptionEntry>,
-    ) -> Self {
+    pub fn entries(mut self, entries: impl IntoIterator<Item = DescriptionEntry>) -> Self {
         self.entries.extend(entries);
         self
     }
@@ -93,14 +90,11 @@ impl RenderOnce for DescriptionList {
                     .gap(Spacing::Medium.pixels())
                     .py(Spacing::Small.pixels())
                     .child(
-                        div()
-                            .w(px(self.label_width))
-                            .flex_shrink_0()
-                            .child(
-                                Label::new(entry.label)
-                                    .size(LabelSize::Default)
-                                    .color(Color::Muted),
-                            ),
+                        div().w(px(self.label_width)).flex_shrink_0().child(
+                            Label::new(entry.label)
+                                .size(LabelSize::Default)
+                                .color(Color::Muted),
+                        ),
                     )
                     .child(h_flex().flex_1().items_center().child(entry.value));
 

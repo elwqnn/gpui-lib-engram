@@ -110,7 +110,11 @@ impl RenderOnce for Sheet {
             .when_some(self.title, |this, title| {
                 this.child(Label::new(title).size(LabelSize::Large))
             })
-            .child(v_flex().gap(Spacing::Small.pixels()).children(self.children));
+            .child(
+                v_flex()
+                    .gap(Spacing::Small.pixels())
+                    .children(self.children),
+            );
 
         // Size the panel based on the side it attaches to.
         match self.side {

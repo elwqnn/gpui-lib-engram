@@ -48,9 +48,7 @@ impl Render for ModalStory {
                     self.modal_focus.clone(),
                     Modal::new()
                         .title("Delete file?")
-                        .child(
-                            Label::new("This action cannot be undone.").color(Color::Muted),
-                        )
+                        .child(Label::new("This action cannot be undone.").color(Color::Muted))
                         .footer(
                             h_flex()
                                 .gap(Spacing::Small.pixels())

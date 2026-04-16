@@ -35,31 +35,35 @@ impl Render for TabStory {
     fn render(&mut self, _window: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
         let weak = cx.entity().downgrade();
 
-        v_flex()
-            .gap(Spacing::Large.pixels())
-            .child(example_group(
-                "TabBar (click to select)",
-                vec![example(
-                    "Interactive tabs",
-                    v_flex()
-                        .gap(Spacing::Small.pixels())
-                        .child(
-                            TabBar::new()
-                                .child(self.tab("tab-overview", IconName::Eye, "Overview", 0, &weak))
-                                .child(self.tab("tab-files", IconName::File, "Files", 1, &weak))
-                                .child(self.tab("tab-settings", IconName::Settings, "Settings", 2, &weak)),
-                        )
-                        .child(
-                            Label::new(match self.selected_tab {
-                                0 => "Overview content",
-                                1 => "Files content",
-                                _ => "Settings content",
-                            })
-                            .color(Color::Muted),
-                        )
-                        .into_any_element(),
-                )],
-            ))
+        v_flex().gap(Spacing::Large.pixels()).child(example_group(
+            "TabBar (click to select)",
+            vec![example(
+                "Interactive tabs",
+                v_flex()
+                    .gap(Spacing::Small.pixels())
+                    .child(
+                        TabBar::new()
+                            .child(self.tab("tab-overview", IconName::Eye, "Overview", 0, &weak))
+                            .child(self.tab("tab-files", IconName::File, "Files", 1, &weak))
+                            .child(self.tab(
+                                "tab-settings",
+                                IconName::Settings,
+                                "Settings",
+                                2,
+                                &weak,
+                            )),
+                    )
+                    .child(
+                        Label::new(match self.selected_tab {
+                            0 => "Overview content",
+                            1 => "Files content",
+                            _ => "Settings content",
+                        })
+                        .color(Color::Muted),
+                    )
+                    .into_any_element(),
+            )],
+        ))
     }
 }
 

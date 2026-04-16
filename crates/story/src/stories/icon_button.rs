@@ -9,16 +9,40 @@ impl Render for IconButtonStory {
             .child(example_group(
                 "Styles",
                 vec![
-                    example("Filled", IconButton::new("filled", IconName::Settings).into_any_element()),
-                    example("Subtle", IconButton::new("subtle", IconName::MagnifyingGlass).style(ButtonStyle::Subtle).into_any_element()),
-                    example("Outlined", IconButton::new("outlined", IconName::Plus).style(ButtonStyle::Outlined).into_any_element()),
+                    example(
+                        "Filled",
+                        IconButton::new("filled", IconName::Settings).into_any_element(),
+                    ),
+                    example(
+                        "Subtle",
+                        IconButton::new("subtle", IconName::MagnifyingGlass)
+                            .style(ButtonStyle::Subtle)
+                            .into_any_element(),
+                    ),
+                    example(
+                        "Outlined",
+                        IconButton::new("outlined", IconName::Plus)
+                            .style(ButtonStyle::Outlined)
+                            .into_any_element(),
+                    ),
                 ],
             ))
             .child(example_group(
                 "States",
                 vec![
-                    example("Selected", IconButton::new("selected", IconName::Star).style(ButtonStyle::Subtle).toggle_state(true).into_any_element()),
-                    example("Disabled", IconButton::new("disabled", IconName::Close).disabled(true).into_any_element()),
+                    example(
+                        "Selected",
+                        IconButton::new("selected", IconName::Star)
+                            .style(ButtonStyle::Subtle)
+                            .toggle_state(true)
+                            .into_any_element(),
+                    ),
+                    example(
+                        "Disabled",
+                        IconButton::new("disabled", IconName::Close)
+                            .disabled(true)
+                            .into_any_element(),
+                    ),
                 ],
             ))
     }

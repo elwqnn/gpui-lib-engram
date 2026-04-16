@@ -8,45 +8,39 @@ impl Render for IndicatorStory {
             .gap(Spacing::Large.pixels())
             .child(example_group(
                 "Dot",
-                vec![
-                    example(
-                        "Colors",
-                        h_flex()
-                            .gap(Spacing::Large.pixels())
-                            .items_center()
-                            .child(Indicator::dot())
-                            .child(Indicator::dot().color(Color::Success))
-                            .child(Indicator::dot().color(Color::Warning))
-                            .child(Indicator::dot().color(Color::Error))
-                            .into_any_element(),
-                    ),
-                ],
+                vec![example(
+                    "Colors",
+                    h_flex()
+                        .gap(Spacing::Large.pixels())
+                        .items_center()
+                        .child(Indicator::dot())
+                        .child(Indicator::dot().color(Color::Success))
+                        .child(Indicator::dot().color(Color::Warning))
+                        .child(Indicator::dot().color(Color::Error))
+                        .into_any_element(),
+                )],
             ))
             .child(example_group(
                 "Bar",
-                vec![
-                    example(
-                        "Accent bar",
-                        v_flex()
-                            .w(px(48.0))
-                            .child(Indicator::bar().color(Color::Accent))
-                            .into_any_element(),
-                    ),
-                ],
+                vec![example(
+                    "Accent bar",
+                    v_flex()
+                        .w(px(48.0))
+                        .child(Indicator::bar().color(Color::Accent))
+                        .into_any_element(),
+                )],
             ))
             .child(example_group(
                 "Icon",
-                vec![
-                    example(
-                        "Status icons",
-                        h_flex()
-                            .gap(Spacing::Large.pixels())
-                            .items_center()
-                            .child(Indicator::icon(Icon::new(IconName::Check)).color(Color::Success))
-                            .child(Indicator::icon(Icon::new(IconName::Close)).color(Color::Error))
-                            .into_any_element(),
-                    ),
-                ],
+                vec![example(
+                    "Status icons",
+                    h_flex()
+                        .gap(Spacing::Large.pixels())
+                        .items_center()
+                        .child(Indicator::icon(Icon::new(IconName::Check)).color(Color::Success))
+                        .child(Indicator::icon(Icon::new(IconName::Close)).color(Color::Error))
+                        .into_any_element(),
+                )],
             ))
     }
 }

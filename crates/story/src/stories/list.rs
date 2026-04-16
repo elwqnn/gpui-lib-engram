@@ -51,9 +51,24 @@ impl Render for ListStory {
                         .child(
                             List::new()
                                 .header("Navigation")
-                                .child(self.nav_item("nav-home", IconName::ChevronRight, "Home", &weak))
-                                .child(self.nav_item("nav-search", IconName::MagnifyingGlass, "Search", &weak))
-                                .child(self.nav_item("nav-settings", IconName::Settings, "Settings", &weak))
+                                .child(self.nav_item(
+                                    "nav-home",
+                                    IconName::ChevronRight,
+                                    "Home",
+                                    &weak,
+                                ))
+                                .child(self.nav_item(
+                                    "nav-search",
+                                    IconName::MagnifyingGlass,
+                                    "Search",
+                                    &weak,
+                                ))
+                                .child(self.nav_item(
+                                    "nav-settings",
+                                    IconName::Settings,
+                                    "Settings",
+                                    &weak,
+                                ))
                                 .child(
                                     ListItem::new("nav-disabled")
                                         .start_slot(Icon::new(IconName::Close))
@@ -70,7 +85,11 @@ impl Render for ListStory {
                     "With empty message",
                     v_flex()
                         .w(px(280.0))
-                        .child(List::new().header("Recent").empty_message("No recent items"))
+                        .child(
+                            List::new()
+                                .header("Recent")
+                                .empty_message("No recent items"),
+                        )
                         .into_any_element(),
                 )],
             ))

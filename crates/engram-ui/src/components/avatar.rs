@@ -138,12 +138,7 @@ impl RenderOnce for Avatar {
             .items_center()
             .justify_center()
             .when_some(image, |this, source| {
-                this.child(
-                    img(source)
-                        .size(diameter)
-                        .rounded_full()
-                        .bg(bg),
-                )
+                this.child(img(source).size(diameter).rounded_full().bg(bg))
             })
             .when(!has_image, |this| {
                 this.child(
@@ -189,11 +184,12 @@ impl Default for Facepile {
 impl RenderOnce for Facepile {
     fn render(self, _window: &mut Window, _cx: &mut App) -> impl IntoElement {
         let avatars = self.avatars;
-        h_flex().children(avatars.into_iter().enumerate().map(|(i, avatar)| {
-            div()
-                .when(i > 0, |this| this.ml(px(-8.0)))
-                .child(avatar)
-        }))
+        h_flex().children(
+            avatars
+                .into_iter()
+                .enumerate()
+                .map(|(i, avatar)| div().when(i > 0, |this| this.ml(px(-8.0))).child(avatar)),
+        )
     }
 }
 
@@ -304,11 +300,7 @@ impl RenderOnce for Chip {
             .border_1()
             .border_color(border)
             .bg(bg)
-            .child(
-                Label::new(self.label)
-                    .size(label_size)
-                    .color(label_color),
-            )
+            .child(Label::new(self.label).size(label_size).color(label_color))
     }
 }
 

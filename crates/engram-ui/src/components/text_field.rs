@@ -150,18 +150,12 @@ impl TextField {
         self
     }
 
-    pub fn on_change(
-        mut self,
-        handler: impl Fn(&str, &mut Window, &mut App) + 'static,
-    ) -> Self {
+    pub fn on_change(mut self, handler: impl Fn(&str, &mut Window, &mut App) + 'static) -> Self {
         self.on_change = Some(Rc::new(handler));
         self
     }
 
-    pub fn on_submit(
-        mut self,
-        handler: impl Fn(&str, &mut Window, &mut App) + 'static,
-    ) -> Self {
+    pub fn on_submit(mut self, handler: impl Fn(&str, &mut Window, &mut App) + 'static) -> Self {
         self.on_submit = Some(Rc::new(handler));
         self
     }
@@ -531,8 +525,14 @@ impl EntityInputHandler for TextField {
         let last_layout = self.last_layout.as_ref()?;
         let range = self.range_from_utf16(&range_utf16);
         Some(Bounds::from_corners(
-            point(bounds.left() + last_layout.x_for_index(range.start), bounds.top()),
-            point(bounds.left() + last_layout.x_for_index(range.end), bounds.bottom()),
+            point(
+                bounds.left() + last_layout.x_for_index(range.start),
+                bounds.top(),
+            ),
+            point(
+                bounds.left() + last_layout.x_for_index(range.end),
+                bounds.bottom(),
+            ),
         ))
     }
 
@@ -644,8 +644,14 @@ impl Element for TextElement {
                 }),
                 ..run.clone()
             };
-            let head = TextRun { len: mr.start, ..run.clone() };
-            let tail = TextRun { len: display_text.len() - mr.end, ..run };
+            let head = TextRun {
+                len: mr.start,
+                ..run.clone()
+            };
+            let tail = TextRun {
+                len: display_text.len() - mr.end,
+                ..run
+            };
             [head, mid, tail]
                 .into_iter()
                 .filter(|r| r.len > 0)

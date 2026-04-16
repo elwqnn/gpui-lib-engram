@@ -90,7 +90,11 @@ impl RenderOnce for KeybindingHint {
             .text_size(size)
             .text_color(colors.text_disabled)
             .when_some(self.prefix, |this, prefix| {
-                this.child(Label::new(prefix).size(LabelSize::XSmall).color(Color::Disabled))
+                this.child(
+                    Label::new(prefix)
+                        .size(LabelSize::XSmall)
+                        .color(Color::Disabled),
+                )
             })
             .child(
                 h_flex()
@@ -108,7 +112,11 @@ impl RenderOnce for KeybindingHint {
                     .child(self.keybinding),
             )
             .when_some(self.suffix, |this, suffix| {
-                this.child(Label::new(suffix).size(LabelSize::XSmall).color(Color::Disabled))
+                this.child(
+                    Label::new(suffix)
+                        .size(LabelSize::XSmall)
+                        .color(Color::Disabled),
+                )
             })
     }
 }

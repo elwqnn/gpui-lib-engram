@@ -167,11 +167,9 @@ impl RenderOnce for Banner {
                     )
                     .when_some(self.description, |this, desc| {
                         this.child(
-                            div().pl(description_indent).child(
-                                Label::new(desc)
-                                    .size(LabelSize::Small)
-                                    .color(Color::Muted),
-                            ),
+                            div()
+                                .pl(description_indent)
+                                .child(Label::new(desc).size(LabelSize::Small).color(Color::Muted)),
                         )
                     }),
             )
@@ -246,11 +244,9 @@ impl RenderOnce for Notification {
                     )
                     .when_some(self.description, |this, desc| {
                         this.child(
-                            div().pl(description_indent).child(
-                                Label::new(desc)
-                                    .size(LabelSize::Small)
-                                    .color(Color::Muted),
-                            ),
+                            div()
+                                .pl(description_indent)
+                                .child(Label::new(desc).size(LabelSize::Small).color(Color::Muted)),
                         )
                     }),
             )

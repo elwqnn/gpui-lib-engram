@@ -38,8 +38,8 @@ use std::rc::Rc;
 
 use engram_theme::{ActiveTheme, Radius, Spacing};
 use gpui::{
-    AnyElement, App, Bounds, Corner, FocusHandle, IntoElement, MouseButton, ParentElement,
-    Pixels, Point, RenderOnce, Window, anchored, deferred, div, point, prelude::*, px,
+    AnyElement, App, Bounds, Corner, FocusHandle, IntoElement, MouseButton, ParentElement, Pixels,
+    Point, RenderOnce, Window, anchored, deferred, div, point, prelude::*, px,
 };
 use smallvec::SmallVec;
 
@@ -179,9 +179,7 @@ pub fn anchored_popover(
                     .child(
                         div()
                             .occlude()
-                            .on_mouse_down(MouseButton::Left, |_, _, cx| {
-                                cx.stop_propagation()
-                            })
+                            .on_mouse_down(MouseButton::Left, |_, _, cx| cx.stop_propagation())
                             .child(content),
                     ),
             ),

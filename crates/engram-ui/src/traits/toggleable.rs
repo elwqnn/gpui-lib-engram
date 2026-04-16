@@ -43,7 +43,11 @@ impl ToggleState {
 
 impl From<bool> for ToggleState {
     fn from(value: bool) -> Self {
-        if value { Self::Selected } else { Self::Unselected }
+        if value {
+            Self::Selected
+        } else {
+            Self::Unselected
+        }
     }
 }
 
@@ -100,8 +104,14 @@ mod tests {
 
     #[test]
     fn from_any_and_all_collapses_to_indeterminate_when_partial() {
-        assert_eq!(ToggleState::from_any_and_all(true, true), ToggleState::Selected);
-        assert_eq!(ToggleState::from_any_and_all(false, false), ToggleState::Unselected);
+        assert_eq!(
+            ToggleState::from_any_and_all(true, true),
+            ToggleState::Selected
+        );
+        assert_eq!(
+            ToggleState::from_any_and_all(false, false),
+            ToggleState::Unselected
+        );
         assert_eq!(
             ToggleState::from_any_and_all(true, false),
             ToggleState::Indeterminate

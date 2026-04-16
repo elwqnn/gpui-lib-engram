@@ -1,5 +1,5 @@
-use crate::prelude::*;
 use crate::layout::{example, example_group};
+use crate::prelude::*;
 
 pub struct AccordionStory {
     expanded: [bool; 3],

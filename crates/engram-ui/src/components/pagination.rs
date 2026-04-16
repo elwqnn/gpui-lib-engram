@@ -70,10 +70,7 @@ impl Pagination {
     }
 
     /// Register a click handler, invoked with the 1-based page number.
-    pub fn on_click(
-        mut self,
-        handler: impl Fn(usize, &mut Window, &mut App) + 'static,
-    ) -> Self {
+    pub fn on_click(mut self, handler: impl Fn(usize, &mut Window, &mut App) + 'static) -> Self {
         self.on_click = Some(Rc::new(handler));
         self
     }
@@ -156,13 +153,11 @@ impl RenderOnce for Pagination {
                 .rounded(radius)
                 .border_1()
                 .border_color(colors.border_variant)
-                .child(
-                    Icon::new(icon).size(IconSize::Small).color(if enabled {
-                        Color::Default
-                    } else {
-                        Color::Disabled
-                    }),
-                );
+                .child(Icon::new(icon).size(IconSize::Small).color(if enabled {
+                    Color::Default
+                } else {
+                    Color::Disabled
+                }));
 
             if enabled && !self.disabled {
                 let btn = btn
@@ -216,21 +211,17 @@ impl RenderOnce for Pagination {
                             .px(Spacing::XSmall.pixels());
 
                         let btn = if is_current {
-                            btn.bg(colors.accent)
-                                .border_color(colors.accent)
-                                .child(
-                                    Label::new(format!("{page}"))
-                                        .size(LabelSize::Small)
-                                        .color(Color::Custom(colors.background)),
-                                )
+                            btn.bg(colors.accent).border_color(colors.accent).child(
+                                Label::new(format!("{page}"))
+                                    .size(LabelSize::Small)
+                                    .color(Color::Custom(colors.background)),
+                            )
                         } else {
-                            let btn = btn
-                                .border_color(colors.border_variant)
-                                .child(
-                                    Label::new(format!("{page}"))
-                                        .size(LabelSize::Small)
-                                        .color(Color::Default),
-                                );
+                            let btn = btn.border_color(colors.border_variant).child(
+                                Label::new(format!("{page}"))
+                                    .size(LabelSize::Small)
+                                    .color(Color::Default),
+                            );
                             if !self.disabled {
                                 let btn = btn
                                     .cursor_pointer()
@@ -246,20 +237,14 @@ impl RenderOnce for Pagination {
                         };
                         btn.into_any_element()
                     }
-                    PageSlot::Ellipsis => {
-                        div()
-                            .min_w(btn_size)
-                            .h(btn_size)
-                            .flex()
-                            .items_center()
-                            .justify_center()
-                            .child(
-                                Label::new("…")
-                                    .size(LabelSize::Small)
-                                    .color(Color::Muted),
-                            )
-                            .into_any_element()
-                    }
+                    PageSlot::Ellipsis => div()
+                        .min_w(btn_size)
+                        .h(btn_size)
+                        .flex()
+                        .items_center()
+                        .justify_center()
+                        .child(Label::new("…").size(LabelSize::Small).color(Color::Muted))
+                        .into_any_element(),
                 }
             }))
             .child(next)
@@ -291,7 +276,10 @@ mod tests {
         // [1, …, 9, 10, 11, …, 20]
         assert!(matches!(slots.first(), Some(PageSlot::Page(1))));
         assert!(matches!(slots.last(), Some(PageSlot::Page(20))));
-        let ellipsis_count = slots.iter().filter(|s| matches!(s, PageSlot::Ellipsis)).count();
+        let ellipsis_count = slots
+            .iter()
+            .filter(|s| matches!(s, PageSlot::Ellipsis))
+            .count();
         assert_eq!(ellipsis_count, 2);
     }
 

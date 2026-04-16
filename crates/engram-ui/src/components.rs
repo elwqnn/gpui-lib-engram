@@ -10,8 +10,8 @@ pub mod checkbox;
 pub mod decorated_icon;
 pub mod description_list;
 pub mod disclosure;
-pub mod dropdown_menu;
 pub mod divider;
+pub mod dropdown_menu;
 pub mod gradient_fade;
 pub mod group;
 pub mod hover_card;
@@ -53,8 +53,7 @@ pub use breadcrumb::{Breadcrumb, BreadcrumbItem};
 pub use button::{
     Button, ButtonBuilder, ButtonCommon, ButtonLike, ButtonLink, ButtonSize, ButtonStyle,
     CopyButton, IconButton, SelectableButton, SplitButton, SplitButtonKind, SplitButtonStyle,
-    TintColor, ToggleButtonGroup, ToggleButtonGroupStyle, ToggleButtonSimple,
-    ToggleButtonWithIcon,
+    TintColor, ToggleButtonGroup, ToggleButtonGroupStyle, ToggleButtonSimple, ToggleButtonWithIcon,
 };
 pub use callout::{BorderPosition, Callout};
 pub use checkbox::{Checkbox, CheckboxSize};

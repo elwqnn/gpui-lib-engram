@@ -83,7 +83,14 @@ use crate::traits::ClickHandler;
 
 actions!(
     engram_menu,
-    [SelectFirst, SelectNext, SelectPrevious, SelectLast, Confirm, Cancel]
+    [
+        SelectFirst,
+        SelectNext,
+        SelectPrevious,
+        SelectLast,
+        Confirm,
+        Cancel
+    ]
 );
 
 /// One row inside a [`Menu`].
@@ -270,12 +277,7 @@ impl Menu {
     // Action handlers
     // ------------------------------------------------------------------
 
-    pub fn select_first(
-        &mut self,
-        _: &SelectFirst,
-        _window: &mut Window,
-        cx: &mut Context<Self>,
-    ) {
+    pub fn select_first(&mut self, _: &SelectFirst, _window: &mut Window, cx: &mut Context<Self>) {
         if let Some(ix) = self.first_selectable() {
             self.selected_index = Some(ix);
             cx.notify();
@@ -391,7 +393,11 @@ impl Render for Menu {
                     on_click,
                 } => {
                     let disabled = *disabled;
-                    let label_color = if disabled { Color::Disabled } else { Color::Default };
+                    let label_color = if disabled {
+                        Color::Disabled
+                    } else {
+                        Color::Default
+                    };
                     let is_selected = selected == Some(ix);
                     let row_id = id.clone();
                     let label = label.clone();
@@ -412,11 +418,11 @@ impl Render for Menu {
                                 .hover(|s| s.bg(colors.ghost_element_hover))
                         })
                         .when_some(icon, |this, icon| {
-                            this.child(
-                                Icon::new(icon)
-                                    .size(IconSize::Small)
-                                    .color(if disabled { Color::Disabled } else { Color::Muted }),
-                            )
+                            this.child(Icon::new(icon).size(IconSize::Small).color(if disabled {
+                                Color::Disabled
+                            } else {
+                                Color::Muted
+                            }))
                         })
                         .child(
                             div()

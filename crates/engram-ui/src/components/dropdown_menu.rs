@@ -21,8 +21,8 @@ use std::cell::Cell;
 use std::rc::Rc;
 
 use gpui::{
-    App, Bounds, Context, Corner, Entity, IntoElement, ParentElement, Pixels, Render,
-    SharedString, Styled, Subscription, Window, canvas, div, prelude::*,
+    App, Bounds, Context, Corner, Entity, IntoElement, ParentElement, Pixels, Render, SharedString,
+    Styled, Subscription, Window, canvas, div, prelude::*,
 };
 
 use crate::components::button::{Button, ButtonCommon, ButtonSize, ButtonStyle};

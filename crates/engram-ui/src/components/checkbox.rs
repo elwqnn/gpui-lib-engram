@@ -4,9 +4,7 @@
 use std::rc::Rc;
 
 use engram_theme::{ActiveTheme, Color, Radius, Spacing};
-use gpui::{
-    App, ElementId, IntoElement, RenderOnce, SharedString, Window, div, prelude::*, px,
-};
+use gpui::{App, ElementId, IntoElement, RenderOnce, SharedString, Window, div, prelude::*, px};
 
 use crate::components::icon::{Icon, IconName, IconSize};
 use crate::components::label::{Label, LabelCommon, LabelSize};
@@ -143,7 +141,11 @@ impl RenderOnce for Checkbox {
         let box_size = self.size.box_size();
         let icon_size = self.size.icon_size();
         let label_size = self.size.label_size();
-        let label_color = if self.disabled { Color::Disabled } else { Color::Default };
+        let label_color = if self.disabled {
+            Color::Disabled
+        } else {
+            Color::Default
+        };
         // On the filled accent background we need a contrasting glyph.
         let glyph_color = if self.disabled {
             Color::Disabled

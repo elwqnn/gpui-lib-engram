@@ -1,5 +1,5 @@
-use crate::prelude::*;
 use crate::layout::{example, example_group};
+use crate::prelude::*;
 
 pub struct HoverCardStory;
 
@@ -14,31 +14,34 @@ impl Render for HoverCardStory {
                 .child(
                     h_flex()
                         .gap(Spacing::Small.pixels())
-                        .child(Icon::new(IconName::Mail).size(IconSize::Small).color(Color::Muted))
-                        .child(Label::new("alice@example.com").size(LabelSize::Small).color(Color::Muted)),
+                        .child(
+                            Icon::new(IconName::Mail)
+                                .size(IconSize::Small)
+                                .color(Color::Muted),
+                        )
+                        .child(
+                            Label::new("alice@example.com")
+                                .size(LabelSize::Small)
+                                .color(Color::Muted),
+                        ),
                 )
         });
 
-        v_flex()
-            .gap(Spacing::Large.pixels())
-            .child(example_group(
-                "HoverCard",
-                vec![
-                    example(
-                        "Rich content card",
-                        card.into_any_element(),
-                    ),
-                    example(
-                        "Minimal card",
-                        cx.new(|_| {
-                            HoverCard::new()
-                                .title("Link Preview")
-                                .child(Label::new("https://example.com").color(Color::Accent))
-                        })
-                        .into_any_element(),
-                    ),
-                ],
-            ))
+        v_flex().gap(Spacing::Large.pixels()).child(example_group(
+            "HoverCard",
+            vec![
+                example("Rich content card", card.into_any_element()),
+                example(
+                    "Minimal card",
+                    cx.new(|_| {
+                        HoverCard::new()
+                            .title("Link Preview")
+                            .child(Label::new("https://example.com").color(Color::Accent))
+                    })
+                    .into_any_element(),
+                ),
+            ],
+        ))
     }
 }
 

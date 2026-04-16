@@ -8,47 +8,63 @@ impl Render for IconStory {
             .gap(Spacing::Large.pixels())
             .child(example_group(
                 "Common icons",
-                vec![
-                    example(
-                        "Selection",
-                        h_flex()
-                            .gap(Spacing::Large.pixels())
-                            .child(Icon::new(IconName::Check))
-                            .child(Icon::new(IconName::Close))
-                            .child(Icon::new(IconName::Plus))
-                            .child(Icon::new(IconName::Dash))
-                            .child(Icon::new(IconName::ChevronDown))
-                            .child(Icon::new(IconName::ChevronRight))
-                            .child(Icon::new(IconName::MagnifyingGlass))
-                            .child(Icon::new(IconName::Settings))
-                            .into_any_element(),
-                    ),
-                ],
+                vec![example(
+                    "Selection",
+                    h_flex()
+                        .gap(Spacing::Large.pixels())
+                        .child(Icon::new(IconName::Check))
+                        .child(Icon::new(IconName::Close))
+                        .child(Icon::new(IconName::Plus))
+                        .child(Icon::new(IconName::Dash))
+                        .child(Icon::new(IconName::ChevronDown))
+                        .child(Icon::new(IconName::ChevronRight))
+                        .child(Icon::new(IconName::MagnifyingGlass))
+                        .child(Icon::new(IconName::Settings))
+                        .into_any_element(),
+                )],
             ))
             .child(example_group(
                 "Sizes",
                 vec![
-                    example("XSmall", Icon::new(IconName::Settings).size(IconSize::XSmall).into_any_element()),
-                    example("Small", Icon::new(IconName::Settings).size(IconSize::Small).into_any_element()),
-                    example("Medium (default)", Icon::new(IconName::Settings).size(IconSize::Medium).into_any_element()),
-                    example("Large", Icon::new(IconName::Settings).size(IconSize::Large).into_any_element()),
+                    example(
+                        "XSmall",
+                        Icon::new(IconName::Settings)
+                            .size(IconSize::XSmall)
+                            .into_any_element(),
+                    ),
+                    example(
+                        "Small",
+                        Icon::new(IconName::Settings)
+                            .size(IconSize::Small)
+                            .into_any_element(),
+                    ),
+                    example(
+                        "Medium (default)",
+                        Icon::new(IconName::Settings)
+                            .size(IconSize::Medium)
+                            .into_any_element(),
+                    ),
+                    example(
+                        "Large",
+                        Icon::new(IconName::Settings)
+                            .size(IconSize::Large)
+                            .into_any_element(),
+                    ),
                 ],
             ))
             .child(example_group(
                 "Colors",
-                vec![
-                    example(
-                        "Semantic colors",
-                        h_flex()
-                            .gap(Spacing::Large.pixels())
-                            .child(Icon::new(IconName::Info).color(Color::Info))
-                            .child(Icon::new(IconName::Check).color(Color::Success))
-                            .child(Icon::new(IconName::Warning).color(Color::Warning))
-                            .child(Icon::new(IconName::XCircle).color(Color::Error))
-                            .child(Icon::new(IconName::Settings).color(Color::Muted))
-                            .into_any_element(),
-                    ),
-                ],
+                vec![example(
+                    "Semantic colors",
+                    h_flex()
+                        .gap(Spacing::Large.pixels())
+                        .child(Icon::new(IconName::Info).color(Color::Info))
+                        .child(Icon::new(IconName::Check).color(Color::Success))
+                        .child(Icon::new(IconName::Warning).color(Color::Warning))
+                        .child(Icon::new(IconName::XCircle).color(Color::Error))
+                        .child(Icon::new(IconName::Settings).color(Color::Muted))
+                        .into_any_element(),
+                )],
             ))
     }
 }

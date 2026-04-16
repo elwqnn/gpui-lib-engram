@@ -18,8 +18,8 @@ use std::rc::Rc;
 
 use engram_theme::{ActiveTheme, Color, Spacing};
 use gpui::{
-    AnyElement, App, ClickEvent, ElementId, IntoElement, ParentElement, RenderOnce,
-    SharedString, Window, div, prelude::*, px,
+    AnyElement, App, ClickEvent, ElementId, IntoElement, ParentElement, RenderOnce, SharedString,
+    Window, div, prelude::*, px,
 };
 use smallvec::SmallVec;
 
@@ -106,7 +106,11 @@ impl RenderOnce for Tab {
             colors.background
         };
         // Underline the active tab with a 2px accent stripe via a child div.
-        let underline_color = if self.selected { colors.accent } else { colors.border };
+        let underline_color = if self.selected {
+            colors.accent
+        } else {
+            colors.border
+        };
 
         let row = h_flex()
             .id(self.id.clone())
@@ -116,13 +120,18 @@ impl RenderOnce for Tab {
             .items_center()
             .bg(bg)
             .when(!self.disabled && !self.selected, |this| {
-                this.cursor_pointer().hover(|s| s.bg(colors.ghost_element_hover))
+                this.cursor_pointer()
+                    .hover(|s| s.bg(colors.ghost_element_hover))
             })
             .when_some(self.icon, |this, icon| {
                 this.child(
                     Icon::new(icon)
                         .size(IconSize::Small)
-                        .color(if self.disabled { Color::Disabled } else { Color::Muted }),
+                        .color(if self.disabled {
+                            Color::Disabled
+                        } else {
+                            Color::Muted
+                        }),
                 )
             })
             .child(Label::new(self.label).color(label_color))

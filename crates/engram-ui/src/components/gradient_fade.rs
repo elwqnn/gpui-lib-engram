@@ -3,8 +3,8 @@
 //! content continues beyond the visible region.
 
 use gpui::{
-    Hsla, IntoElement, Pixels, RenderOnce, SharedString, Window, div, linear_color_stop,
-    linear_gradient, prelude::*, px, App,
+    App, Hsla, IntoElement, Pixels, RenderOnce, SharedString, Window, div, linear_color_stop,
+    linear_gradient, prelude::*, px,
 };
 
 use engram_theme::ActiveTheme;

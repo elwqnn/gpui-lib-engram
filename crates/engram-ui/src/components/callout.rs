@@ -7,9 +7,7 @@
 //! where the user needs to read and likely act on the information.
 
 use engram_theme::{ActiveTheme, Color, Spacing};
-use gpui::{
-    AnyElement, App, IntoElement, ParentElement, RenderOnce, Window, div, prelude::*, px,
-};
+use gpui::{AnyElement, App, IntoElement, ParentElement, RenderOnce, Window, div, prelude::*, px};
 
 use crate::components::banner::Severity;
 use crate::components::icon::{Icon, IconName, IconSize};
@@ -96,26 +94,10 @@ impl RenderOnce for Callout {
         let status = &colors.status;
 
         let (icon, icon_color, bg_color) = match self.severity {
-            Severity::Info => (
-                IconName::Info,
-                Color::Muted,
-                status.info_background,
-            ),
-            Severity::Success => (
-                IconName::Check,
-                Color::Success,
-                status.success_background,
-            ),
-            Severity::Warning => (
-                IconName::Warning,
-                Color::Warning,
-                status.warning_background,
-            ),
-            Severity::Error => (
-                IconName::XCircle,
-                Color::Error,
-                status.error_background,
-            ),
+            Severity::Info => (IconName::Info, Color::Muted, status.info_background),
+            Severity::Success => (IconName::Check, Color::Success, status.success_background),
+            Severity::Warning => (IconName::Warning, Color::Warning, status.warning_background),
+            Severity::Error => (IconName::XCircle, Color::Error, status.error_background),
         };
 
         let has_actions = self.actions_slot.is_some() || self.dismiss_action.is_some();
@@ -133,11 +115,7 @@ impl RenderOnce for Callout {
             .bg(bg_color)
             .overflow_x_hidden()
             .when(self.icon.is_some(), |this| {
-                this.child(
-                    Icon::new(icon)
-                        .size(IconSize::Small)
-                        .color(icon_color),
-                )
+                this.child(Icon::new(icon).size(IconSize::Small).color(icon_color))
             })
             .child(
                 v_flex()
@@ -171,11 +149,7 @@ impl RenderOnce for Callout {
                             }),
                     )
                     .when_some(self.description, |this, desc| {
-                        this.child(
-                            Label::new(desc)
-                                .size(LabelSize::Small)
-                                .color(Color::Muted),
-                        )
+                        this.child(Label::new(desc).size(LabelSize::Small).color(Color::Muted))
                     }),
             )
     }

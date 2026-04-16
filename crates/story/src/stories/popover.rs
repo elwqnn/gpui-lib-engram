@@ -43,67 +43,61 @@ impl Render for PopoverStory {
                 }
             });
 
-        let trigger_with_capture = gpui::div()
-            .relative()
-            .child(trigger)
-            .child(
-                canvas(
-                    move |bounds, _window, _cx| {
-                        bounds_slot.set(Some(bounds));
-                    },
-                    |_, _, _, _| {},
-                )
-                .absolute()
-                .inset_0()
-                .size_full(),
-            );
+        let trigger_with_capture = gpui::div().relative().child(trigger).child(
+            canvas(
+                move |bounds, _window, _cx| {
+                    bounds_slot.set(Some(bounds));
+                },
+                |_, _, _, _| {},
+            )
+            .absolute()
+            .inset_0()
+            .size_full(),
+        );
 
         let is_open = self.open;
         let trigger_bounds = self.trigger_bounds.get();
         let focus = self.focus.clone();
         let weak_dismiss = weak.clone();
 
-        v_flex()
-            .gap(Spacing::Large.pixels())
-            .child(example_group(
-                "Popover (click to toggle)",
-                vec![example(
-                    "Anchored popover",
-                    v_flex()
-                        .gap(Spacing::Small.pixels())
-                        .child(trigger_with_capture)
-                        .when(is_open, |this| {
-                            let Some(bounds) = trigger_bounds else {
-                                return this;
-                            };
-                            this.child(anchored_popover(
-                                focus,
-                                gpui::Corner::TopLeft,
-                                bounds,
-                                Popover::new()
+        v_flex().gap(Spacing::Large.pixels()).child(example_group(
+            "Popover (click to toggle)",
+            vec![example(
+                "Anchored popover",
+                v_flex()
+                    .gap(Spacing::Small.pixels())
+                    .child(trigger_with_capture)
+                    .when(is_open, |this| {
+                        let Some(bounds) = trigger_bounds else {
+                            return this;
+                        };
+                        this.child(anchored_popover(
+                            focus,
+                            gpui::Corner::TopLeft,
+                            bounds,
+                            Popover::new().child(
+                                v_flex()
+                                    .gap(Spacing::Small.pixels())
+                                    .child(Label::new("Popover content"))
                                     .child(
-                                        v_flex()
-                                            .gap(Spacing::Small.pixels())
-                                            .child(Label::new("Popover content"))
-                                            .child(
-                                                Label::new("This is a basic popover.")
-                                                    .color(Color::Muted)
-                                                    .size(LabelSize::Small),
-                                            ),
+                                        Label::new("This is a basic popover.")
+                                            .color(Color::Muted)
+                                            .size(LabelSize::Small),
                                     ),
-                                move |_window, cx| {
-                                    weak_dismiss
-                                        .update(cx, |this, cx| {
-                                            this.open = false;
-                                            cx.notify();
-                                        })
-                                        .ok();
-                                },
-                            ))
-                        })
-                        .into_any_element(),
-                )],
-            ))
+                            ),
+                            move |_window, cx| {
+                                weak_dismiss
+                                    .update(cx, |this, cx| {
+                                        this.open = false;
+                                        cx.notify();
+                                    })
+                                    .ok();
+                            },
+                        ))
+                    })
+                    .into_any_element(),
+            )],
+        ))
     }
 }
 

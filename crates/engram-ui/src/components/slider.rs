@@ -76,10 +76,7 @@ impl Slider {
     }
 
     /// Register a change handler, invoked with the new value when dragged.
-    pub fn on_change(
-        mut self,
-        handler: impl Fn(f32, &mut Window, &mut App) + 'static,
-    ) -> Self {
+    pub fn on_change(mut self, handler: impl Fn(f32, &mut Window, &mut App) + 'static) -> Self {
         self.on_change = Some(Rc::new(handler));
         self
     }
@@ -194,15 +191,14 @@ impl RenderOnce for Slider {
                             .border_1()
                             .border_color(thumb_border)
                             .when(!self.disabled, |this| {
-                                this.cursor_pointer()
-                                    .hover(|s| {
-                                        s.border_color(colors.accent).shadow(vec![BoxShadow {
-                                            color: ring_color,
-                                            offset: point(px(0.), px(0.)),
-                                            blur_radius: px(0.),
-                                            spread_radius: px(3.),
-                                        }])
-                                    })
+                                this.cursor_pointer().hover(|s| {
+                                    s.border_color(colors.accent).shadow(vec![BoxShadow {
+                                        color: ring_color,
+                                        offset: point(px(0.), px(0.)),
+                                        blur_radius: px(0.),
+                                        spread_radius: px(3.),
+                                    }])
+                                })
                             }),
                     ),
             )
@@ -226,19 +222,21 @@ impl RenderOnce for Slider {
                         }
                         handler(val.clamp(min, max), window, cx);
                     })
-                    .on_mouse_move(move |event: &MouseMoveEvent, window, cx| {
-                        if event.pressed_button == Some(MouseButton::Left) {
-                            let b = bounds_for_move.get();
-                            let w = b.size.width.max(px(1.0));
-                            let x = event.position.x - b.origin.x;
-                            let frac = (x / w).clamp(0.0, 1.0);
-                            let mut val = min + frac * (max - min);
-                            if let Some(s) = step {
-                                val = (val / s).round() * s;
+                    .on_mouse_move(
+                        move |event: &MouseMoveEvent, window, cx| {
+                            if event.pressed_button == Some(MouseButton::Left) {
+                                let b = bounds_for_move.get();
+                                let w = b.size.width.max(px(1.0));
+                                let x = event.position.x - b.origin.x;
+                                let frac = (x / w).clamp(0.0, 1.0);
+                                let mut val = min + frac * (max - min);
+                                if let Some(s) = step {
+                                    val = (val / s).round() * s;
+                                }
+                                move_handler(val.clamp(min, max), window, cx);
                             }
-                            move_handler(val.clamp(min, max), window, cx);
-                        }
-                    })
+                        },
+                    )
                 },
             );
 
@@ -255,7 +253,11 @@ impl RenderOnce for Slider {
             .gap(Spacing::Small.pixels())
             .w_full()
             .when_some(self.label, |this, label| {
-                this.child(Label::new(label).size(LabelSize::Default).color(label_color))
+                this.child(
+                    Label::new(label)
+                        .size(LabelSize::Default)
+                        .color(label_color),
+                )
             })
             .child(track)
             .when_some(value_label, |this, label| this.child(label))

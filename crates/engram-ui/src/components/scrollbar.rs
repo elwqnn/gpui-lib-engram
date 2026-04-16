@@ -32,8 +32,8 @@
 
 use engram_theme::{ActiveTheme, Radius};
 use gpui::{
-    App, IntoElement, MouseButton, ParentElement, Pixels, RenderOnce, ScrollHandle, Styled,
-    Window, div, prelude::*, px,
+    App, IntoElement, MouseButton, ParentElement, Pixels, RenderOnce, ScrollHandle, Styled, Window,
+    div, prelude::*, px,
 };
 
 /// Which axis the scrollbar tracks.

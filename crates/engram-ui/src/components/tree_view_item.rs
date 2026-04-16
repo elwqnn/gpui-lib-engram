@@ -119,76 +119,65 @@ impl RenderOnce for TreeViewItem {
             .w(px(22.0))
             .flex_none()
             .justify_center()
-            .child(
-                div()
-                    .w_px()
-                    .h_full()
-                    .bg(colors.border.opacity(0.5)),
-            );
+            .child(div().w_px().h_full().bg(colors.border.opacity(0.5)));
 
-        h_flex()
-            .id(self.id)
-            .w_full()
-            .child(
-                h_flex()
-                    .id("inner_tree_view_item")
-                    .cursor_pointer()
-                    .size_full()
-                    .h(px(28.0))
-                    .pl(px(2.0))
-                    .pr(Spacing::Small.pixels())
-                    .gap(Spacing::Medium.pixels())
-                    .rounded(px(2.0))
-                    .border_1()
-                    .border_color(gpui::transparent_black())
-                    .when(self.selected, |this| {
-                        this.border_color(selected_border).bg(selected_bg)
-                    })
-                    .hover(|s| s.bg(colors.element_hover))
-                    .map(|this| {
-                        let label = self.label;
+        h_flex().id(self.id).w_full().child(
+            h_flex()
+                .id("inner_tree_view_item")
+                .cursor_pointer()
+                .size_full()
+                .h(px(28.0))
+                .pl(px(2.0))
+                .pr(Spacing::Small.pixels())
+                .gap(Spacing::Medium.pixels())
+                .rounded(px(2.0))
+                .border_1()
+                .border_color(gpui::transparent_black())
+                .when(self.selected, |this| {
+                    this.border_color(selected_border).bg(selected_bg)
+                })
+                .hover(|s| s.bg(colors.element_hover))
+                .map(|this| {
+                    let label = self.label;
 
-                        if self.root_item {
-                            this.child(
-                                Disclosure::new("toggle", self.expanded)
-                                    .when_some(self.on_toggle.clone(), |disclosure, on_toggle| {
-                                        disclosure.on_click(move |event, window, cx| {
-                                            on_toggle(event, window, cx)
-                                        })
+                    if self.root_item {
+                        this.child(
+                            Disclosure::new("toggle", self.expanded)
+                                .when_some(self.on_toggle.clone(), |disclosure, on_toggle| {
+                                    disclosure.on_click(move |event, window, cx| {
+                                        on_toggle(event, window, cx)
                                     })
-                                    .opened_icon(IconName::ChevronDown)
-                                    .closed_icon(IconName::ChevronRight),
-                            )
+                                })
+                                .opened_icon(IconName::ChevronDown)
+                                .closed_icon(IconName::ChevronRight),
+                        )
+                        .child(
+                            Label::new(label).when(!self.selected, |this| this.color(Color::Muted)),
+                        )
+                    } else {
+                        this.child(indentation_line)
                             .child(
-                                Label::new(label)
-                                    .when(!self.selected, |this| this.color(Color::Muted)),
+                                h_flex().w_full().flex_grow().child(
+                                    Label::new(label)
+                                        .when(!self.selected, |this| this.color(Color::Muted)),
+                                ),
                             )
-                        } else {
-                            this.child(indentation_line).child(
-                                h_flex()
-                                    .w_full()
-                                    .flex_grow()
-                                    .child(
-                                        Label::new(label)
-                                            .when(!self.selected, |this| this.color(Color::Muted)),
-                                    ),
-                            )
-                        }
+                    }
+                })
+                .when_some(
+                    self.on_click.filter(|_| !self.disabled),
+                    |this, on_click| {
+                        this.on_click(move |event, window, cx| on_click(event, window, cx))
+                    },
+                )
+                .when_some(self.on_secondary_mouse_down, |this, on_mouse_down| {
+                    this.on_mouse_down(MouseButton::Right, move |event, window, cx| {
+                        on_mouse_down(event, window, cx)
                     })
-                    .when_some(
-                        self.on_click.filter(|_| !self.disabled),
-                        |this, on_click| {
-                            this.on_click(move |event, window, cx| on_click(event, window, cx))
-                        },
-                    )
-                    .when_some(self.on_secondary_mouse_down, |this, on_mouse_down| {
-                        this.on_mouse_down(MouseButton::Right, move |event, window, cx| {
-                            on_mouse_down(event, window, cx)
-                        })
-                    })
-                    .when_some(self.tooltip, |this, tooltip| {
-                        this.tooltip(move |window, cx| tooltip(window, cx))
-                    }),
-            )
+                })
+                .when_some(self.tooltip, |this, tooltip| {
+                    this.tooltip(move |window, cx| tooltip(window, cx))
+                }),
+        )
     }
 }

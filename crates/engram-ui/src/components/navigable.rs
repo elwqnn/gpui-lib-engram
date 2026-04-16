@@ -4,7 +4,10 @@
 //! `SelectNext` / `SelectPrevious` actions fire (arrow keys), focus cycles
 //! through the entries in order and optionally scrolls them into view.
 
-use gpui::{AnyElement, App, FocusHandle, IntoElement, RenderOnce, ScrollAnchor, ScrollHandle, Window, div, prelude::*};
+use gpui::{
+    AnyElement, App, FocusHandle, IntoElement, RenderOnce, ScrollAnchor, ScrollHandle, Window, div,
+    prelude::*,
+};
 
 use crate::components::menu;
 
@@ -71,9 +74,7 @@ impl RenderOnce for Navigable {
                 let children = self.entries.clone();
                 move |_: &menu::SelectNext, window, cx| {
                     let target = Self::find_focused(&children, window, cx)
-                        .and_then(|index| {
-                            index.checked_add(1).filter(|i| *i < children.len())
-                        })
+                        .and_then(|index| index.checked_add(1).filter(|i| *i < children.len()))
                         .unwrap_or(0);
                     if let Some(entry) = children.get(target) {
                         entry.focus_handle.focus(window, cx);

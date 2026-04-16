@@ -36,8 +36,8 @@ use std::rc::Rc;
 use engram_theme::{ActiveTheme, Radius};
 use gpui::{
     AnyElement, App, Bounds, Div, ElementId, InteractiveElement, IntoElement, MouseButton,
-    ParentElement, Pixels, Point, Stateful, Styled, UniformListDecoration,
-    UniformListScrollHandle, Window, div, px, uniform_list,
+    ParentElement, Pixels, Point, Stateful, Styled, UniformListDecoration, UniformListScrollHandle,
+    Window, div, px, uniform_list,
 };
 
 use super::scroll_metrics::{SCROLLBAR_THICKNESS, ThumbMetrics};
@@ -167,8 +167,7 @@ impl IntoElement for VirtualList {
                     }
                     let viewport = move_handle.viewport.get();
                     let content = move_handle.content_height.get();
-                    let Some(m) = ThumbMetrics::compute(viewport.size.height, content)
-                    else {
+                    let Some(m) = ThumbMetrics::compute(viewport.size.height, content) else {
                         return;
                     };
                     cx.stop_propagation();
@@ -236,18 +235,14 @@ impl UniformListDecoration for VirtualListScrollbar {
                     .on_mouse_down(MouseButton::Left, move |event, window, cx| {
                         cx.stop_propagation();
                         let click_y = event.position.y - viewport_top;
-                        let on_thumb = click_y >= thumb_top
-                            && click_y <= thumb_top + thumb_h;
+                        let on_thumb = click_y >= thumb_top && click_y <= thumb_top + thumb_h;
                         if on_thumb {
-                            click_handle
-                                .drag_offset
-                                .set(Some(click_y - thumb_top));
+                            click_handle.drag_offset.set(Some(click_y - thumb_top));
                             return;
                         }
                         let desired_top = click_y - thumb_h / 2.0;
                         let new_scroll = metrics.scroll_for_thumb_top(desired_top);
-                        let base =
-                            click_handle.inner.0.borrow().base_handle.clone();
+                        let base = click_handle.inner.0.borrow().base_handle.clone();
                         let mut off = base.offset();
                         off.y = -new_scroll;
                         base.set_offset(off);

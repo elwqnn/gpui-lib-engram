@@ -73,57 +73,52 @@ impl Render for MenuStory {
             .style(ButtonStyle::Outlined)
             .on_click(open_handler);
 
-        let trigger_with_capture = gpui::div()
-            .relative()
-            .child(trigger)
-            .child(
-                canvas(
-                    move |bounds, _window, _cx| {
-                        bounds_slot.set(Some(bounds));
-                    },
-                    |_, _, _, _| {},
-                )
-                .absolute()
-                .inset_0()
-                .size_full(),
-            );
+        let trigger_with_capture = gpui::div().relative().child(trigger).child(
+            canvas(
+                move |bounds, _window, _cx| {
+                    bounds_slot.set(Some(bounds));
+                },
+                |_, _, _, _| {},
+            )
+            .absolute()
+            .inset_0()
+            .size_full(),
+        );
 
         let menu_open = self.menu_open;
         let trigger_bounds = self.menu_trigger_bounds.get();
         let anchor_focus = self.menu.read(cx).focus_handle().clone();
         let weak_for_dismiss = weak.clone();
 
-        v_flex()
-            .gap(Spacing::Large.pixels())
-            .child(example_group(
-                "Menu (click to open — keyboard-navigable)",
-                vec![example(
-                    "Anchored popover menu",
-                    v_flex()
-                        .gap(Spacing::Small.pixels())
-                        .child(trigger_with_capture)
-                        .when(menu_open, |this| {
-                            let Some(bounds) = trigger_bounds else {
-                                return this;
-                            };
-                            this.child(anchored_popover(
-                                anchor_focus,
-                                gpui::Corner::TopLeft,
-                                bounds,
-                                menu_entity,
-                                move |_window, cx| {
-                                    weak_for_dismiss
-                                        .update(cx, |this, cx| {
-                                            this.menu_open = false;
-                                            cx.notify();
-                                        })
-                                        .ok();
-                                },
-                            ))
-                        })
-                        .into_any_element(),
-                )],
-            ))
+        v_flex().gap(Spacing::Large.pixels()).child(example_group(
+            "Menu (click to open — keyboard-navigable)",
+            vec![example(
+                "Anchored popover menu",
+                v_flex()
+                    .gap(Spacing::Small.pixels())
+                    .child(trigger_with_capture)
+                    .when(menu_open, |this| {
+                        let Some(bounds) = trigger_bounds else {
+                            return this;
+                        };
+                        this.child(anchored_popover(
+                            anchor_focus,
+                            gpui::Corner::TopLeft,
+                            bounds,
+                            menu_entity,
+                            move |_window, cx| {
+                                weak_for_dismiss
+                                    .update(cx, |this, cx| {
+                                        this.menu_open = false;
+                                        cx.notify();
+                                    })
+                                    .ok();
+                            },
+                        ))
+                    })
+                    .into_any_element(),
+            )],
+        ))
     }
 }
 
