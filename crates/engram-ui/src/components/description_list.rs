@@ -5,10 +5,10 @@
 //! label column width. Optional borders between items aid scanability in
 //! denser layouts.
 
-use engram_theme::{ActiveTheme, Color, Spacing};
 use gpui::{
     AnyElement, App, IntoElement, RenderOnce, SharedString, Styled, Window, div, prelude::*, px,
 };
+use gpui_engram_theme::{ActiveTheme, Color, Spacing};
 
 use crate::components::label::{Label, LabelCommon, LabelSize};
 use crate::components::stack::{h_flex, v_flex};

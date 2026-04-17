@@ -1,10 +1,10 @@
-//! engram-ui: GPUI component primitives built on top of [`engram_theme`].
+//! engram-ui: GPUI component primitives built on top of [`gpui_engram_theme`].
 //!
-//! Downstream users should typically `use engram::prelude::*;` - the umbrella
+//! Downstream users should typically `use gpui_engram::prelude::*;` - the umbrella
 //! [`engram`](../engram/index.html) crate re-exports both this crate and
-//! [`engram_theme`].
+//! [`gpui_engram_theme`].
 //!
-//! Apps should call [`init`] during startup (alongside `engram_theme::init`)
+//! Apps should call [`init`] during startup (alongside `gpui_engram_theme::init`)
 //! so the built-in components can register their default keybindings.
 
 #![forbid(unsafe_code)]
@@ -26,7 +26,7 @@ pub use traits::*;
 /// Registers the default keybindings for components that need them - today
 /// that's [`components::TextField`] (arrow navigation, selection, clipboard,
 /// submit) and [`components::Menu`] (arrow navigation, Enter / Escape). Call
-/// it once per `App`, after [`engram_theme::init`] and before rendering any
+/// it once per `App`, after [`gpui_engram_theme::init`] and before rendering any
 /// components that depend on those bindings.
 pub fn init(cx: &mut gpui::App) {
     components::text_field::bind_text_field_keys(cx);
@@ -35,7 +35,7 @@ pub fn init(cx: &mut gpui::App) {
 
 /// Re-exports of the things you almost always want when building an engram UI.
 pub mod prelude {
-    pub use engram_theme::{
+    pub use gpui_engram_theme::{
         ActiveTheme, Appearance, Color, Radius, Spacing, TextSize, Theme, ThemeColors,
     };
 

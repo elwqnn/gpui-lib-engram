@@ -7,7 +7,7 @@ use gpui::{
     linear_gradient, prelude::*, px,
 };
 
-use engram_theme::ActiveTheme;
+use gpui_engram_theme::ActiveTheme;
 
 /// A gradient overlay that fades from a solid color to transparent.
 #[derive(IntoElement)]

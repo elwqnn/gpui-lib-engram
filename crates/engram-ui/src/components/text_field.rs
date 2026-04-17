@@ -51,7 +51,6 @@
 use std::ops::Range;
 use std::rc::Rc;
 
-use engram_theme::{ActiveTheme, Radius, Spacing};
 use gpui::{
     App, Bounds, ClipboardItem, Context, Element, ElementId, ElementInputHandler, Entity,
     EntityInputHandler, EventEmitter, FocusHandle, Focusable, GlobalElementId, InspectorElementId,
@@ -60,6 +59,7 @@ use gpui::{
     TextRun, UTF16Selection, UnderlineStyle, Window, actions, div, fill, point, prelude::*, px,
     relative, size,
 };
+use gpui_engram_theme::{ActiveTheme, Radius, Spacing};
 use unicode_segmentation::UnicodeSegmentation;
 
 use crate::components::stack::h_flex;

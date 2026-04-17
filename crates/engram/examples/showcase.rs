@@ -2,18 +2,18 @@
 //! library is wired up to real state, so you can click checkboxes, flip
 //! switches, expand the disclosure, and select list rows.
 //!
-//! Run with: `cargo run --example showcase -p engram`.
+//! Run with: `cargo run --example showcase -p gpui-engram`.
 
 use std::cell::Cell;
 use std::rc::Rc;
 
-use engram::prelude::*;
-use engram::theme::hot_reload::ThemeWatcher;
 use gpui::{
     App, AppContext, Bounds, Context, Entity, FocusHandle, InteractiveElement, IntoElement,
     ParentElement, Pixels, Render, SharedString, StatefulInteractiveElement, Styled, Subscription,
     WeakEntity, Window, WindowBounds, WindowOptions, canvas, div, prelude::FluentBuilder, px, size,
 };
+use gpui_engram::prelude::*;
+use gpui_engram::theme::hot_reload::ThemeWatcher;
 use gpui_platform::application;
 
 struct Showcase {
@@ -206,7 +206,7 @@ impl Render for Showcase {
         // Pull every theme registered in the global registry - built-in
         // engram + any JSON themes loaded from `Assets` in `main()`. The
         // selector below renders one button per entry.
-        let theme_names = engram::theme::ThemeRegistry::global(cx).names();
+        let theme_names = gpui_engram::theme::ThemeRegistry::global(cx).names();
         let selected_theme = self.selected_theme.clone();
 
         v_flex()
@@ -243,7 +243,7 @@ impl Render for Showcase {
                                         // Stop mirroring the OS appearance
                                         // so an explicit user pick sticks.
                                         this._appearance_sub = None;
-                                        if engram::theme::activate_theme(&target, cx).is_ok() {
+                                        if gpui_engram::theme::activate_theme(&target, cx).is_ok() {
                                             this.selected_theme = target;
                                             cx.notify();
                                         }
@@ -981,13 +981,13 @@ impl Showcase {
 }
 
 /// Walk every JSON file under `themes/` in the embedded `Assets` source,
-/// parse it as a [`engram::theme::Theme`], and insert it into the global
-/// [`engram::theme::ThemeRegistry`]. The built-in `Engram Dark` /
-/// `Engram Light` already live there from `engram::theme::init`, so this
+/// parse it as a [`gpui_engram::theme::Theme`], and insert it into the global
+/// [`gpui_engram::theme::ThemeRegistry`]. The built-in `Engram Dark` /
+/// `Engram Light` already live there from `gpui_engram::theme::init`, so this
 /// only adds the JSON-shipped extras (gruvbox at the moment).
 fn register_embedded_themes(cx: &mut App) {
-    use engram::theme::{Theme, ThemeRegistry};
     use gpui::AssetSource;
+    use gpui_engram::theme::{Theme, ThemeRegistry};
 
     let asset_paths = match Assets.list("themes/") {
         Ok(paths) => paths,
@@ -1028,10 +1028,10 @@ fn section(title: &'static str, body: impl IntoElement) -> impl IntoElement {
 
 fn main() {
     application().with_assets(Assets).run(|cx: &mut App| {
-        engram::theme::init(cx);
-        engram::ui::init(cx);
+        gpui_engram::theme::init(cx);
+        gpui_engram::ui::init(cx);
 
-        // Load every JSON theme embedded in `engram_ui::Assets` and insert
+        // Load every JSON theme embedded in `gpui_engram_ui::Assets` and insert
         // it into the registry, so the header bar selector can list them
         // alongside the built-in defaults. Failures are non-fatal - a bad
         // theme just doesn't appear in the picker.
@@ -1040,13 +1040,14 @@ fn main() {
         // Watch the repo's canonical themes directory so edits to the
         // JSON fixtures show up instantly in the showcase.
         let themes_dir = concat!(env!("CARGO_MANIFEST_DIR"), "/../engram-ui/assets/themes");
-        let mut theme_watcher = match engram::theme::hot_reload::watch_themes_dir(themes_dir, cx) {
-            Ok(watcher) => Some(watcher),
-            Err(err) => {
-                eprintln!("engram showcase: hot reload disabled: {err}");
-                None
-            }
-        };
+        let mut theme_watcher =
+            match gpui_engram::theme::hot_reload::watch_themes_dir(themes_dir, cx) {
+                Ok(watcher) => Some(watcher),
+                Err(err) => {
+                    eprintln!("engram showcase: hot reload disabled: {err}");
+                    None
+                }
+            };
 
         let bounds = Bounds::centered(None, size(px(960.0), px(760.0)), cx);
         cx.open_window(
@@ -1058,7 +1059,7 @@ fn main() {
                 // Mirror the OS light/dark appearance onto the active
                 // theme from the first frame onwards.
                 let appearance_sub =
-                    engram::theme::sync_with_system_appearance(Default::default(), window, cx);
+                    gpui_engram::theme::sync_with_system_appearance(Default::default(), window, cx);
                 let entity = cx.new(Showcase::new);
                 entity.update(cx, |showcase, cx| {
                     showcase.selected_theme = cx.theme().name.clone();

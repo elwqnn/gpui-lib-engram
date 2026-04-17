@@ -10,8 +10,8 @@
 //! When engram grows action / keymap support we can add a parallel
 //! `KeyBinding::for_action(...)` constructor without breaking call sites.
 
-use engram_theme::{ActiveTheme, Color, Radius, Spacing};
 use gpui::{IntoElement, RenderOnce, SharedString, div, prelude::*, px};
+use gpui_engram_theme::{ActiveTheme, Color, Radius, Spacing};
 
 use crate::components::label::{Label, LabelCommon, LabelSize};
 use crate::components::stack::h_flex;

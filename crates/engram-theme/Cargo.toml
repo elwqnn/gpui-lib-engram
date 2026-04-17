@@ -1,5 +1,5 @@
 [package]
-name = "engram-theme"
+name = "gpui-engram-theme"
 description = "Theme tokens (Color, Spacing, Radius, TextSize) and ActiveTheme global for the engram GPUI component library."
 version.workspace = true
 edition.workspace = true

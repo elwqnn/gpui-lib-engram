@@ -6,8 +6,8 @@
 //! optional icon, title, description, and action slot. Use it for situations
 //! where the user needs to read and likely act on the information.
 
-use engram_theme::{ActiveTheme, Color, Spacing};
 use gpui::{AnyElement, App, IntoElement, ParentElement, RenderOnce, Window, div, prelude::*, px};
+use gpui_engram_theme::{ActiveTheme, Color, Spacing};
 
 use crate::components::banner::Severity;
 use crate::components::icon::{Icon, IconName, IconSize};

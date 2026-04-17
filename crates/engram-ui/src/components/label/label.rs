@@ -8,8 +8,8 @@
 //! variants can compose the same chrome without re-implementing
 //! `italic`/`weight`/`color`/etc.
 
-use engram_theme::Color;
 use gpui::{App, FontWeight, IntoElement, ParentElement, RenderOnce, SharedString, Window};
+use gpui_engram_theme::Color;
 
 use crate::components::label::label_like::{LabelCommon, LabelLike, LabelSize, LineHeightStyle};
 

@@ -39,8 +39,8 @@ jobs:
       - name: cargo clippy --all-targets
         run: cargo clippy --workspace --all-targets -- -D warnings
 
-      - name: cargo test -p engram-ui
-        run: cargo test -p engram-ui --no-fail-fast
+      - name: cargo test -p gpui-engram-ui
+        run: cargo test -p gpui-engram-ui --no-fail-fast
 
-      - name: cargo test -p engram-theme
-        run: cargo test -p engram-theme --no-fail-fast
+      - name: cargo test -p gpui-engram-theme
+        run: cargo test -p gpui-engram-theme --no-fail-fast

@@ -5,8 +5,8 @@
 //! unread) usually adjacent to a primary element such as an avatar or
 //! list row.
 
-use engram_theme::{ActiveTheme, Color};
 use gpui::{App, IntoElement, RenderOnce, Window, div, prelude::*, px};
+use gpui_engram_theme::{ActiveTheme, Color};
 
 use crate::components::icon::{Icon, IconSize};
 

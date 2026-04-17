@@ -8,8 +8,8 @@
 
 use std::rc::Rc;
 
-use engram_theme::Color;
 use gpui::{App, ClickEvent, CursorStyle, ElementId, IntoElement, RenderOnce, Window, prelude::*};
+use gpui_engram_theme::Color;
 
 use crate::components::button::{ButtonCommon, ButtonSize, ButtonStyle, IconButton};
 use crate::components::icon::{IconName, IconSize};

@@ -7,11 +7,11 @@
 //! strips both. Either side is forced to [`ButtonStyle::Transparent`] at
 //! render time so the inner buttons never double-paint the chrome.
 
-use engram_theme::ActiveTheme;
 use gpui::{
     App, BoxShadow, IntoElement, ParentElement, RenderOnce, Styled, Window, div, hsla, point,
     prelude::*, px, relative,
 };
+use gpui_engram_theme::ActiveTheme;
 
 use crate::components::button::button_like::{ButtonCommon, ButtonLike, ButtonStyle};
 use crate::components::button::icon_button::IconButton;

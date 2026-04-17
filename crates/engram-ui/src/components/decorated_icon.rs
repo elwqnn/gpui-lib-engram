@@ -4,10 +4,10 @@
 //! dot in the bottom-right corner. Useful for indicating status on file
 //! icons (modified, error, etc.).
 
-use engram_theme::Radius;
 use gpui::{
     App, Hsla, IntoElement, ParentElement, Pixels, Point, RenderOnce, Styled, Window, div, px,
 };
+use gpui_engram_theme::Radius;
 
 use crate::components::icon::{Icon, IconSize};
 

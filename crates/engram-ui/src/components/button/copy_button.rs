@@ -6,7 +6,7 @@
 
 use std::time::Duration;
 
-use engram_theme::Color;
+use gpui_engram_theme::Color;
 use std::time::Instant;
 
 use gpui::{

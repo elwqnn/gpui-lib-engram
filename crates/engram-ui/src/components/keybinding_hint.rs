@@ -9,11 +9,11 @@
 //! Adapted from zed's `ui::KeybindingHint`, simplified to match engram's
 //! visual-only [`KeyBinding`] (no action / keymap lookup).
 
-use engram_theme::{ActiveTheme, Appearance, Color, Radius, Spacing, TextSize};
 use gpui::{
     BoxShadow, FontStyle, IntoElement, Pixels, RenderOnce, SharedString, Styled, Window, point,
     prelude::*, px,
 };
+use gpui_engram_theme::{ActiveTheme, Appearance, Color, Radius, Spacing, TextSize};
 
 use crate::components::keybinding::KeyBinding;
 use crate::components::label::{Label, LabelCommon, LabelSize};

@@ -5,37 +5,37 @@ A small GPUI-based component library - a Zed-flavored UI toolkit built on `gpui`
 `engram` is a Cargo workspace with three crates that downstream apps consume through the umbrella `engram` crate:
 
 ```rust
-use engram::prelude::*;
+use gpui_engram::prelude::*;
 ```
 
 ## Workspace
 
 | crate | role |
 |---|---|
-| `engram` | umbrella facade - re-exports `engram_theme` and `engram_ui` |
-| `engram-theme` | theme tokens (`Color`, `Spacing`, `Radius`, `TextSize`) + `ActiveTheme` global |
-| `engram-ui` | component primitives + shared traits + embedded SVG assets |
+| `gpui-engram` | umbrella facade - re-exports `gpui_engram_theme` and `gpui_engram_ui` |
+| `gpui-engram-theme` | theme tokens (`Color`, `Spacing`, `Radius`, `TextSize`) + `ActiveTheme` global |
+| `gpui-engram-ui` | component primitives + shared traits + embedded SVG assets |
 
 ## Quick start
 
 ```rust
 fn main() {
     Application::new()
-        .with_assets(engram_ui::Assets)
+        .with_assets(gpui_engram_ui::Assets)
         .run(|cx| {
-            engram_theme::init(cx);
-            engram_ui::init(cx);
+            gpui_engram_theme::init(cx);
+            gpui_engram_ui::init(cx);
             // ... open your window
         });
 }
 ```
 
-The two `init` calls are not optional - `engram_theme::init` installs the default dark theme as a GPUI global, and `engram_ui::init` registers the `TextField` keybindings. To use icons, the asset source must be wired through `Application::with_assets`.
+The two `init` calls are not optional - `gpui_engram_theme::init` installs the default dark theme as a GPUI global, and `gpui_engram_ui::init` registers the `TextField` keybindings. To use icons, the asset source must be wired through `Application::with_assets`.
 
 The canonical way to eyeball every component is the showcase example:
 
 ```bash
-cargo run --example showcase -p engram     # multi-theme showcase (all components, light + dark)
+cargo run --example showcase -p gpui-engram # multi-theme showcase (all components, light + dark)
 cargo run -p story                          # sidebar gallery with per-component nav + theme switching
 ```
 

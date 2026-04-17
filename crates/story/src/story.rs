@@ -8,12 +8,12 @@ mod stories;
 
 /// Re-exports for story files - each story just writes `use crate::prelude::*`.
 pub mod prelude {
-    pub use engram::prelude::*;
     pub use gpui::{
         AnyView, App, AppContext, Context, Entity, InteractiveElement, IntoElement, ParentElement,
         Render, SharedString, StatefulInteractiveElement, Styled, WeakEntity, Window,
         prelude::FluentBuilder, px,
     };
+    pub use gpui_engram::prelude::*;
 
     pub use crate::layout::{example, example_group};
 }
@@ -303,7 +303,7 @@ struct Gallery {
     selected_index: usize,
     current_view: Option<AnyView>,
     _appearance_sub: Option<Subscription>,
-    _theme_watcher: Option<engram::theme::hot_reload::ThemeWatcher>,
+    _theme_watcher: Option<gpui_engram::theme::hot_reload::ThemeWatcher>,
 }
 
 impl Gallery {
@@ -430,7 +430,7 @@ impl Gallery {
     }
 
     fn render_theme_switcher(&self, cx: &Context<Self>) -> impl IntoElement {
-        let theme_names = engram::theme::ThemeRegistry::global(cx).names();
+        let theme_names = gpui_engram::theme::ThemeRegistry::global(cx).names();
         let current = cx.theme().name.clone();
         let weak = cx.entity().downgrade();
 
@@ -453,7 +453,7 @@ impl Gallery {
                         let target = target.clone();
                         weak.update(cx, |this, cx| {
                             this._appearance_sub = None;
-                            if engram::theme::activate_theme(&target, cx).is_ok() {
+                            if gpui_engram::theme::activate_theme(&target, cx).is_ok() {
                                 cx.notify();
                             }
                         })
@@ -468,8 +468,8 @@ impl Gallery {
 // ---------------------------------------------------------------------------
 
 fn register_embedded_themes(cx: &mut App) {
-    use engram::theme::{Theme, ThemeRegistry};
     use gpui::AssetSource;
+    use gpui_engram::theme::{Theme, ThemeRegistry};
 
     let asset_paths = match Assets.list("themes/") {
         Ok(paths) => paths,
@@ -506,18 +506,19 @@ fn register_embedded_themes(cx: &mut App) {
 
 fn main() {
     application().with_assets(Assets).run(|cx: &mut App| {
-        engram::theme::init(cx);
-        engram::ui::init(cx);
+        gpui_engram::theme::init(cx);
+        gpui_engram::ui::init(cx);
         register_embedded_themes(cx);
 
         let themes_dir = concat!(env!("CARGO_MANIFEST_DIR"), "/../engram-ui/assets/themes");
-        let mut theme_watcher = match engram::theme::hot_reload::watch_themes_dir(themes_dir, cx) {
-            Ok(watcher) => Some(watcher),
-            Err(err) => {
-                eprintln!("story: hot reload disabled: {err}");
-                None
-            }
-        };
+        let mut theme_watcher =
+            match gpui_engram::theme::hot_reload::watch_themes_dir(themes_dir, cx) {
+                Ok(watcher) => Some(watcher),
+                Err(err) => {
+                    eprintln!("story: hot reload disabled: {err}");
+                    None
+                }
+            };
 
         let bounds = Bounds::centered(None, size(px(1100.0), px(760.0)), cx);
         cx.open_window(
@@ -527,7 +528,7 @@ fn main() {
             },
             |window, cx| {
                 let appearance_sub =
-                    engram::theme::sync_with_system_appearance(Default::default(), window, cx);
+                    gpui_engram::theme::sync_with_system_appearance(Default::default(), window, cx);
                 let entity: Entity<Gallery> = cx.new(|cx| Gallery::new(window, cx));
                 entity.update(cx, |gallery, _cx| {
                     gallery._appearance_sub = Some(appearance_sub);

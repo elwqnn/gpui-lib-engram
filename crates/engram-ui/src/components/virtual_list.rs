@@ -33,12 +33,12 @@ use std::cell::Cell;
 use std::ops::Range;
 use std::rc::Rc;
 
-use engram_theme::{ActiveTheme, Radius};
 use gpui::{
     AnyElement, App, Bounds, Div, ElementId, InteractiveElement, IntoElement, MouseButton,
     ParentElement, Pixels, Point, Stateful, Styled, UniformListDecoration, UniformListScrollHandle,
     Window, div, px, uniform_list,
 };
+use gpui_engram_theme::{ActiveTheme, Radius};
 
 use super::scroll_metrics::{SCROLLBAR_THICKNESS, ThumbMetrics};
 

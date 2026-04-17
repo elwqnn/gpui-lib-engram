@@ -18,11 +18,11 @@
 
 use std::rc::Rc;
 
-use engram_theme::{ActiveTheme, Spacing};
 use gpui::{
     AnyElement, App, FocusHandle, IntoElement, MouseButton, ParentElement, Pixels, RenderOnce,
     SharedString, Window, deferred, div, hsla, prelude::*, px,
 };
+use gpui_engram_theme::{ActiveTheme, Spacing};
 use smallvec::SmallVec;
 
 use crate::components::label::{Label, LabelCommon, LabelSize};

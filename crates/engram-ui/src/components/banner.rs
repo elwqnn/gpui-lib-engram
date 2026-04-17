@@ -7,11 +7,11 @@
 
 use std::rc::Rc;
 
-use engram_theme::{ActiveTheme, Color, Radius, Spacing, StatusColors};
 use gpui::{
     AnyElement, App, ClickEvent, Hsla, IntoElement, ParentElement, RenderOnce, SharedString,
     Window, div, prelude::*, px,
 };
+use gpui_engram_theme::{ActiveTheme, Color, Radius, Spacing, StatusColors};
 use smallvec::SmallVec;
 
 use crate::components::icon::{Icon, IconName, IconSize};

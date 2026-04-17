@@ -1,7 +1,7 @@
 use std::path::Path;
 
 use crate::prelude::*;
-use engram_ui::components::image::center_crop_square;
+use gpui_engram_ui::components::image::center_crop_square;
 
 const BALCONY: &str = concat!(env!("CARGO_MANIFEST_DIR"), "/../../balcony.jpg");
 

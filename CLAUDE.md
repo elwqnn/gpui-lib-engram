@@ -4,13 +4,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-`engram` is a small GPUI-based component library - a Zed-flavored UI toolkit built on `gpui` from the (unreleased) Zed source. It is a Cargo workspace with three crates that downstream apps consume through the umbrella `engram` crate (`use engram::prelude::*;`).
+`engram` is a small GPUI-based component library - a Zed-flavored UI toolkit built on `gpui` from the (unreleased) Zed source. It is a Cargo workspace with three crates that downstream apps consume through the umbrella `engram` crate (`use gpui_engram::prelude::*;`).
 
 ## Workspace layout
 
 ```
 crates/
-  engram/         umbrella facade - re-exports `engram_theme` and `engram_ui`
+  engram/         umbrella facade - re-exports `gpui_engram_theme` and `gpui_engram_ui`
   engram-theme/   theme tokens (Color, Spacing, Radius, TextSize) + ActiveTheme global
   engram-ui/      component primitives + shared traits + embedded SVG assets
   story/          per-component story gallery binary (sidebar nav + theme switching)
@@ -25,10 +25,10 @@ reference/        excluded read-only checkout of zed-industries/zed (do NOT modi
 cargo build                              # build all workspace crates
 cargo check                              # quick type-check
 cargo clippy --all-targets               # lint
-cargo test -p engram-ui                  # run engram-ui smoke tests (the only test crate)
-cargo test -p engram-ui render_smoke::button_renders_every_style   # one test
+cargo test -p gpui-engram-ui                  # run engram-ui smoke tests (the only test crate)
+cargo test -p gpui-engram-ui render_smoke::button_renders_every_style   # one test
 cargo run -p story                       # launch the story gallery (Wayland/X11)
-cargo run --example showcase -p engram   # launch the multi-theme showcase
+cargo run --example showcase -p gpui-engram   # launch the multi-theme showcase
 ```
 
 The story gallery (`cargo run -p story`) is the canonical way to eyeball every component - it provides a sidebar with per-component navigation and theme switching. The showcase example shows all components in a single scrollable page across both light and dark themes.
@@ -40,13 +40,13 @@ The story gallery (`cargo run -p story`) is the canonical way to eyeball every c
 Apps that consume engram must call **both** init functions during startup, in order:
 
 ```rust
-engram_theme::init(cx);   // installs default dark Theme as a GPUI Global
-engram_ui::init(cx);      // registers TextField default keybindings
+gpui_engram_theme::init(cx);   // installs default dark Theme as a GPUI Global
+gpui_engram_ui::init(cx);      // registers TextField default keybindings
 ```
 
-Skipping `engram_ui::init` means `TextField` won't respond to arrow keys, copy/paste, or Enter. Skipping `engram_theme::init` means every component panics on `cx.theme()`.
+Skipping `gpui_engram_ui::init` means `TextField` won't respond to arrow keys, copy/paste, or Enter. Skipping `gpui_engram_theme::init` means every component panics on `cx.theme()`.
 
-To use icons, the app must also wire up the asset source: `application().with_assets(engram_ui::Assets)`. `Icon` resolves SVGs through GPUI's `AssetSource` registered on the `Application`, not through any engram-side cache.
+To use icons, the app must also wire up the asset source: `application().with_assets(gpui_engram_ui::Assets)`. `Icon` resolves SVGs through GPUI's `AssetSource` registered on the `Application`, not through any engram-side cache.
 
 ### Theme system (engram-theme)
 
@@ -99,7 +99,7 @@ For brand/trademark icons (logos of AI providers, editors, languages, etc.) engr
 
 ### TextField
 
-`components/text_field.rs` is derived from `crates/gpui/examples/input.rs` in `zed-industries/zed` (Apache-2.0), adapted to engram's theming. The file header carries the explicit derivation notice required by Apache-2.0 §4(b). It is the only component with a custom `gpui::Element` impl, its own actions namespace (`engram_text_field`), and a process-global key-binding registration (done in `engram_ui::init`). Word-by-word navigation, undo/redo (with consecutive-keystroke grouping), and opt-in multi-line mode (`TextField::multi_line()` - hard-wrap only) are implemented. Soft-wrap on width and word-double-click selection are still TODO.
+`components/text_field.rs` is derived from `crates/gpui/examples/input.rs` in `zed-industries/zed` (Apache-2.0), adapted to engram's theming. The file header carries the explicit derivation notice required by Apache-2.0 §4(b). It is the only component with a custom `gpui::Element` impl, its own actions namespace (`engram_text_field`), and a process-global key-binding registration (done in `gpui_engram_ui::init`). Word-by-word navigation, undo/redo (with consecutive-keystroke grouping), and opt-in multi-line mode (`TextField::multi_line()` - hard-wrap only) are implemented. Soft-wrap on width and word-double-click selection are still TODO.
 
 ## Conventions
 

@@ -10,11 +10,11 @@
 //!   so call sites can write `.tooltip(Tooltip::text("Save"))` without
 //!   wiring up a `cx.new(...)` every time.
 
-use engram_theme::{ActiveTheme, Color, Radius, Spacing};
 use gpui::{
     AnyView, App, Context, IntoElement, ParentElement, Render, SharedString, Styled, Window, div,
     prelude::*,
 };
+use gpui_engram_theme::{ActiveTheme, Color, Radius, Spacing};
 
 use crate::styles::ElevationIndex;
 

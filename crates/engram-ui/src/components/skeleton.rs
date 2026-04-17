@@ -7,11 +7,11 @@
 
 use std::time::Duration;
 
-use engram_theme::{ActiveTheme, Radius, Spacing};
 use gpui::{
     Animation, AnimationExt, App, IntoElement, Pixels, RenderOnce, Styled, Window, div, prelude::*,
     px,
 };
+use gpui_engram_theme::{ActiveTheme, Radius, Spacing};
 
 use crate::components::stack::v_flex;
 

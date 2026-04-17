@@ -1,5 +1,5 @@
 [package]
-name = "engram-ui"
+name = "gpui-engram-ui"
 description = "GPUI component primitives for engram - buttons, lists, popovers, text fields, and the shared trait + handler layer."
 version.workspace = true
 edition.workspace = true
@@ -16,7 +16,7 @@ path = "src/ui.rs"
 
 [dependencies]
 anyhow.workspace = true
-engram-theme.workspace = true
+gpui-engram-theme.workspace = true
 gpui.workspace = true
 image.workspace = true
 rust-embed.workspace = true

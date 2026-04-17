@@ -10,8 +10,8 @@
 //! so any element produced by GPUI's fluent API picks the methods up for
 //! free - no opt-in required.
 
-use engram_theme::ActiveTheme;
 use gpui::{App, Styled};
+use gpui_engram_theme::ActiveTheme;
 
 use crate::styles::ElevationIndex;
 

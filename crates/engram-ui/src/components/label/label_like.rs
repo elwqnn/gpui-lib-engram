@@ -7,16 +7,16 @@
 //!
 //! Like [`crate::components::button::ButtonLike`], `LabelLike` is exposed
 //! on its own so callers building a freeform "engram-tinted block of text"
-//! - say, a multi-line description or a custom inline group - can compose
+//! (say, a multi-line description or a custom inline group) can compose
 //! the same modifiers ([`LabelCommon`]) used by the prebuilt
 //! [`Label`](super::label::Label) and [`Headline`](super::headline::Headline)
 //! without re-implementing the size/weight/strikethrough/etc machinery.
 
-use engram_theme::{ActiveTheme, Color};
 use gpui::{
     AnyElement, App, Div, FontWeight, IntoElement, ParentElement, Pixels, Rems, RenderOnce,
     UnderlineStyle, Window, div, prelude::*, px, relative,
 };
+use gpui_engram_theme::{ActiveTheme, Color};
 use smallvec::SmallVec;
 
 /// Sets the size of a [`Label`](super::label::Label) or [`LabelLike`].

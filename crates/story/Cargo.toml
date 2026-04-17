@@ -10,9 +10,9 @@ name = "story"
 path = "src/story.rs"
 
 [dependencies]
-engram.workspace = true
-engram-theme.workspace = true
-engram-ui.workspace = true
+gpui-engram.workspace = true
+gpui-engram-theme.workspace = true
+gpui-engram-ui.workspace = true
 gpui.workspace = true
 gpui_platform.workspace = true
 strum.workspace = true

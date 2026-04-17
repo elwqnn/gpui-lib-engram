@@ -10,11 +10,11 @@
 
 use std::rc::Rc;
 
-use engram_theme::{ActiveTheme, Color, Spacing};
 use gpui::{
     AnyElement, App, ClickEvent, ElementId, IntoElement, ParentElement, RenderOnce, SharedString,
     Styled, Window, div, prelude::*,
 };
+use gpui_engram_theme::{ActiveTheme, Color, Spacing};
 
 use crate::components::disclosure::Disclosure;
 use crate::components::label::{Label, LabelCommon, LabelSize};

@@ -26,8 +26,12 @@
 
 use std::cell::RefCell;
 
-use engram_theme::{self, Radius, Spacing};
-use engram_ui::components::{
+use gpui::{
+    AnyElement, App, Bounds, Context, Corner, CursorStyle, IntoElement, ParentElement, Render,
+    ScrollHandle, Styled, TestAppContext, Window, div, point, prelude::*, px, size,
+};
+use gpui_engram_theme::{self, Radius, Spacing};
+use gpui_engram_ui::components::{
     Accordion, AccordionItem, Avatar, AvatarSize, Banner, BorderPosition, Breadcrumb,
     BreadcrumbItem, Button, ButtonCommon, ButtonLink, ButtonStyle, Callout, Checkbox, CheckboxSize,
     Chip, ChipSize, ChipStyle, CircularProgress, CopyButton, CountBadge, DecoratedIcon,
@@ -41,11 +45,7 @@ use engram_ui::components::{
     TreeViewItem, VariableList, VariableListScrollHandle, VirtualList, VirtualListScrollHandle,
     anchored_popover, h_flex, h_group, menu, modal_overlay, v_flex, v_group,
 };
-use engram_ui::traits::{Clickable, Disableable, StyledExt, ToggleState, Toggleable};
-use gpui::{
-    AnyElement, App, Bounds, Context, Corner, CursorStyle, IntoElement, ParentElement, Render,
-    ScrollHandle, Styled, TestAppContext, Window, div, point, prelude::*, px, size,
-};
+use gpui_engram_ui::traits::{Clickable, Disableable, StyledExt, ToggleState, Toggleable};
 
 type BuildFn = Box<dyn FnMut(&mut Window, &mut Context<TestRoot>) -> AnyElement>;
 
@@ -74,8 +74,8 @@ where
     F: FnMut(&mut Window, &mut Context<TestRoot>) -> AnyElement + 'static,
 {
     let (_view, _vtx) = cx.add_window_view(|_window, cx| {
-        engram_theme::init(cx);
-        engram_ui::init(cx);
+        gpui_engram_theme::init(cx);
+        gpui_engram_ui::init(cx);
         TestRoot {
             build: RefCell::new(Box::new(build)),
         }
@@ -219,7 +219,7 @@ fn indicator_renders(cx: &mut TestAppContext) {
         h_flex()
             .gap(Spacing::Small.pixels())
             .child(Indicator::dot())
-            .child(Indicator::dot().color(engram_theme::Color::Success))
+            .child(Indicator::dot().color(gpui_engram_theme::Color::Success))
             .child(Indicator::bar())
             .child(Indicator::icon(Icon::new(IconName::Check)))
             .into_any_element()
@@ -488,8 +488,8 @@ fn menu_select_next_advances_cursor(cx: &mut TestAppContext) {
     // non-selectable, so the first landing index is 1 (the "new" entry),
     // not 0 (the "File" header).
     let (_root, vtx) = cx.add_window_view(|_window, cx| {
-        engram_theme::init(cx);
-        engram_ui::init(cx);
+        gpui_engram_theme::init(cx);
+        gpui_engram_ui::init(cx);
         TestRoot {
             build: RefCell::new(Box::new(|_, _| div().into_any_element())),
         }
@@ -600,8 +600,8 @@ fn labels_take_every_size_and_color(cx: &mut TestAppContext) {
             .child(Label::new("Small").size(LabelSize::Small))
             .child(Label::new("Default").size(LabelSize::Default))
             .child(Label::new("Large").size(LabelSize::Large))
-            .child(Label::new("muted").color(engram_theme::Color::Muted))
-            .child(Label::new("accent").color(engram_theme::Color::Accent))
+            .child(Label::new("muted").color(gpui_engram_theme::Color::Muted))
+            .child(Label::new("accent").color(gpui_engram_theme::Color::Accent))
             .into_any_element()
     });
 }
@@ -740,14 +740,14 @@ fn json_theme_registry_pipeline_renders(cx: &mut TestAppContext) {
     // would either fail to parse or panic during the draw.
     use gpui::AssetSource;
     smoke(cx, |_, cx| {
-        let bytes = engram_ui::Assets
+        let bytes = gpui_engram_ui::Assets
             .load("themes/gruvbox_dark.json")
             .expect("loading gruvbox_dark.json must not error")
             .expect("gruvbox_dark.json must be present in the embedded asset bundle");
-        let theme = engram_theme::Theme::from_json_bytes(&bytes)
+        let theme = gpui_engram_theme::Theme::from_json_bytes(&bytes)
             .expect("gruvbox_dark.json must parse as a Theme");
-        engram_theme::ThemeRegistry::global_mut(cx).insert(theme);
-        engram_theme::activate_theme("Gruvbox Dark", cx)
+        gpui_engram_theme::ThemeRegistry::global_mut(cx).insert(theme);
+        gpui_engram_theme::activate_theme("Gruvbox Dark", cx)
             .expect("Gruvbox Dark must be registered after insert");
         v_flex()
             .gap(Spacing::Small.pixels())
@@ -755,7 +755,7 @@ fn json_theme_registry_pipeline_renders(cx: &mut TestAppContext) {
             .child(Banner::new(Severity::Success, "Success from JSON theme"))
             .child(Banner::new(Severity::Warning, "Warning from JSON theme"))
             .child(Banner::new(Severity::Error, "Error from JSON theme"))
-            .child(Indicator::dot().color(engram_theme::Color::Accent))
+            .child(Indicator::dot().color(gpui_engram_theme::Color::Accent))
             .into_any_element()
     });
 }
@@ -956,7 +956,7 @@ fn spinner_renders(cx: &mut TestAppContext) {
             .gap(Spacing::Small.pixels())
             .child(Spinner::new())
             .child(Spinner::new().size(IconSize::Small))
-            .child(Spinner::new().color(engram_theme::Color::Accent))
+            .child(Spinner::new().color(gpui_engram_theme::Color::Accent))
             .into_any_element()
     });
 }
@@ -1033,7 +1033,7 @@ fn sheet_renders(cx: &mut TestAppContext) {
 fn sheet_overlay_renders(cx: &mut TestAppContext) {
     smoke(cx, |_, cx| {
         let focus_handle = cx.focus_handle();
-        engram_ui::components::sheet_overlay(
+        gpui_engram_ui::components::sheet_overlay(
             focus_handle,
             Sheet::new()
                 .side(SheetSide::Left)
@@ -1092,7 +1092,7 @@ fn hover_card_renders(cx: &mut TestAppContext) {
                 .title("User Profile")
                 .min_width(px(200.0))
                 .child(Label::new("Alice Smith"))
-                .child(Label::new("alice@example.com").color(engram_theme::Color::Muted))
+                .child(Label::new("alice@example.com").color(gpui_engram_theme::Color::Muted))
         });
         card.into_any_element()
     });
@@ -1129,7 +1129,7 @@ fn skeleton_renders(cx: &mut TestAppContext) {
             .child(Skeleton::new())
             .child(Skeleton::new().width(px(200.0)).height(px(24.0)))
             .child(Skeleton::circle(px(40.0)))
-            .child(engram_ui::components::skeleton_text(3, px(180.0)))
+            .child(gpui_engram_ui::components::skeleton_text(3, px(180.0)))
             .into_any_element()
     });
 }

@@ -11,7 +11,7 @@ use crate::components::icon::{Icon, IconName, IconSize};
 use crate::components::label::{Label, LabelCommon, LabelSize};
 use crate::components::stack::h_flex;
 use crate::traits::Clickable;
-use engram_theme::Color;
+use gpui_engram_theme::Color;
 
 /// A button that looks like a web link and opens a URL on click.
 #[derive(IntoElement)]

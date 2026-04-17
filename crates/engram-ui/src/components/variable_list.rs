@@ -39,11 +39,11 @@
 use std::cell::Cell;
 use std::rc::Rc;
 
-use engram_theme::{ActiveTheme, Radius};
 use gpui::{
     AnyElement, App, InteractiveElement, IntoElement, ListAlignment, ListState, MouseButton,
     ParentElement, Pixels, Point, RenderOnce, StyleRefinement, Styled, Window, div, list, px,
 };
+use gpui_engram_theme::{ActiveTheme, Radius};
 
 use super::scroll_metrics::{SCROLLBAR_THICKNESS, ThumbMetrics};
 

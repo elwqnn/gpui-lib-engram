@@ -4,7 +4,7 @@
 
 use gpui::{Div, div, prelude::*};
 
-use engram_theme::Spacing;
+use gpui_engram_theme::Spacing;
 
 use crate::traits::StyledExt as _;
 

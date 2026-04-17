@@ -5,11 +5,11 @@
 
 use std::f32::consts::PI;
 
-use engram_theme::ActiveTheme;
 use gpui::{
     App, Hsla, IntoElement, PathBuilder, Pixels, RenderOnce, Styled, Window, canvas, div, point,
     prelude::*, px, relative,
 };
+use gpui_engram_theme::ActiveTheme;
 
 // -------------------- ProgressBar --------------------
 

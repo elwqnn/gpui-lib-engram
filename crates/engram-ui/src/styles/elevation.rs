@@ -9,8 +9,8 @@
 
 use std::fmt::{self, Display, Formatter};
 
-use engram_theme::{ActiveTheme, Appearance};
 use gpui::{App, BoxShadow, hsla, point, px};
+use gpui_engram_theme::{ActiveTheme, Appearance};
 
 /// Semantic z-axis level for a surface.
 ///

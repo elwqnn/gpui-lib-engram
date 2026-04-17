@@ -18,11 +18,11 @@
 use std::path::Path;
 use std::sync::Arc;
 
-use engram_theme::Radius;
 use gpui::{
     App, ImageSource, IntoElement, ObjectFit, Pixels, RenderImage, RenderOnce, Styled, StyledImage,
     Window, img,
 };
+use gpui_engram_theme::Radius;
 
 /// A styled image element.
 ///

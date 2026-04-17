@@ -21,12 +21,12 @@
 
 use std::rc::Rc;
 
-use engram_theme::{ActiveTheme, Radius};
 use gpui::{
     AnyElement, AnyView, App, ClickEvent, CursorStyle, DefiniteLength, Div, ElementId, FocusHandle,
     Hsla, IntoElement, ParentElement, Pixels, RenderOnce, StyleRefinement, Window, div, prelude::*,
     relative, transparent_black,
 };
+use gpui_engram_theme::{ActiveTheme, Radius};
 use smallvec::SmallVec;
 
 use crate::styles::ElevationIndex;

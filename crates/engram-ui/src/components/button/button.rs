@@ -6,11 +6,11 @@
 //! label/icon to draw and applies the size-derived padding before handing
 //! the assembled child off to ButtonLike.
 
-use engram_theme::{Color, Spacing};
 use gpui::{
     AnyView, App, ClickEvent, CursorStyle, ElementId, FocusHandle, IntoElement, ParentElement,
     RenderOnce, SharedString, Styled, Window, prelude::FluentBuilder,
 };
+use gpui_engram_theme::{Color, Spacing};
 
 use crate::components::button::button_like::{
     ButtonCommon, ButtonLike, ButtonSize, ButtonStyle, SelectableButton,

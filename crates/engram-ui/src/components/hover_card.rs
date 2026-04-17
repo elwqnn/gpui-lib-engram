@@ -9,11 +9,11 @@
 //! handed to GPUI's `.tooltip(builder)` method on any stateful element.
 //! The [`HoverCard::build`] helper produces the closure.
 
-use engram_theme::{ActiveTheme, Radius, Spacing};
 use gpui::{
     AnyElement, AnyView, App, Context, IntoElement, ParentElement, Pixels, Render, SharedString,
     Styled, Window, div, prelude::*,
 };
+use gpui_engram_theme::{ActiveTheme, Radius, Spacing};
 use smallvec::SmallVec;
 
 use crate::components::label::{Label, LabelCommon, LabelSize};

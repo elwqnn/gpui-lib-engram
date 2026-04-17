@@ -25,11 +25,11 @@
 use std::path::Path;
 use std::sync::Arc;
 
-use engram_theme::{ActiveTheme, Color};
 use gpui::{
     App, IntoElement, Pixels, Rems, RenderOnce, SharedString, Window, img, prelude::*, px, rems,
     svg,
 };
+use gpui_engram_theme::{ActiveTheme, Color};
 use strum::IntoStaticStr;
 
 /// Conversion constant between [`Pixels`] and [`Rems`]. Matches gpui's

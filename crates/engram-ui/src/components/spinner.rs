@@ -6,11 +6,11 @@
 
 use std::time::Duration;
 
-use engram_theme::{ActiveTheme, Color};
 use gpui::{
     Animation, AnimationExt, App, IntoElement, RenderOnce, Styled, Transformation, Window,
     percentage,
 };
+use gpui_engram_theme::{ActiveTheme, Color};
 
 use crate::components::icon::{IconName, IconSize};
 

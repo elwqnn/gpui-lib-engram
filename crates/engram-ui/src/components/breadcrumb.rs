@@ -7,11 +7,11 @@
 
 use std::rc::Rc;
 
-use engram_theme::{Color, Spacing};
 use gpui::{
     AnyElement, App, ClickEvent, ElementId, IntoElement, RenderOnce, SharedString, Styled, Window,
     prelude::*,
 };
+use gpui_engram_theme::{Color, Spacing};
 
 use crate::components::icon::{Icon, IconName, IconSize};
 use crate::components::label::{Label, LabelCommon, LabelSize};

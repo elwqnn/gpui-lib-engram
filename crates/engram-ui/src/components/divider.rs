@@ -1,7 +1,7 @@
 //! Thin separator line used to delineate regions.
 
-use engram_theme::ActiveTheme;
 use gpui::{App, IntoElement, RenderOnce, Window, div, prelude::*, px};
+use gpui_engram_theme::ActiveTheme;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum DividerOrientation {

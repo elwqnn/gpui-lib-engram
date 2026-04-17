@@ -1,9 +1,9 @@
 //! Unit tests for JSON theme loading, refinement, and registry bookkeeping.
 
-use engram_theme::{
+use gpui::{Hsla, Rgba};
+use gpui_engram_theme::{
     Appearance, ThemeColorsRefinement, ThemeContent, ThemeRegistry, default_dark, default_light,
 };
-use gpui::{Hsla, Rgba};
 
 fn hex(rgba: &str) -> Hsla {
     // Round-trip through the gpui Rgba Deserialize impl (which accepts
@@ -25,7 +25,7 @@ fn parses_a_full_theme_document() {
         }
     }"##;
 
-    let theme = engram_theme::Theme::from_json_str(json).unwrap();
+    let theme = gpui_engram_theme::Theme::from_json_str(json).unwrap();
     assert_eq!(theme.name.as_ref(), "Test Dark");
     assert_eq!(theme.appearance, Appearance::Dark);
     assert_eq!(theme.colors.background, hex("#0a0a0a"));
@@ -44,7 +44,7 @@ fn fields_not_in_the_json_fall_through_to_the_base_theme() {
         }
     }"##;
 
-    let theme = engram_theme::Theme::from_json_str(json).unwrap();
+    let theme = gpui_engram_theme::Theme::from_json_str(json).unwrap();
     assert_eq!(theme.colors.accent, hex("#ff00ff"));
     // Every other token should match the built-in dark theme byte-for-byte.
     assert_eq!(theme.colors.background, base.colors.background);
@@ -64,7 +64,7 @@ fn partial_status_overrides_leave_siblings_alone() {
             }
         }
     }"##;
-    let theme = engram_theme::Theme::from_json_str(json).unwrap();
+    let theme = gpui_engram_theme::Theme::from_json_str(json).unwrap();
     assert_eq!(theme.colors.status.error, hex("#ff1111"));
     assert_eq!(theme.colors.status.success, base.colors.status.success);
     assert_eq!(theme.colors.status.warning, base.colors.status.warning);
@@ -79,7 +79,7 @@ fn unknown_top_level_fields_are_rejected() {
         "appearance": "dark",
         "extra": "nope"
     }"##;
-    let err = engram_theme::Theme::from_json_str(json).unwrap_err();
+    let err = gpui_engram_theme::Theme::from_json_str(json).unwrap_err();
     let msg = err.to_string();
     assert!(msg.contains("extra"), "unexpected error: {msg}");
 }
@@ -93,7 +93,7 @@ fn unknown_color_fields_are_rejected() {
             "totally_fake": "#000000"
         }
     }"##;
-    let err = engram_theme::Theme::from_json_str(json).unwrap_err();
+    let err = gpui_engram_theme::Theme::from_json_str(json).unwrap_err();
     assert!(err.to_string().contains("totally_fake"));
 }
 
@@ -135,7 +135,7 @@ fn round_trip_theme_content_json_is_stable_after_one_pass() {
     // must yield byte-identical JSON.
     let dark = default_dark();
     let json1 = serde_json::to_string_pretty(&ThemeContent::from_theme(&dark)).unwrap();
-    let reparsed = engram_theme::Theme::from_json_str(&json1).unwrap();
+    let reparsed = gpui_engram_theme::Theme::from_json_str(&json1).unwrap();
     let json2 = serde_json::to_string_pretty(&ThemeContent::from_theme(&reparsed)).unwrap();
     assert_eq!(json1, json2);
     assert_eq!(reparsed.name, dark.name);
@@ -144,7 +144,7 @@ fn round_trip_theme_content_json_is_stable_after_one_pass() {
 
 /// Regenerates the bundled JSON fixtures under
 /// `crates/engram-ui/assets/themes/`. Ignored by default - run explicitly
-/// with `cargo test -p engram-theme --test loader -- --ignored regenerate_builtin_fixtures`
+/// with `cargo test -p gpui-engram-theme --test loader -- --ignored regenerate_builtin_fixtures`
 /// whenever the hand-tuned defaults in `engram-theme/src/default.rs`
 /// change.
 #[test]

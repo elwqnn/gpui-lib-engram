@@ -3,11 +3,11 @@
 
 use std::ops::Range;
 
-use engram_theme::{ActiveTheme, Color};
 use gpui::{
     App, FontWeight, HighlightStyle, IntoElement, ParentElement, RenderOnce, SharedString,
     StyledText, UnderlineStyle, Window, px,
 };
+use gpui_engram_theme::{ActiveTheme, Color};
 
 use crate::components::label::label_like::{LabelCommon, LabelLike, LabelSize, LineHeightStyle};
 

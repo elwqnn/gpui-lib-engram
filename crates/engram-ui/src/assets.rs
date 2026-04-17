@@ -1,7 +1,7 @@
 //! Embedded asset bundle for engram-ui (icons today, fonts/images later).
 //!
 //! [`Assets`] implements gpui's [`AssetSource`] so callers can wire it into
-//! their `Application` with `application().with_assets(engram_ui::Assets)`.
+//! their `Application` with `application().with_assets(gpui_engram_ui::Assets)`.
 //! Once registered, every [`Icon`](crate::components::Icon) resolves its SVG
 //! through this source.
 

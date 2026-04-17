@@ -58,12 +58,12 @@
 
 use std::rc::Rc;
 
-use engram_theme::{ActiveTheme, Color, Spacing};
 use gpui::{
     AnyElement, App, ClickEvent, Context, DismissEvent, ElementId, Entity, EventEmitter,
     FocusHandle, Focusable, IntoElement, ParentElement, Pixels, Render, SharedString, Window,
     actions, div, prelude::*, px,
 };
+use gpui_engram_theme::{ActiveTheme, Color, Spacing};
 use smallvec::SmallVec;
 
 use crate::components::icon::{Icon, IconName, IconSize};

@@ -1,5 +1,5 @@
 [package]
-name = "engram"
+name = "gpui-engram"
 description = "Umbrella facade for the engram GPUI component library - re-exports engram-theme and engram-ui."
 version.workspace = true
 edition.workspace = true
@@ -15,8 +15,8 @@ publish = true
 path = "src/engram.rs"
 
 [dependencies]
-engram-theme.workspace = true
-engram-ui.workspace = true
+gpui-engram-theme.workspace = true
+gpui-engram-ui.workspace = true
 gpui.workspace = true
 
 [dev-dependencies]

@@ -16,11 +16,11 @@
 
 use std::rc::Rc;
 
-use engram_theme::{ActiveTheme, Color, Spacing};
 use gpui::{
     AnyElement, App, ClickEvent, ElementId, IntoElement, ParentElement, RenderOnce, SharedString,
     Window, div, prelude::*, px,
 };
+use gpui_engram_theme::{ActiveTheme, Color, Spacing};
 use smallvec::SmallVec;
 
 use crate::components::icon::{Icon, IconName, IconSize};

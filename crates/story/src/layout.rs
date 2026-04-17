@@ -3,11 +3,11 @@
 //! Inspired by Zed's `ComponentExample` / `ComponentExampleGroup` from the
 //! `component` crate, adapted to engram's theme tokens.
 
-use engram::prelude::*;
 use gpui::{
     AnyElement, App, IntoElement, ParentElement, RenderOnce, SharedString, Styled, Window, div,
     prelude::FluentBuilder, px,
 };
+use gpui_engram::prelude::*;
 
 /// A single variant example: name label above a bordered card containing the element.
 #[derive(IntoElement)]

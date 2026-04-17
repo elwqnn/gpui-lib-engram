@@ -5,11 +5,11 @@
 //! square. The label-color logic is identical (Disabled / Selected /
 //! Default).
 
-use engram_theme::Color;
 use gpui::{
     AnyView, App, ClickEvent, CursorStyle, ElementId, FocusHandle, IntoElement, ParentElement,
     Pixels, RenderOnce, Window, px,
 };
+use gpui_engram_theme::Color;
 
 use crate::components::button::button_like::{
     ButtonCommon, ButtonLike, ButtonSize, ButtonStyle, SelectableButton,

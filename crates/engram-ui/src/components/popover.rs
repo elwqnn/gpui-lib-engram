@@ -36,11 +36,11 @@
 
 use std::rc::Rc;
 
-use engram_theme::{ActiveTheme, Radius, Spacing};
 use gpui::{
     AnyElement, App, Bounds, Corner, FocusHandle, IntoElement, MouseButton, ParentElement, Pixels,
     Point, RenderOnce, Window, anchored, deferred, div, point, prelude::*, px,
 };
+use gpui_engram_theme::{ActiveTheme, Radius, Spacing};
 use smallvec::SmallVec;
 
 use crate::components::stack::v_flex;

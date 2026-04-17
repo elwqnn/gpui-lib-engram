@@ -7,8 +7,8 @@
 
 use std::rc::Rc;
 
-use engram_theme::{ActiveTheme, Color, Spacing};
 use gpui::{App, ElementId, IntoElement, RenderOnce, SharedString, Window, div, prelude::*, px};
+use gpui_engram_theme::{ActiveTheme, Color, Spacing};
 
 use crate::components::label::{Label, LabelCommon, LabelSize};
 use crate::components::stack::h_flex;
@@ -41,8 +41,8 @@ impl Radio {
         self
     }
 
-    /// Register a click handler. The handler receives the new [`ToggleState`]
-    /// - always [`ToggleState::Selected`], since a radio can only be turned
+    /// Register a click handler. The handler receives the new [`ToggleState`],
+    /// always [`ToggleState::Selected`], since a radio can only be turned
     /// *on* by clicking; the parent is responsible for deselecting siblings.
     pub fn on_click(
         mut self,

@@ -30,11 +30,11 @@
 //! track still takes layout space - wrap the `Scrollbar` in a `.when(...)`
 //! if you want the whole thing to collapse away.
 
-use engram_theme::{ActiveTheme, Radius};
 use gpui::{
     App, IntoElement, MouseButton, ParentElement, Pixels, RenderOnce, ScrollHandle, Styled, Window,
     div, prelude::*, px,
 };
+use gpui_engram_theme::{ActiveTheme, Radius};
 
 /// Which axis the scrollbar tracks.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]

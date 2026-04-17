@@ -9,11 +9,11 @@
 use std::cell::Cell;
 use std::rc::Rc;
 
-use engram_theme::{ActiveTheme, Color, Spacing};
 use gpui::{
     App, Bounds, BoxShadow, ElementId, IntoElement, MouseButton, MouseMoveEvent, Pixels,
     RenderOnce, SharedString, Styled, Window, canvas, div, point, prelude::*, px, relative, size,
 };
+use gpui_engram_theme::{ActiveTheme, Color, Spacing};
 
 use crate::components::label::{Label, LabelCommon, LabelSize};
 use crate::components::stack::h_flex;

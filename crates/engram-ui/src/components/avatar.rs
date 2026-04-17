@@ -12,11 +12,11 @@
 //! - [`CountBadge`]: a numeric badge that styles small counts ("3") and
 //!   caps large ones at "99+".
 
-use engram_theme::{ActiveTheme, Color, Radius, Spacing};
 use gpui::{
     App, Hsla, ImageSource, IntoElement, ParentElement, Pixels, RenderOnce, SharedString, Styled,
     Window, div, hsla, img, prelude::*, px, transparent_black,
 };
+use gpui_engram_theme::{ActiveTheme, Color, Radius, Spacing};
 use smallvec::SmallVec;
 
 use crate::components::label::{Label, LabelCommon, LabelSize};

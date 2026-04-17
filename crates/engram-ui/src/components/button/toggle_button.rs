@@ -12,7 +12,7 @@ use gpui::{
     Styled, Window, div, prelude::*, relative,
 };
 
-use engram_theme::{ActiveTheme, Color};
+use gpui_engram_theme::{ActiveTheme, Color};
 
 use super::button_like::{
     ButtonCommon, ButtonLike, ButtonLikeRounding, ButtonSize, ButtonStyle, SelectableButton,

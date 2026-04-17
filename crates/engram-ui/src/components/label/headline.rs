@@ -10,10 +10,10 @@
 //! which gives a clean visual jump between adjacent steps without ever
 //! looking decorative.
 
-use engram_theme::Color;
 use gpui::{
     App, FontWeight, IntoElement, ParentElement, Rems, RenderOnce, SharedString, Window, rems,
 };
+use gpui_engram_theme::Color;
 
 use crate::components::label::label_like::{LabelCommon, LabelLike, LabelSize, LineHeightStyle};
 

@@ -1448,41 +1448,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "66b7e2430c6dff6a955451e2cfc438f09cea1965a9d6f87f7e3b90decc014099"
 
 [[package]]
-name = "engram"
-version = "0.1.0"
-dependencies = [
- "engram-theme",
- "engram-ui",
- "gpui",
- "gpui_platform",
-]
-
-[[package]]
-name = "engram-theme"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "gpui",
- "notify",
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "engram-ui"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "engram-theme",
- "gpui",
- "image",
- "rust-embed",
- "smallvec",
- "strum",
- "unicode-segmentation",
-]
-
-[[package]]
 name = "enumflags2"
 version = "0.7.12"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2238,6 +2203,41 @@ dependencies = [
  "windows 0.61.3",
  "zed-font-kit",
  "zed-scap",
+]
+
+[[package]]
+name = "gpui-engram"
+version = "0.1.0"
+dependencies = [
+ "gpui",
+ "gpui-engram-theme",
+ "gpui-engram-ui",
+ "gpui_platform",
+]
+
+[[package]]
+name = "gpui-engram-theme"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "gpui",
+ "notify",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "gpui-engram-ui"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "gpui",
+ "gpui-engram-theme",
+ "image",
+ "rust-embed",
+ "smallvec",
+ "strum",
+ "unicode-segmentation",
 ]
 
 [[package]]
@@ -5164,10 +5164,10 @@ checksum = "a2eb9349b6444b326872e140eb1cf5e7c522154d69e7a0ffb0fb81c06b37543f"
 name = "story"
 version = "0.1.0"
 dependencies = [
- "engram",
- "engram-theme",
- "engram-ui",
  "gpui",
+ "gpui-engram",
+ "gpui-engram-theme",
+ "gpui-engram-ui",
  "gpui_platform",
  "strum",
 ]

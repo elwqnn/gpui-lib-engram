@@ -19,9 +19,9 @@ keywords = ["gpui", "ui", "desktop", "zed", "components"]
 categories = ["gui"]
 
 [workspace.dependencies]
-engram = { path = "crates/engram", version = "0.1.0" }
-engram-theme = { path = "crates/engram-theme", version = "0.1.0" }
-engram-ui = { path = "crates/engram-ui", version = "0.1.0" }
+gpui-engram = { path = "crates/engram", version = "0.1.0" }
+gpui-engram-theme = { path = "crates/engram-theme", version = "0.1.0" }
+gpui-engram-ui = { path = "crates/engram-ui", version = "0.1.0" }
 gpui = { git = "https://github.com/zed-industries/zed", rev = "302e591e3d946ef84df1e3a6f41af1a0216288bc", version = "0.2.2" }
 gpui_platform = { git = "https://github.com/zed-industries/zed", rev = "302e591e3d946ef84df1e3a6f41af1a0216288bc", features = ["wayland", "x11"] }
 anyhow = "1"
