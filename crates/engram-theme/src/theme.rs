@@ -16,6 +16,8 @@ use std::sync::Arc;
 
 use gpui::{App, Global, SharedString};
 
+pub use anyhow::{Error, Result};
+
 pub use crate::colors::{Color, StatusColors, ThemeColors};
 pub use crate::default::{dark as default_dark, light as default_light};
 pub use crate::loader::{AppearanceContent, ThemeContent};
