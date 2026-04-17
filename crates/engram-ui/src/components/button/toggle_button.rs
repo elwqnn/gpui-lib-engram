@@ -1,4 +1,4 @@
-//! [`ToggleButtonGroup`] — a segmented control where exactly one button in
+//! [`ToggleButtonGroup`] - a segmented control where exactly one button in
 //! the group is selected at a time. Each button shows a label and optional
 //! icon, visually joined with shared rounding on the outer edges only.
 //!
@@ -236,7 +236,7 @@ impl<T: ButtonBuilder, const N: usize> RenderOnce for ToggleButtonGroup<T, N> {
         let is_outlined = self.style == ToggleButtonGroupStyle::Outlined;
         let is_filled = self.style == ToggleButtonGroupStyle::Filled;
         let is_transparent = self.style == ToggleButtonGroupStyle::Transparent;
-        // Inner buttons are transparent in every group style — the group's
+        // Inner buttons are transparent in every group style - the group's
         // container paints the chrome (background, border). Selection is
         // always an accent tint so it reads against any group backdrop.
         let inner_style = ButtonStyle::Transparent;

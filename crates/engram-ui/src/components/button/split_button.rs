@@ -1,4 +1,4 @@
-//! [`SplitButton`] — a two-part button with a primary action on the left
+//! [`SplitButton`] - a two-part button with a primary action on the left
 //! and a secondary action (e.g. dropdown trigger) on the right, visually
 //! separated by a divider.
 //!
@@ -88,7 +88,7 @@ impl RenderOnce for SplitButton {
             SplitButtonStyle::Transparent => colors.border.opacity(0.3),
         };
 
-        // Both sides render with transparent chrome — the outer container
+        // Both sides render with transparent chrome - the outer container
         // is responsible for background + border so the two sides read as
         // a single surface.
         let left = self.left.with_style(ButtonStyle::Transparent);

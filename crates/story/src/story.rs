@@ -1,4 +1,4 @@
-//! Story gallery for engram — a per-component showcase browser with sidebar
+//! Story gallery for engram - a per-component showcase browser with sidebar
 //! navigation and theme switching.
 //!
 //! Run with: `cargo run -p story`
@@ -6,7 +6,7 @@
 mod layout;
 mod stories;
 
-/// Re-exports for story files — each story just writes `use crate::prelude::*`.
+/// Re-exports for story files - each story just writes `use crate::prelude::*`.
 pub mod prelude {
     pub use engram::prelude::*;
     pub use gpui::{

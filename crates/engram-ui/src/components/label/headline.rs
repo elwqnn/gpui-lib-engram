@@ -1,12 +1,12 @@
-//! [`Headline`] — a typographic step above [`Label`](super::label::Label).
+//! [`Headline`] - a typographic step above [`Label`](super::label::Label).
 //!
 //! Headlines exist to draw the eye and create visual hierarchy in pages
 //! that have more than one section. They sit on top of [`LabelLike`] (so
 //! they get color/italic/strikethrough/etc for free via [`LabelCommon`])
 //! but ship with their own [`HeadlineSize`] scale because the named label
-//! sizes top out at "16px Large" — anything bigger is a headline.
+//! sizes top out at "16px Large" - anything bigger is a headline.
 //!
-//! The size scale is the Major Second (rems × 1.125) progression zed uses,
+//! The size scale is the Major Second (rems x 1.125) progression zed uses,
 //! which gives a clean visual jump between adjacent steps without ever
 //! looking decorative.
 
@@ -22,16 +22,16 @@ use crate::components::label::label_like::{LabelCommon, LabelLike, LabelSize, Li
 /// Defaults to a Major Second scale, mirroring zed's `HeadlineSize`.
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy, Default)]
 pub enum HeadlineSize {
-    /// An extra small headline — `~14px` @16px/rem.
+    /// An extra small headline - `~14px` @16px/rem.
     XSmall,
-    /// A small headline — `16px` @16px/rem.
+    /// A small headline - `16px` @16px/rem.
     Small,
-    /// A medium headline — `~18px` @16px/rem. The default.
+    /// A medium headline - `~18px` @16px/rem. The default.
     #[default]
     Medium,
-    /// A large headline — `~20px` @16px/rem.
+    /// A large headline - `~20px` @16px/rem.
     Large,
-    /// An extra large headline — `~22px` @16px/rem.
+    /// An extra large headline - `~22px` @16px/rem.
     XLarge,
 }
 

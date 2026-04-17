@@ -1,4 +1,4 @@
-//! [`StyledExt`] — engram-flavoured shorthands on top of [`gpui::Styled`].
+//! [`StyledExt`] - engram-flavoured shorthands on top of [`gpui::Styled`].
 //!
 //! These methods are pure compositions of the underlying GPUI fluent API.
 //! They exist so layout and elevation idioms ("a horizontal stack of
@@ -8,7 +8,7 @@
 //!
 //! The trait is implemented for **every** `E: Styled` via a blanket impl,
 //! so any element produced by GPUI's fluent API picks the methods up for
-//! free — no opt-in required.
+//! free - no opt-in required.
 
 use engram_theme::ActiveTheme;
 use gpui::{App, Styled};
@@ -43,7 +43,7 @@ pub trait StyledExt: Styled + Sized {
         self.flex().flex_col()
     }
 
-    /// Render `self` as a [`Surface`](ElevationIndex::Surface) — the standard
+    /// Render `self` as a [`Surface`](ElevationIndex::Surface) - the standard
     /// in-page card. Sets background, rounded corners, border, and the
     /// elevation's shadow stack (currently empty for `Surface`).
     fn elevation_1(self, cx: &App) -> Self {
@@ -51,12 +51,12 @@ pub trait StyledExt: Styled + Sized {
     }
 
     /// Render `self` as an [`ElevatedSurface`](ElevationIndex::ElevatedSurface)
-    /// — popovers, dropdown menus, toasts. Adds a soft drop shadow.
+    /// - popovers, dropdown menus, toasts. Adds a soft drop shadow.
     fn elevation_2(self, cx: &App) -> Self {
         elevated(self, cx, ElevationIndex::ElevatedSurface)
     }
 
-    /// Render `self` as a [`ModalSurface`](ElevationIndex::ModalSurface) —
+    /// Render `self` as a [`ModalSurface`](ElevationIndex::ModalSurface) -
     /// modals and dialogs. Adds the deepest shadow stack.
     fn elevation_3(self, cx: &App) -> Self {
         elevated(self, cx, ElevationIndex::ModalSurface)

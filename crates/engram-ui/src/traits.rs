@@ -7,7 +7,7 @@
 //!
 //! Consider the alternative: let every component invent its own method
 //! name. `Button::click(...)`, `Checkbox::on_toggle(...)`,
-//! `Tab::set_active(true)`, `Disclosure::on_open(...)` — all technically
+//! `Tab::set_active(true)`, `Disclosure::on_open(...)` - all technically
 //! fine, all inconsistent. Callers would have to look up the exact method
 //! per component, and the library would drift over time.
 //!

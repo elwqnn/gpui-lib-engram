@@ -1,4 +1,4 @@
-//! [`Button`] — text button with an optional leading icon.
+//! [`Button`] - text button with an optional leading icon.
 //!
 //! Composes [`ButtonLike`] for chrome and forwards every builder method
 //! through [`ButtonCommon`] / [`Clickable`] / [`Disableable`] /

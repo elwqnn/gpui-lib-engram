@@ -1,13 +1,13 @@
-//! [`LabelLike`] — the shared chrome behind every engram label.
+//! [`LabelLike`] - the shared chrome behind every engram label.
 //!
 //! Mirrors zed's `ui::LabelLike`, scoped down to engram's needs. Notably
 //! absent: `buffer_font` and `inline_code` (engram has no editor surface),
 //! and the `truncate_start` helper (engram-side label callers don't need
-//! end-anchored truncation yet — easy to add later).
+//! end-anchored truncation yet - easy to add later).
 //!
 //! Like [`crate::components::button::ButtonLike`], `LabelLike` is exposed
 //! on its own so callers building a freeform "engram-tinted block of text"
-//! — say, a multi-line description or a custom inline group — can compose
+//! - say, a multi-line description or a custom inline group - can compose
 //! the same modifiers ([`LabelCommon`]) used by the prebuilt
 //! [`Label`](super::label::Label) and [`Headline`](super::headline::Headline)
 //! without re-implementing the size/weight/strikethrough/etc machinery.
@@ -22,7 +22,7 @@ use smallvec::SmallVec;
 /// Sets the size of a [`Label`](super::label::Label) or [`LabelLike`].
 ///
 /// Mirrors zed's `LabelSize`. Engram's `TextSize` token is intentionally
-/// kept separate — `LabelSize` is the *label-facing* API, and any future
+/// kept separate - `LabelSize` is the *label-facing* API, and any future
 /// label-only sizes (e.g. an editor-tied buffer-font scale) belong here
 /// without polluting the workspace-wide spacing tokens.
 #[derive(Debug, PartialEq, Clone, Copy, Default)]
@@ -57,7 +57,7 @@ impl LabelSize {
 /// Sets the line height behavior of a label.
 ///
 /// `TextLabel` (the default) uses GPUI's natural line height, which leaves
-/// breathing room above descenders — appropriate for paragraph-style copy.
+/// breathing room above descenders - appropriate for paragraph-style copy.
 /// `UiLabel` clamps to a tight `1.0` for compact UI rows where vertical
 /// rhythm matters more than legibility of multi-line wrapped text.
 #[derive(Debug, Default, PartialEq, Eq, Copy, Clone)]
@@ -74,7 +74,7 @@ pub enum LineHeightStyle {
 /// Like the rest of engram's behavioural traits in [`crate::traits`], this
 /// trait exists for **naming uniformity and rustdoc surface**, not as a
 /// generic bound. Every label-like type spells `size`, `color`, `italic`,
-/// `truncate`, etc the same way — that consistency is the whole point.
+/// `truncate`, etc the same way - that consistency is the whole point.
 pub trait LabelCommon {
     /// Set the size of the label.
     fn size(self, size: LabelSize) -> Self;
@@ -101,7 +101,7 @@ pub trait LabelCommon {
     /// semantic color (e.g. "muted but still 50% transparent on top").
     fn alpha(self, alpha: f32) -> Self;
 
-    /// Truncate overflowing text with a trailing ellipsis (`…`).
+    /// Truncate overflowing text with a trailing ellipsis (`...`).
     fn truncate(self) -> Self;
 
     /// Force single-line layout, collapsing any embedded newlines.
@@ -111,7 +111,7 @@ pub trait LabelCommon {
 /// A flexible base from which the prebuilt label types
 /// ([`Label`](super::label::Label), [`Headline`](super::headline::Headline))
 /// are composed. Use it directly only when the prebuilt labels can't
-/// express what you need — every escape hatch is a place engram's
+/// express what you need - every escape hatch is a place engram's
 /// typography can drift.
 #[derive(IntoElement)]
 #[must_use = "LabelLike does nothing unless rendered"]

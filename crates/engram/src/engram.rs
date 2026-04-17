@@ -1,10 +1,10 @@
-//! engram — a small GPUI-based component library.
+//! engram - a small GPUI-based component library.
 //!
 //! `engram` is an umbrella facade that re-exports its two sibling crates:
 //!
-//! - [`engram_theme`] (aliased as [`theme`]) — color tokens, spacing,
+//! - [`engram_theme`] (aliased as [`theme`]) - color tokens, spacing,
 //!   typography, and the [`ActiveTheme`](engram_theme::ActiveTheme) global.
-//! - [`engram_ui`] (aliased as [`ui`]) — component primitives, shared traits,
+//! - [`engram_ui`] (aliased as [`ui`]) - component primitives, shared traits,
 //!   embedded icon assets.
 //!
 //! Downstream apps typically just pull in the prelude:
@@ -38,7 +38,7 @@
 //! # Stability
 //!
 //! `engram` is pre-1.0. `gpui` is git-pinned against a specific revision of
-//! `zed-industries/zed` — see the workspace `Cargo.toml`. Until `gpui` is on
+//! `zed-industries/zed` - see the workspace `Cargo.toml`. Until `gpui` is on
 //! crates.io, `engram` consumers also take it as a git dependency.
 
 #![forbid(unsafe_code)]

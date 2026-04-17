@@ -1,8 +1,8 @@
-//! Switch — a two-state toggle (on / off) with optional inline label.
+//! Switch - a two-state toggle (on / off) with optional inline label.
 //!
 //! Modeled on Zed's `Switch`, trimmed to the essentials: state, disabled,
 //! label, and click handler. Skips Zed's `SwitchColor`, `SwitchLabelPosition`,
-//! `key_binding`, and tab-index plumbing — these can come back as needed.
+//! `key_binding`, and tab-index plumbing - these can come back as needed.
 
 use std::rc::Rc;
 

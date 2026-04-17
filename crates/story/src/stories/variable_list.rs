@@ -20,7 +20,7 @@ impl Render for VariableListStory {
         v_flex().gap(Spacing::Large.pixels()).child(example_group(
             "Large list with variable row heights (2,000 rows)",
             vec![example(
-                "Every third row is taller — gpui::list measures rows lazily",
+                "Every third row is taller - gpui::list measures rows lazily",
                 v_flex()
                     .h(px(320.0))
                     .w_full()
@@ -37,7 +37,7 @@ impl Render for VariableListStory {
                                 .py(py)
                                 .gap(Spacing::Small.pixels())
                                 .child(Label::new(format!(
-                                    "row {ix:>5} — {}",
+                                    "row {ix:>5} - {}",
                                     if tall { "tall" } else { "short" }
                                 )))
                                 .into_any_element()

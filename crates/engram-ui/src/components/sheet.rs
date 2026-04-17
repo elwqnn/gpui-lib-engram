@@ -1,4 +1,4 @@
-//! Sheet — a panel overlay that slides in from a window edge.
+//! Sheet - a panel overlay that slides in from a window edge.
 //!
 //! Follows the same pattern as [`Modal`](super::modal): the parent owns the
 //! open state and conditionally inserts a [`sheet_overlay`] in the element

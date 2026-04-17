@@ -4,7 +4,7 @@
 //! appearance hint, and a partial [`ThemeColorsRefinement`]. The appearance
 //! field decides which built-in base theme (`default_dark` or `default_light`)
 //! the refinement is layered on top of, so user themes can be as sparse as
-//! they like — overriding a single accent color is a valid theme.
+//! they like - overriding a single accent color is a valid theme.
 //!
 //! The canonical entry point is [`Theme::from_json_bytes`], used both by the
 //! built-in theme assets and by [`hot_reload`](crate::hot_reload) when it

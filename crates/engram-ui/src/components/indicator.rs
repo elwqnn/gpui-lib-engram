@@ -1,4 +1,4 @@
-//! Indicator — small status marker (dot, bar, or icon).
+//! Indicator - small status marker (dot, bar, or icon).
 //!
 //! Mirrors Zed's `Indicator` API: three kinds (`dot`, `bar`, `icon`) plus
 //! optional border tinting. Used to communicate status (online, error,

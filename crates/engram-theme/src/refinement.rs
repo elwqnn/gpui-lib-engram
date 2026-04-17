@@ -6,7 +6,7 @@
 //! theme the refinement is applied on top of.
 //!
 //! This is the hand-rolled counterpart to zed's `#[derive(Refineable)]`
-//! proc-macro — we keep the refinement shape in lock-step with
+//! proc-macro - we keep the refinement shape in lock-step with
 //! [`ThemeColors`] manually, so adding a color token means adding it in both
 //! [`colors.rs`](crate::colors) and here.
 
@@ -145,7 +145,7 @@ impl StatusColorsRefinement {
     }
 
     /// Wrap every field of `colors` in `Some`. Useful for dumping a base
-    /// theme to JSON — nothing is skipped on serialize.
+    /// theme to JSON - nothing is skipped on serialize.
     pub fn from_full(colors: &StatusColors) -> Self {
         Self {
             info: Some(colors.info),
@@ -369,7 +369,7 @@ impl ThemeColorsRefinement {
     }
 
     /// Wrap every field of `colors` in `Some`. Useful for dumping a base
-    /// theme to JSON — nothing is skipped on serialize.
+    /// theme to JSON - nothing is skipped on serialize.
     pub fn from_full(colors: &ThemeColors) -> Self {
         Self {
             background: Some(colors.background),

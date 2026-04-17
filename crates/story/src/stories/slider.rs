@@ -70,7 +70,7 @@ impl Render for SliderStory {
                             .disabled(true)
                             .into_any_element(),
                     ),
-                    example("Custom range (0–1)", {
+                    example("Custom range (0-1)", {
                         let w = weak.clone();
                         Slider::new("sl-small", self.small)
                             .min(0.0)

@@ -1,4 +1,4 @@
-//! Progress indicators — [`ProgressBar`] and [`CircularProgress`].
+//! Progress indicators - [`ProgressBar`] and [`CircularProgress`].
 //!
 //! Both are stateless `RenderOnce` views: the parent passes the current value
 //! and max, and the component just renders the fill.

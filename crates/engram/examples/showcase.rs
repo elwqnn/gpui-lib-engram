@@ -1,4 +1,4 @@
-//! Live gallery of engram components — every interactive component in the
+//! Live gallery of engram components - every interactive component in the
 //! library is wired up to real state, so you can click checkboxes, flip
 //! switches, expand the disclosure, and select list rows.
 //!
@@ -48,7 +48,7 @@ struct Showcase {
     // Menu open + the captured trigger button bounds (set by a `canvas`
     // overlay during prepaint, read on the next render). The menu is a
     // stateful entity that owns its own focus handle and emits
-    // `DismissEvent` — we subscribe below to flip `menu_open` back off.
+    // `DismissEvent` - we subscribe below to flip `menu_open` back off.
     menu_open: bool,
     menu: Entity<Menu>,
     menu_trigger_bounds: Rc<Cell<Option<Bounds<Pixels>>>>,
@@ -56,7 +56,7 @@ struct Showcase {
     submitted_value: SharedString,
     // The text field entity
     text_field: Entity<TextField>,
-    // System appearance observer — kept alive to mirror OS dark/light
+    // System appearance observer - kept alive to mirror OS dark/light
     // onto the active theme.
     _appearance_sub: Option<Subscription>,
     // Live hot-reload watcher for the JSON theme directory. Edits to
@@ -69,7 +69,7 @@ impl Showcase {
         let weak = cx.entity().downgrade();
         let text_field = cx.new(|cx| {
             TextField::with_value(cx, "Hello, engram")
-                .placeholder("Type something…")
+                .placeholder("Type something...")
                 .on_submit(move |value, _window, cx| {
                     let value = SharedString::from(value.to_string());
                     weak.update(cx, |this, cx| {
@@ -79,7 +79,7 @@ impl Showcase {
                     .ok();
                 })
         });
-        // Build the menu entity once — its contents are static, so there's
+        // Build the menu entity once - its contents are static, so there's
         // no reason to reconstruct it on every render. Each entry's handler
         // is a plain no-op: the menu emits `DismissEvent` automatically
         // after invoking an entry, and the subscription below flips the
@@ -91,7 +91,7 @@ impl Showcase {
                 .keybinding_entry("menu-save", "Save", ["Ctrl", "S"], |_, _, _| {})
                 .keybinding_entry(
                     "menu-saveas",
-                    "Save As…",
+                    "Save As...",
                     ["Ctrl", "Shift", "S"],
                     |_, _, _| {},
                 )
@@ -203,7 +203,7 @@ impl Render for Showcase {
         let colors = cx.theme().colors();
         let weak = cx.entity().downgrade();
 
-        // Pull every theme registered in the global registry — built-in
+        // Pull every theme registered in the global registry - built-in
         // engram + any JSON themes loaded from `Assets` in `main()`. The
         // selector below renders one button per entry.
         let theme_names = engram::theme::ThemeRegistry::global(cx).names();
@@ -784,7 +784,7 @@ impl Render for Showcase {
             ))
             .child(Divider::horizontal())
             // -------------------- Menu (real anchored popover) --------------------
-            .child(section("Menu (click to open — keyboard-navigable)", {
+            .child(section("Menu (click to open - keyboard-navigable)", {
                 let bounds_slot = self.menu_trigger_bounds.clone();
                 let menu_entity = self.menu.clone();
                 let open_menu_handler = {
@@ -810,7 +810,7 @@ impl Render for Showcase {
                     .on_click(open_menu_handler);
                 // Wrap the trigger in a relatively-positioned container
                 // and overlay a `canvas` that captures the trigger's
-                // bounds. The canvas paint callback is empty — we only
+                // bounds. The canvas paint callback is empty - we only
                 // need its prepaint hook to grab `bounds`.
                 let trigger_with_capture = div().relative().child(trigger_button).child(
                     canvas(
@@ -1033,7 +1033,7 @@ fn main() {
 
         // Load every JSON theme embedded in `engram_ui::Assets` and insert
         // it into the registry, so the header bar selector can list them
-        // alongside the built-in defaults. Failures are non-fatal — a bad
+        // alongside the built-in defaults. Failures are non-fatal - a bad
         // theme just doesn't appear in the picker.
         register_embedded_themes(cx);
 

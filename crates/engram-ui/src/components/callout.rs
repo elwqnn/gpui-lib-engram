@@ -1,4 +1,4 @@
-//! Callout — a highlighted info/warning/error block for important messages
+//! Callout - a highlighted info/warning/error block for important messages
 //! that require user attention.
 //!
 //! Unlike [`Banner`](super::banner::Banner) which is an inline strip,

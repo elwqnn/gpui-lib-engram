@@ -1,15 +1,15 @@
 //! Hand-tuned default themes.
 //!
-//! The defaults are deliberately **neutral grayscale** — modeled after
+//! The defaults are deliberately **neutral grayscale** - modeled after
 //! shadcn/ui's "neutral" color scheme. There is no chromatic accent baked
 //! into the base palette: `accent`, `text_accent`, `border_focused`, and
 //! the element/border state ramps are all pure grays. The only colored
 //! tokens in the default themes are the four severity foregrounds
 //! (`status.{info,success,warning,error}`) and their alpha-tinted
-//! `_background` / `_border` siblings — without those, `Banner` /
+//! `_background` / `_border` siblings - without those, `Banner` /
 //! `Notification` / `Indicator` would lose their only signal.
 //!
-//! Themes that want a chromatic accent (gruvbox, solarized, …) override
+//! Themes that want a chromatic accent (gruvbox, solarized, ...) override
 //! the neutral defaults via JSON or by building a fresh `Theme`.
 
 use gpui::SharedString;
@@ -17,7 +17,7 @@ use gpui::SharedString;
 use crate::colors::{StatusColors, ThemeColors, hsl, hsla};
 use crate::{Appearance, Theme};
 
-/// The default dark theme — shadcn neutral grayscale base, status colors
+/// The default dark theme - shadcn neutral grayscale base, status colors
 /// kept tinted so severity surfaces remain readable.
 pub fn dark() -> Theme {
     Theme {
@@ -25,7 +25,7 @@ pub fn dark() -> Theme {
         appearance: Appearance::Dark,
         colors: ThemeColors {
             // Three steps of neutral surface, matching shadcn neutral
-            // background → card → popover/secondary.
+            // background -> card -> popover/secondary.
             background: hsl(0.0, 0.00, 0.145),
             surface_background: hsl(0.0, 0.00, 0.205),
             elevated_surface_background: hsl(0.0, 0.00, 0.269),
@@ -46,7 +46,7 @@ pub fn dark() -> Theme {
             text_muted: hsl(0.0, 0.00, 0.708),
             text_placeholder: hsl(0.0, 0.00, 0.50),
             text_disabled: hsl(0.0, 0.00, 0.40),
-            // accent_text == text in the neutral scheme — accent surfaces
+            // accent_text == text in the neutral scheme - accent surfaces
             // are high-contrast against their background, so the foreground
             // is the same near-white as ordinary body text.
             text_accent: hsl(0.0, 0.00, 0.985),
@@ -102,7 +102,7 @@ pub fn dark() -> Theme {
                 ignored_border: hsla(0.0, 0.00, 0.38, 0.55),
             },
 
-            // Maps to shadcn neutral's "primary" — near-white in dark mode.
+            // Maps to shadcn neutral's "primary" - near-white in dark mode.
             // Used as the fill for accented surfaces (Indicator, CountBadge,
             // selected button styles); pairs with `text_accent` above.
             accent: hsl(0.0, 0.00, 0.922),
@@ -110,7 +110,7 @@ pub fn dark() -> Theme {
     }
 }
 
-/// The default light theme — shadcn neutral grayscale base, status colors
+/// The default light theme - shadcn neutral grayscale base, status colors
 /// kept tinted so severity surfaces remain readable.
 pub fn light() -> Theme {
     Theme {

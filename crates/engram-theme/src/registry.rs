@@ -1,7 +1,7 @@
 //! In-process catalog of loaded themes.
 //!
 //! [`ThemeRegistry`] lives as a GPUI [`Global`] and holds every theme the app
-//! knows about — both the built-ins registered during [`crate::init`] and
+//! knows about - both the built-ins registered during [`crate::init`] and
 //! anything the hot-reload watcher has picked up at runtime. Components and
 //! example apps switch themes by name through this registry instead of
 //! plumbing [`Theme`] values around manually.
@@ -29,7 +29,7 @@ impl ThemeRegistry {
     }
 
     /// Add (or replace) a theme. Returns the previous entry under the same
-    /// name, if any — callers can ignore it for first-time inserts.
+    /// name, if any - callers can ignore it for first-time inserts.
     pub fn insert(&mut self, theme: Theme) -> Option<Arc<Theme>> {
         let name = theme.name.clone();
         self.themes.insert(name, Arc::new(theme))

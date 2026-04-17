@@ -1,10 +1,10 @@
 //! Minimal scrollbar indicator for [`gpui::ScrollHandle`]-driven content.
 //!
-//! GPUI itself doesn't ship a styled scrollbar — each consuming crate rolls
+//! GPUI itself doesn't ship a styled scrollbar - each consuming crate rolls
 //! its own on top of `ScrollHandle`'s geometry (`offset()`, `max_offset()`,
 //! `bounds()`). This implementation is intentionally minimal: a track with
 //! a proportionally-sized thumb, plus click-to-jump on the track. It
-//! **does not** support dragging the thumb — doing that well requires
+//! **does not** support dragging the thumb - doing that well requires
 //! either a custom `Element` impl or persistent per-element drag state,
 //! and the wheel / trackpad path already covers the common case. A
 //! future version can layer drag support on top.
@@ -27,7 +27,7 @@
 //! ```
 //!
 //! When `max_offset` is zero (content fits), the thumb is hidden but the
-//! track still takes layout space — wrap the `Scrollbar` in a `.when(...)`
+//! track still takes layout space - wrap the `Scrollbar` in a `.when(...)`
 //! if you want the whole thing to collapse away.
 
 use engram_theme::{ActiveTheme, Radius};
@@ -92,7 +92,7 @@ impl RenderOnce for Scrollbar {
             ScrollbarAxis::Vertical => {
                 let viewport = bounds.size.height.as_f32();
                 let max = max_offset.y.as_f32();
-                // Content shorter than viewport — no thumb, zero-sized.
+                // Content shorter than viewport - no thumb, zero-sized.
                 let content_fits = max <= 0.0 || viewport <= 0.0;
                 let (thumb_height, thumb_top) = if content_fits {
                     (px(0.0), px(0.0))

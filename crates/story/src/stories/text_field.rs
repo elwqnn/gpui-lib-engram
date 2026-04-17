@@ -10,7 +10,7 @@ impl TextFieldStory {
         let weak = cx.entity().downgrade();
         let field = cx.new(|cx| {
             TextField::with_value(cx, "Hello, engram")
-                .placeholder("Type something…")
+                .placeholder("Type something...")
                 .on_submit(move |value, _window, cx| {
                     let value = SharedString::from(value.to_string());
                     weak.update(cx, |this, cx| {

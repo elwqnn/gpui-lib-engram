@@ -1,4 +1,4 @@
-//! Tooltip — a small elevated card shown when hovering an interactive element.
+//! Tooltip - a small elevated card shown when hovering an interactive element.
 //!
 //! The underlying machinery is provided by `gpui`: any stateful interactive
 //! element (e.g. anything with an `id`) has a [`.tooltip(builder)`](gpui::StatefulInteractiveElement::tooltip)

@@ -1,4 +1,4 @@
-//! Avatar / Facepile / Chip / CountBadge — small data-display primitives.
+//! Avatar / Facepile / Chip / CountBadge - small data-display primitives.
 //!
 //! Grouped in one file because each is tiny and they share a similar shape.
 //!
@@ -90,7 +90,7 @@ impl Avatar {
 
     /// Render a real image instead of a monogram.
     ///
-    /// Accepts any [`ImageSource`] — URLs, file paths, pre-loaded
+    /// Accepts any [`ImageSource`] - URLs, file paths, pre-loaded
     /// [`Arc<Image>`](gpui::Image), etc. See [`gpui::img`] for the full
     /// list of `From` impls.
     pub fn image(mut self, source: impl Into<ImageSource>) -> Self {
@@ -212,9 +212,9 @@ pub enum ChipStyle {
 /// Display size of a [`Chip`].
 #[derive(Debug, Default, Clone, Copy, PartialEq, Eq)]
 pub enum ChipSize {
-    /// Compact — `LabelSize::XSmall`, tight padding.
+    /// Compact - `LabelSize::XSmall`, tight padding.
     Small,
-    /// Default — `LabelSize::Small`, standard padding.
+    /// Default - `LabelSize::Small`, standard padding.
     #[default]
     Medium,
 }

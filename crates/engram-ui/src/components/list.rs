@@ -1,4 +1,4 @@
-//! List and ListItem — the workhorse of sidebars, command palettes, and
+//! List and ListItem - the workhorse of sidebars, command palettes, and
 //! settings panes.
 //!
 //! [`List`] is a thin vertical container: stack of children plus an optional
@@ -32,7 +32,7 @@ use crate::traits::{
 
 /// Vertical density of a [`ListItem`].
 ///
-/// `Sparse` matches engram's pre-Phase-8 default — comfortable padding,
+/// `Sparse` matches engram's pre-Phase-8 default - comfortable padding,
 /// suitable for sidebars and settings panes. `Dense` and `ExtraDense` shrink
 /// the row to fit tree views, command palettes, and other places that need
 /// to pack many items into a fixed height.
@@ -50,7 +50,7 @@ pub enum ListItemSpacing {
 /// Controls when a [`ListItem`]'s end slot is shown.
 ///
 /// `Always` is the default and matches the original behavior. `OnHover`
-/// hides the slot until the mouse enters the row — a common pattern for
+/// hides the slot until the mouse enters the row - a common pattern for
 /// inline action affordances (delete buttons, secondary menus) that should
 /// not draw the eye on every row of a long list.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Default)]
@@ -64,7 +64,7 @@ pub enum EndSlotVisibility {
 
 /// Group name attached to the inner row so [`EndSlotVisibility::OnHover`]
 /// can target it via `group_hover`. Multiple list items in the same parent
-/// share the name on purpose — `group_hover` only walks up to the nearest
+/// share the name on purpose - `group_hover` only walks up to the nearest
 /// ancestor with the matching group, so each row is self-contained.
 const HOVER_GROUP: &str = "engram_list_item";
 
@@ -152,7 +152,7 @@ impl ListItem {
     }
 
     /// When `true`, the indent gutter is drawn *outside* the row's
-    /// background — the hover/selected chrome shifts right with the indent
+    /// background - the hover/selected chrome shifts right with the indent
     /// instead of spanning the full container width. This is the look used
     /// by zed's tree views.
     pub fn inset(mut self, inset: bool) -> Self {

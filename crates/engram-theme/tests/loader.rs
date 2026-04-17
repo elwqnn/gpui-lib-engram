@@ -131,7 +131,7 @@ fn round_trip_theme_content_json_is_stable_after_one_pass() {
     // The on-disk JSON format is 8-bit sRGB hex, so an Hsla going through
     // from_full -> serialize -> parse -> refine loses the lower bits of
     // the hsl coordinates. One round trip is enough to reach a stable
-    // fixed point — a *second* serialize -> parse of the reparsed theme
+    // fixed point - a *second* serialize -> parse of the reparsed theme
     // must yield byte-identical JSON.
     let dark = default_dark();
     let json1 = serde_json::to_string_pretty(&ThemeContent::from_theme(&dark)).unwrap();
@@ -143,12 +143,12 @@ fn round_trip_theme_content_json_is_stable_after_one_pass() {
 }
 
 /// Regenerates the bundled JSON fixtures under
-/// `crates/engram-ui/assets/themes/`. Ignored by default — run explicitly
+/// `crates/engram-ui/assets/themes/`. Ignored by default - run explicitly
 /// with `cargo test -p engram-theme --test loader -- --ignored regenerate_builtin_fixtures`
 /// whenever the hand-tuned defaults in `engram-theme/src/default.rs`
 /// change.
 #[test]
-#[ignore = "regeneration helper — run manually"]
+#[ignore = "regeneration helper - run manually"]
 fn regenerate_builtin_fixtures() {
     let assets = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
         .join("..")

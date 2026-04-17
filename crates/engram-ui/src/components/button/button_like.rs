@@ -1,7 +1,7 @@
-//! [`ButtonLike`] — the shared chrome behind every engram button.
+//! [`ButtonLike`] - the shared chrome behind every engram button.
 //!
 //! `ButtonLike` is a thin wrapper around a `gpui::Div` that handles the bits
-//! that *every* button needs in lockstep — id, focus tracking, tooltip,
+//! that *every* button needs in lockstep - id, focus tracking, tooltip,
 //! click forwarding, hover/active palettes, rounding, optional border. Both
 //! [`Button`](super::button::Button) and
 //! [`IconButton`](super::icon_button::IconButton) compose this struct
@@ -9,8 +9,8 @@
 //! [`ButtonCommon`].
 //!
 //! `ButtonLike` is also exported on its own so callers who need a
-//! freeform "rounded clickable surface with engram's button states" — a
-//! card-like trigger, a custom dropdown anchor — can build directly on it
+//! freeform "rounded clickable surface with engram's button states" - a
+//! card-like trigger, a custom dropdown anchor - can build directly on it
 //! without re-implementing all the chrome. Use it sparingly though: every
 //! escape hatch is a place engram's visual language can drift.
 //!
@@ -44,7 +44,7 @@ pub trait SelectableButton: Toggleable {
     fn selected_style(self, style: ButtonStyle) -> Self;
 }
 
-/// The "every button speaks the same dialect" trait — id, style, size,
+/// The "every button speaks the same dialect" trait - id, style, size,
 /// tooltip, elevation layer, tab index, focus tracking.
 ///
 /// Like the rest of engram's behavioural traits in [`crate::traits`], this
@@ -75,7 +75,7 @@ pub trait ButtonCommon: Clickable + Disableable {
     fn layer(self, layer: ElevationIndex) -> Self;
 
     /// Track focus on the given handle. The button itself does not own the
-    /// handle — it's borrowed from a parent view that wants to programmatically
+    /// handle - it's borrowed from a parent view that wants to programmatically
     /// focus it.
     fn track_focus(self, focus_handle: &FocusHandle) -> Self;
 }
@@ -91,7 +91,7 @@ pub enum ButtonStyle {
     /// default/affirmative action.
     #[default]
     Filled,
-    /// A semantic-coloured tint (Accent / Error / Warning / Success) — soft
+    /// A semantic-coloured tint (Accent / Error / Warning / Success) - soft
     /// background plus a coloured border. Used for primary CTAs and
     /// destructive confirmations.
     Tinted(TintColor),
@@ -119,7 +119,7 @@ pub enum TintColor {
     Success,
 }
 
-/// Resolved background + border colors for one (style × state) pair.
+/// Resolved background + border colors for one (style x state) pair.
 #[derive(Debug, Clone, Copy)]
 pub(super) struct ButtonLikeStyles {
     pub background: Hsla,
@@ -397,7 +397,7 @@ impl ButtonLike {
     /// Set the inner padding (horizontal, vertical) of this button. Used by
     /// the wrapping [`Button`](super::button::Button) and
     /// [`IconButton`](super::icon_button::IconButton) to apply their own
-    /// size-derived padding through ButtonLike's chrome — the padding has
+    /// size-derived padding through ButtonLike's chrome - the padding has
     /// to live on the same div that paints the background, otherwise the
     /// background hugs the inner content with no breathing room.
     pub fn padding(mut self, horizontal: Pixels, vertical: Pixels) -> Self {

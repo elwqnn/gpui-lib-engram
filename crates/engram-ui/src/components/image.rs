@@ -12,7 +12,7 @@
 //!   fallback) without changing the downstream call sites.
 //!
 //! For a circular profile picture, prefer
-//! [`Avatar::image`](crate::components::Avatar::image) — it sizes and clips
+//! [`Avatar::image`](crate::components::Avatar::image) - it sizes and clips
 //! the image to match the rest of the avatar family.
 
 use std::path::Path;
@@ -26,7 +26,7 @@ use gpui::{
 
 /// A styled image element.
 ///
-/// Simple builder around [`gpui::img`]. All fields default to "unset" —
+/// Simple builder around [`gpui::img`]. All fields default to "unset" -
 /// if neither `width` nor `height` is given, the image lays out at its
 /// intrinsic size.
 #[derive(IntoElement)]
@@ -50,7 +50,7 @@ impl Image {
             // GPUI's shader applies corner_radii to the sprite's *painted*
             // bounds. With Cover those bounds extend beyond the layout area,
             // making rounding invisible. Zed uses Contain everywhere for the
-            // same reason — the image fits within its layout bounds and
+            // same reason - the image fits within its layout bounds and
             // rounding works correctly.
             object_fit: ObjectFit::Contain,
             grayscale: false,
@@ -102,7 +102,7 @@ impl RenderOnce for Image {
     fn render(self, _window: &mut Window, _cx: &mut App) -> impl IntoElement {
         // Radius::Full (circle) needs the image to fill the square exactly
         // so the circular SDF clips a full disk. Fill stretches slightly but
-        // inside a small circle the distortion is imperceptible — this is how
+        // inside a small circle the distortion is imperceptible - this is how
         // every avatar system works. Other radii keep the caller's ObjectFit.
         let object_fit = match self.radius {
             Some(Radius::Full) => ObjectFit::Fill,
@@ -130,15 +130,15 @@ impl RenderOnce for Image {
 /// Load an image from disk and center-crop it to the largest square.
 ///
 /// Returns an [`ImageSource`] backed by pre-cropped pixel data. The crop
-/// and downscale happen once at call time — after that the GPU texture is
+/// and downscale happen once at call time - after that the GPU texture is
 /// cached like any other image. Use this when you need `rounded_full()` on
 /// a non-square source image so the circle fills completely without
 /// stretching.
 ///
 /// Large images are downscaled *before* RGBA conversion so the expensive
-/// pixel buffer stays small. Without the early downscale, a 3888×2187 JPEG
-/// would allocate ~34MB for `to_rgba8()` alone — enough to freeze the main
-/// thread for 1–2 seconds.
+/// pixel buffer stays small. Without the early downscale, a 3888x2187 JPEG
+/// would allocate ~34MB for `to_rgba8()` alone - enough to freeze the main
+/// thread for 1-2 seconds.
 pub fn center_crop_square(path: impl AsRef<Path>) -> anyhow::Result<ImageSource> {
     const MAX_DIM: u32 = 256;
 
@@ -146,8 +146,8 @@ pub fn center_crop_square(path: impl AsRef<Path>) -> anyhow::Result<ImageSource>
     let decoded = image::load_from_memory(&data)?;
 
     // Downscale the DynamicImage while it's still in its native color space.
-    // `resize` preserves aspect ratio, so a 3888×2187 source becomes ~456×256
-    // — the subsequent RGBA conversion allocates ~467KB instead of ~34MB.
+    // `resize` preserves aspect ratio, so a 3888x2187 source becomes ~456x256
+    // - the subsequent RGBA conversion allocates ~467KB instead of ~34MB.
     let small = if decoded.width() > MAX_DIM || decoded.height() > MAX_DIM {
         decoded.resize(MAX_DIM, MAX_DIM, image::imageops::FilterType::Triangle)
     } else {

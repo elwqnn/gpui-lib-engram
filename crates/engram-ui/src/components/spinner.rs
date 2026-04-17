@@ -1,4 +1,4 @@
-//! Spinner — an animated loading indicator.
+//! Spinner - an animated loading indicator.
 //!
 //! Uses GPUI's `Animation` + `AnimationExt` to continuously rotate an icon
 //! (default: [`IconName::RotateCw`]). Useful anywhere a background

@@ -2,8 +2,8 @@
 //!
 //! [`IconName`] is a curated set of ~140 common UI icons, each variant
 //! mapping to an `icons/<snake_case>.svg` asset shipped inside this crate.
-//! The SVGs are sourced from [Lucide](https://lucide.dev) (ISC License — see
-//! `assets/icons/LICENSES`) at their canonical 24×24 stroke form. The actual
+//! The SVGs are sourced from [Lucide](https://lucide.dev) (ISC License - see
+//! `assets/icons/LICENSES`) at their canonical 24x24 stroke form. The actual
 //! asset resolution is performed by gpui's `svg()` element, which goes
 //! through the [`AssetSource`](gpui::AssetSource) registered on the
 //! [`Application`]. The showcase wires up [`crate::assets::Assets`] for that
@@ -12,7 +12,7 @@
 //! An [`Icon`] carries an [`IconSource`]: either a curated [`IconName`]
 //! (Embedded), a raster image file on disk (External), or an SVG string path
 //! resolved via the consumer app's AssetSource (ExternalSvg). This mirrors
-//! zed's `ui::IconSource` shape with one intentional divergence — engram's
+//! zed's `ui::IconSource` shape with one intentional divergence - engram's
 //! ExternalSvg routes through `svg().path(...)` (the AssetSource) rather
 //! than zed's `svg().external_path(...)` (a direct fs read), because the
 //! primary engram use case for external SVGs is a consumer app bundling
@@ -33,14 +33,14 @@ use gpui::{
 use strum::IntoStaticStr;
 
 /// Conversion constant between [`Pixels`] and [`Rems`]. Matches gpui's
-/// default rem size. Used only for the `IconSize` preset → `Rems` conversion
+/// default rem size. Used only for the `IconSize` preset -> `Rems` conversion
 /// so the fixed-pixel presets round-trip to reasonable rem values.
 const BASE_REM_SIZE_PX: f32 = 16.0;
 
 /// Size of an [`Icon`].
 ///
 /// The fixed presets mirror zed's `IconSize` with one engram divergence:
-/// [`IconSize::Large`] (20px) — zed dropped it, engram keeps it because 20px
+/// [`IconSize::Large`] (20px) - zed dropped it, engram keeps it because 20px
 /// is a real size in the engram visual language and removing it is churn
 /// for parity's sake. [`IconSize::Custom`] takes a [`Rems`] value so callers
 /// with specific layout needs can bypass the preset ramp without jumping to
@@ -56,7 +56,7 @@ pub enum IconSize {
     /// 16px (default)
     #[default]
     Medium,
-    /// 20px — engram divergence from zed.
+    /// 20px - engram divergence from zed.
     Large,
     /// 48px
     XLarge,
@@ -66,7 +66,7 @@ pub enum IconSize {
 
 impl IconSize {
     /// Pixel size of the preset. For [`IconSize::Custom`], converts back to
-    /// pixels assuming the default 16px rem — a best-effort approximation
+    /// pixels assuming the default 16px rem - a best-effort approximation
     /// for call sites that still want a `Pixels` value (e.g. banner layout
     /// indents). Use [`IconSize::rems`] instead when you're going through a
     /// `Styled`/`svg()` API, which is rem-aware.
@@ -100,12 +100,12 @@ impl IconSize {
 /// Catalogue of every icon shipped with engram-ui. Each variant resolves to
 /// `icons/<snake_case>.svg` via [`IconName::path`].
 ///
-/// The set is curated from [Lucide](https://lucide.dev) — the names follow
+/// The set is curated from [Lucide](https://lucide.dev) - the names follow
 /// Lucide's vocabulary except for a few engram-side renames where the
-/// component layer already speaks differently (e.g. [`Self::Close`] →
-/// Lucide `x`, [`Self::Dash`] → Lucide `minus`, [`Self::MagnifyingGlass`] →
-/// Lucide `search`, [`Self::Warning`] → Lucide `triangle-alert`,
-/// [`Self::XCircle`] → Lucide `circle-x`). [`Self::StarFilled`] is a
+/// component layer already speaks differently (e.g. [`Self::Close`] ->
+/// Lucide `x`, [`Self::Dash`] -> Lucide `minus`, [`Self::MagnifyingGlass`] ->
+/// Lucide `search`, [`Self::Warning`] -> Lucide `triangle-alert`,
+/// [`Self::XCircle`] -> Lucide `circle-x`). [`Self::StarFilled`] is a
 /// derivative of Lucide's `star` with `fill="currentColor"`.
 #[derive(Debug, PartialEq, Eq, Copy, Clone, Hash, IntoStaticStr)]
 #[strum(serialize_all = "snake_case")]
@@ -255,7 +255,7 @@ pub enum IconName {
 }
 
 impl IconName {
-    /// Asset path to this icon's SVG, e.g. `IconName::ArrowDown` →
+    /// Asset path to this icon's SVG, e.g. `IconName::ArrowDown` ->
     /// `icons/arrow_down.svg`. Resolved by gpui's `svg().path(...)`.
     pub fn path(self) -> Arc<str> {
         let stem: &'static str = self.into();
@@ -275,7 +275,7 @@ pub enum IconSource {
     /// must include [`crate::assets::Assets`] (directly or wrapped).
     Embedded(IconName),
     /// A raster image file on disk. Rendered through gpui's `img(path)`
-    /// so callers can use arbitrary PNG/JPG sources — typically a
+    /// so callers can use arbitrary PNG/JPG sources - typically a
     /// user-supplied avatar or file-type thumbnail.
     External(Arc<Path>),
     /// An SVG at the given asset path. Rendered via `svg().path(...)`,
@@ -302,7 +302,7 @@ pub struct Icon {
 }
 
 impl Icon {
-    /// Build an icon from anything that can become an [`IconSource`] — an
+    /// Build an icon from anything that can become an [`IconSource`] - an
     /// [`IconName`] (the common path, via `From<IconName> for IconSource`),
     /// or an explicit `IconSource::External`/`ExternalSvg`.
     pub fn new(source: impl Into<IconSource>) -> Self {

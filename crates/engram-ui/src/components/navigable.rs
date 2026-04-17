@@ -1,4 +1,4 @@
-//! Navigable — a keyboard-navigation wrapper for scrollable views.
+//! Navigable - a keyboard-navigation wrapper for scrollable views.
 //!
 //! Wraps a child element and a list of focusable entries. When the menu
 //! `SelectNext` / `SelectPrevious` actions fire (arrow keys), focus cycles

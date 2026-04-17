@@ -1,7 +1,7 @@
 /// Elements whose interactivity and visual style can be suppressed.
 ///
 /// Every component that can be disabled (buttons, list items, checkboxes,
-/// switches, tabs, …) implements this trait so callers can reach for the
+/// switches, tabs, ...) implements this trait so callers can reach for the
 /// same method name on every one of them. The convention is that
 /// `.disabled(true)`:
 ///

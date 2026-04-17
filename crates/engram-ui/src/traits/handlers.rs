@@ -3,7 +3,7 @@
 //! Every interactive component in engram stores its callbacks as
 //! `Rc<dyn Fn(...) + 'static>`. Before this module existed, each component
 //! re-declared the same type alias (`ClickHandler`, `DismissHandler`,
-//! `MenuClickHandler`, …) with slightly different names — a real maintenance
+//! `MenuClickHandler`, ...) with slightly different names - a real maintenance
 //! trap when the signature needs to change. Keeping the aliases here means:
 //!
 //! - there's **one** place to update the handler signature,
@@ -15,7 +15,7 @@
 //! cloned into multiple closures (e.g. `on_click` + `on_key_down`) within a
 //! single render pass.
 //!
-//! If you need a handler shape that isn't represented here, add it — don't
+//! If you need a handler shape that isn't represented here, add it - don't
 //! re-declare a local alias.
 
 use std::rc::Rc;
@@ -37,13 +37,13 @@ pub type StringHandler = Rc<dyn Fn(&str, &mut Window, &mut App) + 'static>;
 pub type ToggleHandler = Rc<dyn Fn(&ToggleState, &mut Window, &mut App) + 'static>;
 
 /// Handler fired when an overlay (modal, popover) wants to close itself.
-/// No event payload — it's called from both mouse (backdrop click) and
+/// No event payload - it's called from both mouse (backdrop click) and
 /// keyboard (Escape) paths, so there's no single meaningful event.
 pub type DismissHandler = Rc<dyn Fn(&mut Window, &mut App) + 'static>;
 
 /// Handler fired on the mouse hover-enter and hover-leave events. The
 /// boolean payload is `true` when the cursor enters and `false` when it
-/// leaves — matches gpui's `Div::on_hover` shape.
+/// leaves - matches gpui's `Div::on_hover` shape.
 pub type HoverHandler = Rc<dyn Fn(&bool, &mut Window, &mut App) + 'static>;
 
 /// Handler fired on a raw mouse-down event. Used by list items to bind

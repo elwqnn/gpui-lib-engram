@@ -1,4 +1,4 @@
-//! Modal — centered overlay card with a dimmed backdrop.
+//! Modal - centered overlay card with a dimmed backdrop.
 //!
 //! Like [`Popover`](super::popover::Popover), the modal is *stateless*: the
 //! parent view holds an `is_open` flag and conditionally inserts a
@@ -128,7 +128,7 @@ impl RenderOnce for Modal {
 ///
 /// The caller passes a [`FocusHandle`] that is expected to be focused *while
 /// the overlay is visible*. This is what gives the Escape key somewhere to
-/// land — without a focused handle in the overlay's subtree, key events go
+/// land - without a focused handle in the overlay's subtree, key events go
 /// elsewhere and Esc does nothing.
 ///
 /// The overlay paints inside a [`deferred`] node so it floats above siblings.

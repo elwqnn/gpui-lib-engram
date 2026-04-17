@@ -1,8 +1,8 @@
-//! [`ButtonLink`] — an underlined text link that opens a URL.
+//! [`ButtonLink`] - an underlined text link that opens a URL.
 //!
 //! Renders as an underlined label with an optional trailing arrow icon to
 //! communicate that clicking navigates outside the app. Has no inner
-//! padding — the link sits flush with surrounding text.
+//! padding - the link sits flush with surrounding text.
 
 use gpui::{App, IntoElement, ParentElement, RenderOnce, SharedString, Styled, Window, prelude::*};
 
@@ -56,7 +56,7 @@ impl RenderOnce for ButtonLink {
         let id = format!("{}-{}", self.label, self.link);
         let link = self.link;
 
-        // Zero-padding link — matches Zed's ButtonSize::None behavior.
+        // Zero-padding link - matches Zed's ButtonSize::None behavior.
         let mut btn = ButtonLike::new(id);
         btn.base = btn.base.self_start();
         btn.padding(gpui::px(0.0), gpui::px(0.0))

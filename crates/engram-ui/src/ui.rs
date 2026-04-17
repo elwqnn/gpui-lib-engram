@@ -1,6 +1,6 @@
 //! engram-ui: GPUI component primitives built on top of [`engram_theme`].
 //!
-//! Downstream users should typically `use engram::prelude::*;` — the umbrella
+//! Downstream users should typically `use engram::prelude::*;` - the umbrella
 //! [`engram`](../engram/index.html) crate re-exports both this crate and
 //! [`engram_theme`].
 //!
@@ -23,7 +23,7 @@ pub use traits::*;
 
 /// Initialize engram-ui's process-global state.
 ///
-/// Registers the default keybindings for components that need them — today
+/// Registers the default keybindings for components that need them - today
 /// that's [`components::TextField`] (arrow navigation, selection, clipboard,
 /// submit) and [`components::Menu`] (arrow navigation, Enter / Escape). Call
 /// it once per `App`, after [`engram_theme::init`] and before rendering any

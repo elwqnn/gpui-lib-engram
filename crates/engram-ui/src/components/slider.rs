@@ -1,4 +1,4 @@
-//! Slider — a draggable range input for selecting a numeric value.
+//! Slider - a draggable range input for selecting a numeric value.
 //!
 //! The slider is stateless (`RenderOnce`): the parent owns the value and
 //! receives changes via a handler. Drag interaction uses a `canvas` overlay
@@ -141,7 +141,7 @@ impl RenderOnce for Slider {
 
         // The interaction area is intentionally taller than the visual
         // track so the user can drag vertically without losing the cursor
-        // — same approach as HTML <input type="range">. The visible 6px
+        // - same approach as HTML <input type="range">. The visible 6px
         // track is centered inside via flex + items_center.
         let track = div()
             .id(self.id.clone())
@@ -178,7 +178,7 @@ impl RenderOnce for Slider {
                             .rounded_full()
                             .bg(fill_bg),
                     )
-                    // Thumb — shadcn-style: small white circle with a ring
+                    // Thumb - shadcn-style: small white circle with a ring
                     // halo on hover/active for affordance.
                     .child(
                         div()

@@ -1,6 +1,6 @@
 [package]
 name = "engram-ui"
-description = "GPUI component primitives for engram — buttons, lists, popovers, text fields, and the shared trait + handler layer."
+description = "GPUI component primitives for engram - buttons, lists, popovers, text fields, and the shared trait + handler layer."
 version.workspace = true
 edition.workspace = true
 license.workspace = true

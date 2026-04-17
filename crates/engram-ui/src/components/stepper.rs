@@ -1,8 +1,8 @@
-//! Stepper — a compact numeric increment / decrement control.
+//! Stepper - a compact numeric increment / decrement control.
 //!
 //! Two icon buttons (minus / plus) flanking a value display. The parent
 //! owns the value and receives changes via `on_change`. Stateless like
-//! every other engram component — the stepper just renders the current
+//! every other engram component - the stepper just renders the current
 //! value and fires callbacks.
 
 use std::rc::Rc;
@@ -66,7 +66,7 @@ impl Stepper {
         self
     }
 
-    /// Register a change handler, invoked with the new value when +/− is clicked.
+    /// Register a change handler, invoked with the new value when +/- is clicked.
     pub fn on_change(mut self, handler: impl Fn(f64, &mut Window, &mut App) + 'static) -> Self {
         self.on_change = Some(Rc::new(handler));
         self
@@ -194,8 +194,8 @@ impl RenderOnce for Stepper {
 
 /// Apply a signed `delta` to `value` and clamp to `[min, max]`.
 ///
-/// Used by the +/- handlers — a positive delta increments, a negative delta
-/// decrements. The clamp guards against overshoot when `value ± step` steps
+/// Used by the +/- handlers - a positive delta increments, a negative delta
+/// decrements. The clamp guards against overshoot when `value +/- step` steps
 /// past the range boundary.
 fn step_value(value: f64, delta: f64, min: f64, max: f64) -> f64 {
     (value + delta).clamp(min, max)

@@ -1,4 +1,4 @@
-//! Popover — a floating, anchored overlay used for menus and rich tooltips.
+//! Popover - a floating, anchored overlay used for menus and rich tooltips.
 //!
 //! Zed's `PopoverMenu` is a 500-line custom `Element` implementation that
 //! manages an internal `ManagedView`, dismissal events, focus handling, and
@@ -114,10 +114,10 @@ impl RenderOnce for Popover {
 /// dismissal on **click-outside** and **`Escape`**.
 ///
 /// `corner` chooses which corner of the popover sits against the trigger:
-/// - `Corner::TopLeft` → popover hangs below-and-right of the trigger
-/// - `Corner::TopRight` → hangs below-and-left
-/// - `Corner::BottomLeft` → grows upward-and-right
-/// - `Corner::BottomRight` → grows upward-and-left
+/// - `Corner::TopLeft` -> popover hangs below-and-right of the trigger
+/// - `Corner::TopRight` -> hangs below-and-left
+/// - `Corner::BottomLeft` -> grows upward-and-right
+/// - `Corner::BottomRight` -> grows upward-and-left
 ///
 /// # Dismissal
 ///

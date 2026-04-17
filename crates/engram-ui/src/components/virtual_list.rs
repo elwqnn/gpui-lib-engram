@@ -1,4 +1,4 @@
-//! VirtualList — lazy-rendered scrollable list of uniform-height items.
+//! VirtualList - lazy-rendered scrollable list of uniform-height items.
 //!
 //! Thin wrapper around [`gpui::uniform_list`]. Zed's `uniform_list` is the
 //! canonical primitive for "render only the visible subset of N items of
@@ -7,13 +7,13 @@
 //! 1. give it a matching component-style builder surface (engram tends to
 //!    expose types, not free functions, for components);
 //! 2. provide one-call scrollbar attachment via a [`UniformListDecoration`]
-//!    implementation — same integration pattern Zed's own `Scrollbar` uses;
+//!    implementation - same integration pattern Zed's own `Scrollbar` uses;
 //! 3. expose a [`VirtualListScrollHandle`] wrapper that bundles the gpui
 //!    scroll handle with a small shared cell for scrollbar drag state,
 //!    plus the shared padded bounds needed to convert mouse coords
 //!    back to scroll offsets.
 //!
-//! Variable-height rows are out of scope for `VirtualList` — use
+//! Variable-height rows are out of scope for `VirtualList` - use
 //! [`gpui::list`] directly for that case (same shape, slower layout,
 //! different scroll-handle type).
 //!

@@ -1,4 +1,4 @@
-//! [`IconButton`] — square icon-only button. Composes [`ButtonLike`].
+//! [`IconButton`] - square icon-only button. Composes [`ButtonLike`].
 //!
 //! Same shape as [`Button`](super::button::Button) but renders only an
 //! [`Icon`] and uses smaller, square padding so the hit target stays

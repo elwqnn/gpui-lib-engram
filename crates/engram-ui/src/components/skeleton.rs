@@ -1,4 +1,4 @@
-//! Skeleton — an animated placeholder that signals content is loading.
+//! Skeleton - an animated placeholder that signals content is loading.
 //!
 //! A `Skeleton` is a plain `RenderOnce` rectangle with a subtle pulse
 //! animation. The caller chooses the shape (via width/height/rounded)
@@ -21,7 +21,7 @@ pub enum SkeletonShape {
     /// Rounded rectangle (default).
     #[default]
     Rectangle,
-    /// Full circle — use with equal width and height.
+    /// Full circle - use with equal width and height.
     Circle,
 }
 
@@ -93,7 +93,7 @@ impl RenderOnce for Skeleton {
             "skeleton-pulse",
             Animation::new(Duration::from_millis(1500)).repeat(),
             |el, delta| {
-                // Sine wave: 0→1→0 over one cycle, mapped to 0.4–1.0
+                // Sine wave: 0->1->0 over one cycle, mapped to 0.4-1.0
                 let t = (delta * std::f32::consts::PI * 2.0).sin() * 0.5 + 0.5;
                 let opacity = 0.4 + t * 0.6;
                 el.opacity(opacity)
@@ -102,7 +102,7 @@ impl RenderOnce for Skeleton {
     }
 }
 
-/// Convenience: a common "text block" skeleton — several lines stacked.
+/// Convenience: a common "text block" skeleton - several lines stacked.
 pub fn skeleton_text(lines: usize, line_width: Pixels) -> impl IntoElement {
     v_flex()
         .gap(Spacing::Medium.pixels())

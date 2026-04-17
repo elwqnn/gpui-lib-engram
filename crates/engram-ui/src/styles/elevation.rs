@@ -1,4 +1,4 @@
-//! [`ElevationIndex`] — semantic z-axis levels for shadowed surfaces.
+//! [`ElevationIndex`] - semantic z-axis levels for shadowed surfaces.
 //!
 //! Engram leans on a tiny vocabulary of "how high above the page does
 //! this surface float?" so that any given component (popover, modal,
@@ -19,12 +19,12 @@ use gpui::{App, BoxShadow, hsla, point, px};
 /// concrete `BoxShadow` stack to apply via `.shadow(...)`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum ElevationIndex {
-    /// The bottom layer — flush with the app background. No shadow.
+    /// The bottom layer - flush with the app background. No shadow.
     Background,
     /// The standard surface layer used for panels, cards, and inline
     /// containers. No shadow; relies on borders/background contrast.
     Surface,
-    /// One step above [`Self::Surface`] — used for floating-but-not-modal
+    /// One step above [`Self::Surface`] - used for floating-but-not-modal
     /// chrome like popovers, dropdown menus, and notifications.
     ElevatedSurface,
     /// The topmost layer for modals/dialogs that block the rest of the UI.

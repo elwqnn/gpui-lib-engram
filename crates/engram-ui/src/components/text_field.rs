@@ -1,4 +1,4 @@
-//! TextField — single-line text input with IME, caret, selection and undo.
+//! TextField - single-line text input with IME, caret, selection and undo.
 //!
 //! Derived from `crates/gpui/examples/input.rs` in
 //! [zed-industries/zed](https://github.com/zed-industries/zed), licensed under
@@ -11,12 +11,12 @@
 //!
 //! - A [`TextField`] entity that owns the content, selection range, marked
 //!   (IME-composing) range, and focus handle.
-//! - A private [`TextElement`] that implements [`gpui::Element`] directly —
+//! - A private [`TextElement`] that implements [`gpui::Element`] directly -
 //!   shaping the text line with `window.text_system().shape_line(...)`,
 //!   painting the caret and selection rects, and registering the field as
 //!   an input target via `window.handle_input(...)`.
 //! - An [`EntityInputHandler`] impl on `TextField` that handles all the
-//!   UTF-16 ↔ UTF-8 conversions the platform needs for IME, and that the
+//!   UTF-16 <-> UTF-8 conversions the platform needs for IME, and that the
 //!   OS calls into when composing text, querying bounds, or performing
 //!   replacements.
 //! - A set of [`gpui::actions!`]-style actions bound by [`crate::init`]:
@@ -34,7 +34,7 @@
 //! between lines with a preserved goal column, Home/End act line-aware,
 //! paste preserves newlines, and the field auto-grows in height down to
 //! [`TextField::min_lines`]. Only hard wraps (explicit `\n`) create new
-//! visual rows — soft-wrap on width overflow is not implemented.
+//! visual rows - soft-wrap on width overflow is not implemented.
 //! Word-double-click selection is still TODO.
 //!
 //! ## Usage
@@ -42,7 +42,7 @@
 //! ```ignore
 //! let field = cx.new(|cx| TextField::with_value(cx, "initial"));
 //! field.update(cx, |field, cx| {
-//!     field.set_placeholder("Type here…");
+//!     field.set_placeholder("Type here...");
 //! });
 //! // Render as a child:
 //! div().child(field.clone())
@@ -159,7 +159,7 @@ pub struct TextField {
     /// range, if any.
     marked_range: Option<Range<usize>>,
     /// Populated during paint by the private `TextElement`. One entry per
-    /// logical line — always one entry in single-line mode.
+    /// logical line - always one entry in single-line mode.
     last_rows: Vec<ShapedRow>,
     last_bounds: Option<Bounds<Pixels>>,
     last_line_height: Option<Pixels>,
@@ -255,7 +255,7 @@ impl TextField {
     }
 
     /// Replace the value programmatically. Selection is clamped to the
-    /// new content length. Undo history is cleared — programmatic sets
+    /// new content length. Undo history is cleared - programmatic sets
     /// are treated as a fresh document rather than a keystroke.
     pub fn set_value(&mut self, value: impl Into<String>, cx: &mut Context<Self>) {
         let new: SharedString = value.into().into();
@@ -290,7 +290,7 @@ impl TextField {
 
     /// Called before a mutation. Pushes a snapshot of the *pre-edit*
     /// state onto the undo stack, unless the previous edit matches the
-    /// same grouping kind — in which case consecutive typing or deletion
+    /// same grouping kind - in which case consecutive typing or deletion
     /// collapses into a single undo step.
     fn push_undo(&mut self, kind: EditKind) {
         let groupable = matches!(
@@ -391,7 +391,7 @@ impl TextField {
 
     /// Byte ranges of each logical line (i.e. the span between consecutive
     /// '\n' characters), always at least one entry. The range covers the
-    /// line text only — the terminating '\n' is not included.
+    /// line text only - the terminating '\n' is not included.
     fn line_ranges(&self) -> Vec<Range<usize>> {
         let content = &self.content;
         let mut ranges = Vec::new();
@@ -462,7 +462,7 @@ impl TextField {
         cx.notify();
     }
 
-    // ---------- UTF-16 ↔ UTF-8 conversion (for IME) ----------
+    // ---------- UTF-16 <-> UTF-8 conversion (for IME) ----------
 
     fn offset_from_utf16(&self, offset: usize) -> usize {
         let mut utf8 = 0;
@@ -808,7 +808,7 @@ impl TextField {
 
     /// Core mutation: replace `range` with `new_text`, collapse selection
     /// to the end of the inserted text, notify listeners. Does not push
-    /// undo — callers are responsible for calling [`push_undo`] first.
+    /// undo - callers are responsible for calling [`push_undo`] first.
     fn perform_edit(
         &mut self,
         range: Range<usize>,
@@ -857,7 +857,7 @@ impl Focusable for TextField {
 }
 
 // -----------------------------------------------------------------------
-// EntityInputHandler — platform-facing IME + edit interface
+// EntityInputHandler - platform-facing IME + edit interface
 // -----------------------------------------------------------------------
 
 impl EntityInputHandler for TextField {
@@ -1004,7 +1004,7 @@ impl EntityInputHandler for TextField {
 }
 
 // -----------------------------------------------------------------------
-// TextElement — the custom Element that shapes & paints the line
+// TextElement - the custom Element that shapes & paints the line
 // -----------------------------------------------------------------------
 
 struct TextElement {

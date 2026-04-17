@@ -1,4 +1,4 @@
-//! Checkbox — tri-state (unchecked / checked / indeterminate) interactive box
+//! Checkbox - tri-state (unchecked / checked / indeterminate) interactive box
 //! with optional inline label.
 
 use std::rc::Rc;

@@ -9,7 +9,7 @@ use gpui::{App, SharedString, Subscription, Window, WindowAppearance};
 
 use crate::registry::{ThemeRegistry, activate_theme};
 
-/// Configuration for [`sync_with_system_appearance`] — which registered
+/// Configuration for [`sync_with_system_appearance`] - which registered
 /// theme name to use for each OS appearance bucket.
 #[derive(Debug, Clone)]
 pub struct SystemAppearanceConfig {
@@ -39,7 +39,7 @@ impl SystemAppearanceConfig {
 /// theme. Immediately applies the current appearance, then installs an
 /// observer that re-applies it on every change.
 ///
-/// Returns a [`Subscription`] — keep it alive for as long as you want the
+/// Returns a [`Subscription`] - keep it alive for as long as you want the
 /// sync to run (dropping it unsubscribes).
 ///
 /// If either the `dark_theme` or `light_theme` name is missing from the
@@ -63,7 +63,7 @@ fn apply_appearance(config: &SystemAppearanceConfig, appearance: WindowAppearanc
     let target = config.theme_for(appearance).clone();
     if ThemeRegistry::global(cx).get(&target).is_some() {
         // Any error here means the registry dropped the theme between the
-        // check and the call — shouldn't happen, but there's no useful
+        // check and the call - shouldn't happen, but there's no useful
         // recovery, so swallow it.
         let _ = activate_theme(&target, cx);
     }

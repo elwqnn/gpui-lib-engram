@@ -1,4 +1,4 @@
-//! Banner / Notification — surface alerts inline (`Banner`) or as a
+//! Banner / Notification - surface alerts inline (`Banner`) or as a
 //! short-lived toast card (`Notification`).
 //!
 //! Both components are stateless `RenderOnce` views: the parent decides

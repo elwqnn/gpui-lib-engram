@@ -1,7 +1,7 @@
 //! Button family: text [`Button`], icon-only [`IconButton`], and the shared
 //! [`ButtonLike`] chrome they both compose.
 //!
-//! See `button/button_like.rs` for the architectural notes — this file is
+//! See `button/button_like.rs` for the architectural notes - this file is
 //! just the module wiring.
 
 #[allow(clippy::module_inception)]

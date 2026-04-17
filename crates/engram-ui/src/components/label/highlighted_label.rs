@@ -1,4 +1,4 @@
-//! [`HighlightedLabel`] — a label with specific characters highlighted,
+//! [`HighlightedLabel`] - a label with specific characters highlighted,
 //! typically used to show search match positions.
 
 use std::ops::Range;

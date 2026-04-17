@@ -1,8 +1,8 @@
-//! Breadcrumb — a navigation path showing the user's location in a hierarchy.
+//! Breadcrumb - a navigation path showing the user's location in a hierarchy.
 //!
 //! A [`Breadcrumb`] is a horizontal strip of [`BreadcrumbItem`]s separated
 //! by chevrons. Each item can be clickable (an ancestor you can navigate
-//! back to) or plain (the current location). The component is stateless —
+//! back to) or plain (the current location). The component is stateless -
 //! the parent decides which item is "current" and wires click handlers.
 
 use std::rc::Rc;

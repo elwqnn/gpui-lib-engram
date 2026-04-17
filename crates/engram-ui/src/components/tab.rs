@@ -1,4 +1,4 @@
-//! TabBar / Tab — horizontal strip of selectable tabs.
+//! TabBar / Tab - horizontal strip of selectable tabs.
 //!
 //! Engram's tab bar is a much-trimmed take on Zed's `TabBar` + `Tab` pair.
 //! Zed's version supports drag-reorder, overflow scrolling, sticky tabs,
@@ -67,7 +67,7 @@ impl Tab {
         self
     }
 
-    /// Show a small ✕ next to the label and route its click to `handler`.
+    /// Show a small x next to the label and route its click to `handler`.
     pub fn on_close(
         mut self,
         handler: impl Fn(&ClickEvent, &mut Window, &mut App) + 'static,

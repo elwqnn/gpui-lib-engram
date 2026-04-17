@@ -25,7 +25,7 @@ use crate::registry::{ThemeRegistry, activate_theme};
 use crate::{ActiveTheme, Theme};
 
 /// Handle returned by [`watch_themes_dir`]. Keep it alive for as long as
-/// hot reload should run — dropping it tears down the watcher and the
+/// hot reload should run - dropping it tears down the watcher and the
 /// polling task.
 pub struct ThemeWatcher {
     _watcher: RecommendedWatcher,
@@ -47,7 +47,7 @@ pub fn watch_themes_dir(dir: impl AsRef<Path>, cx: &mut App) -> Result<ThemeWatc
     // contents of the directory even before the first filesystem event.
     load_all_themes(&dir, cx);
 
-    // notify fires events from a background thread — forward them onto an
+    // notify fires events from a background thread - forward them onto an
     // mpsc channel that the foreground poll task drains.
     let (tx, rx) = channel::<notify::Result<Event>>();
     let mut watcher = notify::recommended_watcher(move |res| {

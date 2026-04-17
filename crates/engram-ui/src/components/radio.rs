@@ -1,4 +1,4 @@
-//! Radio — a two-state circle toggle for mutually exclusive choices.
+//! Radio - a two-state circle toggle for mutually exclusive choices.
 //!
 //! Follows the same idiom as [`Checkbox`](super::checkbox) and
 //! [`Switch`](super::switch): stateless `RenderOnce`, parent owns the
@@ -42,7 +42,7 @@ impl Radio {
     }
 
     /// Register a click handler. The handler receives the new [`ToggleState`]
-    /// — always [`ToggleState::Selected`], since a radio can only be turned
+    /// - always [`ToggleState::Selected`], since a radio can only be turned
     /// *on* by clicking; the parent is responsible for deselecting siblings.
     pub fn on_click(
         mut self,

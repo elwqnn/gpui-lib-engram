@@ -3,7 +3,7 @@
 //! These tests are intentionally dumb: they open a test window with a root
 //! view that builds the component under test, and verify the draw pass
 //! doesn't panic. They don't assert on pixel output or on specific element
-//! trees — GPUI's layout engine is the unit under inspection, not ours.
+//! trees - GPUI's layout engine is the unit under inspection, not ours.
 //!
 //! Why bother? Two reasons:
 //!
@@ -11,13 +11,13 @@
 //!    `.child()` for an `AnyElement` can silently break `ParentElement` /
 //!    `RenderOnce` wiring. A draw is the cheapest way to catch that at CI.
 //! 2. **Exercising the handler-consolidation refactor.** Many components
-//!    store `Rc<dyn Fn(...)>` handlers — a botched type alias would fail
+//!    store `Rc<dyn Fn(...)>` handlers - a botched type alias would fail
 //!    to compile, but a botched *variance* or a missing trait bound can
 //!    still slip past the compiler and blow up only at draw time.
 //!
 //! ## Why a `TestRoot` view?
 //!
-//! `TestAppContext::draw()` draws *bare* elements — but interactive GPUI
+//! `TestAppContext::draw()` draws *bare* elements - but interactive GPUI
 //! elements (Button, List, Tab, anything with `.id(...)`) call
 //! `window.current_view()` during paint to key their hitboxes to a view id.
 //! That panics when there is no view on the stack. So each test is rendered
@@ -144,7 +144,7 @@ fn icon_renders_every_size(cx: &mut TestAppContext) {
 fn icon_source_variants_render(cx: &mut TestAppContext) {
     // Exercises the three `IconSource` branches so any future wiring
     // regression in the render match arms blows up at draw time. The
-    // external paths are mock strings — gpui's AssetSource resolution just
+    // external paths are mock strings - gpui's AssetSource resolution just
     // no-ops on lookup failure, which is fine for a draw smoke test.
     smoke(cx, |_, _| {
         h_flex()
@@ -295,7 +295,7 @@ fn list_item_phase8_fields_render(cx: &mut TestAppContext) {
     // Phase 8 acceptance: a single ListItem must accept indent_level=2,
     // dense spacing, and inset=true at once. Also exercises outlined,
     // hover-only end slot, and the new on_hover / on_secondary_mouse_down
-    // handlers — all of which are wired through the trait/handler aliases,
+    // handlers - all of which are wired through the trait/handler aliases,
     // so a botched type alias would only blow up at draw time.
     smoke(cx, |_, _| {
         v_flex()
@@ -364,7 +364,7 @@ fn avatar_and_facepile_render(cx: &mut TestAppContext) {
 
 #[gpui::test]
 fn image_renders(cx: &mut TestAppContext) {
-    // Image paints its container even if the source can't be resolved —
+    // Image paints its container even if the source can't be resolved -
     // all we're proving here is that the builder and the child wiring
     // don't panic.
     smoke(cx, |_, _| {
@@ -467,7 +467,7 @@ fn anchored_popover_renders_with_focus_handle(cx: &mut TestAppContext) {
 #[gpui::test]
 fn menu_renders_all_item_kinds(cx: &mut TestAppContext) {
     // Menu is a stateful entity (Phase 9), so it must be constructed inside
-    // `cx.new` — matching the TextField / Tooltip pattern.
+    // `cx.new` - matching the TextField / Tooltip pattern.
     smoke(cx, |_, cx| {
         let menu = cx.new(|cx| {
             Menu::new(cx)
@@ -569,7 +569,7 @@ fn modal_overlay_renders(cx: &mut TestAppContext) {
 fn text_field_renders(cx: &mut TestAppContext) {
     smoke(cx, |_, cx| {
         // TextField is stateful, so it has to be constructed inside `cx.new`.
-        let field = cx.new(|cx| TextField::with_value(cx, "initial").placeholder("type…"));
+        let field = cx.new(|cx| TextField::with_value(cx, "initial").placeholder("type..."));
         field.into_any_element()
     });
 }
@@ -644,7 +644,7 @@ fn headline_renders_every_size(cx: &mut TestAppContext) {
 #[gpui::test]
 fn scrollbar_renders_both_axes(cx: &mut TestAppContext) {
     // The scrollbar reads geometry from a ScrollHandle, which is empty on
-    // the first frame — so the thumb renders at zero size, but nothing
+    // the first frame - so the thumb renders at zero size, but nothing
     // should panic.
     smoke(cx, |_, _| {
         let handle = ScrollHandle::new();
@@ -671,7 +671,7 @@ fn scrollbar_renders_both_axes(cx: &mut TestAppContext) {
 
 #[gpui::test]
 fn radius_tokens_apply(cx: &mut TestAppContext) {
-    // Exercise the Radius token path via a styled container — this catches
+    // Exercise the Radius token path via a styled container - this catches
     // any Radius variant that was added but not wired through Pixels().
     smoke(cx, |_, _| {
         h_flex()
@@ -730,13 +730,13 @@ fn styled_ext_elevation_renders(cx: &mut TestAppContext) {
 
 #[gpui::test]
 fn json_theme_registry_pipeline_renders(cx: &mut TestAppContext) {
-    // Proves the JSON → ThemeRegistry → activate_theme → component-render
+    // Proves the JSON -> ThemeRegistry -> activate_theme -> component-render
     // pipeline end-to-end. Loads gruvbox_dark.json from the embedded asset
     // bundle, parses it via `Theme::from_json_bytes`, inserts it into the
     // global registry, switches the active theme to it, and then draws a
     // Banner per status hue plus an accent Indicator. Catches drift between
     // `default_dark`'s schema and the canonical JSON shape (status keys
-    // missing, refinement layer broken, etc.) — anything in that chain
+    // missing, refinement layer broken, etc.) - anything in that chain
     // would either fail to parse or panic during the draw.
     use gpui::AssetSource;
     smoke(cx, |_, cx| {
@@ -760,7 +760,7 @@ fn json_theme_registry_pipeline_renders(cx: &mut TestAppContext) {
     });
 }
 
-// ── New component smoke tests ──────────────────────────────────────────
+// -- New component smoke tests ------------------------------------------
 
 #[gpui::test]
 fn callout_renders_every_severity(cx: &mut TestAppContext) {

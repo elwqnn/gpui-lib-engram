@@ -1,4 +1,4 @@
-//! GradientFade — an absolute-positioned overlay that fades from a solid
+//! GradientFade - an absolute-positioned overlay that fades from a solid
 //! color to transparent, used at the edges of scrollable areas to hint that
 //! content continues beyond the visible region.
 

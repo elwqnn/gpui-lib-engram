@@ -22,7 +22,7 @@ impl MenuStory {
                 .keybinding_entry("menu-save", "Save", ["Ctrl", "S"], |_, _, _| {})
                 .keybinding_entry(
                     "menu-saveas",
-                    "Save As…",
+                    "Save As...",
                     ["Ctrl", "Shift", "S"],
                     |_, _, _| {},
                 )
@@ -91,7 +91,7 @@ impl Render for MenuStory {
         let weak_for_dismiss = weak.clone();
 
         v_flex().gap(Spacing::Large.pixels()).child(example_group(
-            "Menu (click to open — keyboard-navigable)",
+            "Menu (click to open - keyboard-navigable)",
             vec![example(
                 "Anchored popover menu",
                 v_flex()

@@ -1,11 +1,11 @@
-//! Scrollbar thumb geometry — shared by the list-like components that
+//! Scrollbar thumb geometry - shared by the list-like components that
 //! overlay an engram-styled scrollbar ([`VirtualList`], [`VariableList`]).
 //!
 //! The generic `Scrollbar` component handles the axis-aware overflow case;
 //! the list components need the same thumb math for a custom overlay that
 //! sits alongside the list primitive (`gpui::uniform_list` or `gpui::list`).
 //! Extracting [`ThumbMetrics`] here keeps both components' decoration path
-//! and drag-handler path driving from a single source of truth — drift
+//! and drag-handler path driving from a single source of truth - drift
 //! between the two would mean a dragged thumb that doesn't track the
 //! cursor.
 
@@ -67,14 +67,14 @@ mod tests {
 
     #[test]
     fn compute_returns_none_when_content_fits_viewport() {
-        // No overflow → no scrollbar needed.
+        // No overflow -> no scrollbar needed.
         assert!(ThumbMetrics::compute(px(500.0), px(500.0)).is_none());
         assert!(ThumbMetrics::compute(px(500.0), px(400.0)).is_none());
     }
 
     #[test]
     fn compute_sizes_thumb_proportionally_for_long_content() {
-        // viewport = 200, content = 1000 → ratio 0.2, thumb_h = 40.
+        // viewport = 200, content = 1000 -> ratio 0.2, thumb_h = 40.
         let m = ThumbMetrics::compute(px(200.0), px(1000.0)).unwrap();
         assert_eq!(m.thumb_h, 40.0);
         assert_eq!(m.travel, 160.0);
@@ -83,7 +83,7 @@ mod tests {
 
     #[test]
     fn compute_enforces_minimum_thumb_ratio_for_very_long_content() {
-        // viewport = 100, content = 100_000 → natural ratio 0.001, floored to
+        // viewport = 100, content = 100_000 -> natural ratio 0.001, floored to
         // SCROLLBAR_MIN_THUMB_RATIO (0.08) so the thumb stays grabbable.
         let m = ThumbMetrics::compute(px(100.0), px(100_000.0)).unwrap();
         assert_eq!(m.thumb_h, 100.0 * SCROLLBAR_MIN_THUMB_RATIO);

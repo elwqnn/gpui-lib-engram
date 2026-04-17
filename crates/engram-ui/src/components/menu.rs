@@ -1,10 +1,10 @@
-//! Menu — vertical list of clickable items, separators, and headers,
+//! Menu - vertical list of clickable items, separators, and headers,
 //! packaged as the content of a [`Popover`](super::popover::Popover) and
 //! navigable from the keyboard.
 //!
 //! ## Why this is a stateful entity
 //!
-//! Menus need persistent state — `selected_index` for the keyboard cursor,
+//! Menus need persistent state - `selected_index` for the keyboard cursor,
 //! a focus handle so the dispatch tree routes Down / Up / Enter / Esc to
 //! the right element, and dismissal via [`gpui::DismissEvent`] so callers
 //! can subscribe instead of threading close-callbacks through every entry.
@@ -15,7 +15,7 @@
 //!
 //! Build the menu inside `cx.new` (so it can grab a focus handle from the
 //! current `Context`) and chain entries onto it. Then render the entity
-//! directly — `Entity<Menu>` is `IntoElement` because [`Menu`] implements
+//! directly - `Entity<Menu>` is `IntoElement` because [`Menu`] implements
 //! [`Render`].
 //!
 //! ```ignore
@@ -54,7 +54,7 @@
 //!
 //! Submenus, search/filter, and the `SelectChild` / `SelectParent`
 //! navigation actions from zed's `ContextMenu` are intentionally out of
-//! scope — when a real consumer needs them, port them in.
+//! scope - when a real consumer needs them, port them in.
 
 use std::rc::Rc;
 

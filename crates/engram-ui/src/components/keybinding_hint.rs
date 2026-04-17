@@ -1,10 +1,10 @@
-//! [`KeybindingHint`] — inline keyboard-shortcut glyph for hover cards and
+//! [`KeybindingHint`] - inline keyboard-shortcut glyph for hover cards and
 //! descriptions.
 //!
 //! A compact, italic rendering of a [`KeyBinding`] with optional prefix and
 //! suffix text. Where [`KeyBinding`] is a standalone chip strip (toolbar or
 //! menu end-slot), `KeybindingHint` is designed to sit *inside* running text
-//! — think "Press **Enter** to confirm" in a tooltip or hover card.
+//! - think "Press **Enter** to confirm" in a tooltip or hover card.
 //!
 //! Adapted from zed's `ui::KeybindingHint`, simplified to match engram's
 //! visual-only [`KeyBinding`] (no action / keymap lookup).

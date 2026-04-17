@@ -1,11 +1,11 @@
-//! VariableList — lazy-rendered scrollable list of *variable*-height rows.
+//! VariableList - lazy-rendered scrollable list of *variable*-height rows.
 //!
 //! Thin wrapper around [`gpui::list`]. Companion to [`VirtualList`]:
 //!
-//! - [`VirtualList`] wraps [`gpui::uniform_list`] — every row is the same
+//! - [`VirtualList`] wraps [`gpui::uniform_list`] - every row is the same
 //!   height, so gpui knows total content size as `count * row_height`
 //!   without laying anything out off-screen. Fast, strict.
-//! - [`VariableList`] wraps [`gpui::list`] — rows can be any height, so
+//! - [`VariableList`] wraps [`gpui::list`] - rows can be any height, so
 //!   gpui has to actually lay each row out (at least inside an overdraw
 //!   band) to learn its size. Slower, more flexible.
 //!
@@ -16,11 +16,11 @@
 //! call site; two siblings keep the choice explicit.
 //!
 //! The scrollbar overlay reuses [`ThumbMetrics`] from
-//! [`super::scroll_metrics`] — identical thumb geometry across both
+//! [`super::scroll_metrics`] - identical thumb geometry across both
 //! components. On the drive side, [`ListState`] already exposes the exact
 //! hooks needed (`viewport_bounds`, `max_offset_for_scrollbar`,
 //! `scroll_px_offset_for_scrollbar`, `set_offset_from_scrollbar`,
-//! `scrollbar_drag_started` / `scrollbar_drag_ended`) — the same surface
+//! `scrollbar_drag_started` / `scrollbar_drag_ended`) - the same surface
 //! Zed's own `Scrollbar` element binds against.
 //!
 //! ## Usage
@@ -51,7 +51,7 @@ pub use gpui::ListAlignment as VariableListAlignment;
 
 type RenderItemFn = dyn FnMut(usize, &mut Window, &mut App) -> AnyElement + 'static;
 
-/// Scroll handle for a [`VariableList`]. Wraps a [`ListState`] — clones
+/// Scroll handle for a [`VariableList`]. Wraps a [`ListState`] - clones
 /// share the underlying item-measurement cache, so row heights and
 /// scroll position persist across frames and across handle clones.
 #[derive(Clone)]

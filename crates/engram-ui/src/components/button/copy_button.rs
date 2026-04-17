@@ -1,4 +1,4 @@
-//! [`CopyButton`] — an icon button that copies a string to the clipboard.
+//! [`CopyButton`] - an icon button that copies a string to the clipboard.
 //!
 //! Shows a copy icon that transitions to a check icon for 2 seconds after
 //! the user clicks it. Uses `window.use_keyed_state` to persist the

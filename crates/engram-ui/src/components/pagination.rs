@@ -1,8 +1,8 @@
-//! Pagination — page navigation with truncation and boundary controls.
+//! Pagination - page navigation with truncation and boundary controls.
 //!
 //! Renders previous / next buttons and a row of page numbers with
 //! ellipsis placeholders when the total page count exceeds the visible
-//! window. The component is stateless — the parent owns the current page
+//! window. The component is stateless - the parent owns the current page
 //! and receives clicks via a handler.
 
 use std::rc::Rc;
@@ -244,7 +244,7 @@ impl RenderOnce for Pagination {
                         .flex()
                         .items_center()
                         .justify_center()
-                        .child(Label::new("…").size(LabelSize::Small).color(Color::Muted))
+                        .child(Label::new("...").size(LabelSize::Small).color(Color::Muted))
                         .into_any_element(),
                 }
             }))

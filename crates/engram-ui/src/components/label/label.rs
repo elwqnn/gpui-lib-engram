@@ -1,4 +1,4 @@
-//! [`Label`] — single-string text label built on [`LabelLike`].
+//! [`Label`] - single-string text label built on [`LabelLike`].
 //!
 //! `Label` is the workhorse engram callers reach for whenever they need
 //! "a piece of text styled by the active theme". It's a thin wrapper that

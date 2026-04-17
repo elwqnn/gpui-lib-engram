@@ -1,8 +1,8 @@
-//! HoverCard — a richer tooltip-like surface for preview content.
+//! HoverCard - a richer tooltip-like surface for preview content.
 //!
 //! Where [`Tooltip`](super::tooltip) shows a title and optional metadata
 //! line, `HoverCard` is a full [`Popover`]-backed card that accepts
-//! arbitrary children — user profiles, link previews, definition
+//! arbitrary children - user profiles, link previews, definition
 //! summaries, etc.
 //!
 //! Like `Tooltip`, `HoverCard` is a view (`impl Render`) so it can be

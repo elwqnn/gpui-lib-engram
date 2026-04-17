@@ -18,7 +18,7 @@ pub enum Color {
     Disabled,
     /// Accent foreground (links, emphasis).
     Accent,
-    /// Selected foreground — used for items in the selected/active state.
+    /// Selected foreground - used for items in the selected/active state.
     Selected,
     /// Hint or suggestion text. Typically a soft blue.
     Hint,
@@ -90,7 +90,7 @@ pub struct StatusColors {
     pub hint_background: Hsla,
     pub hint_border: Hsla,
 
-    /// Strongly de-emphasized — items that are present but should not draw
+    /// Strongly de-emphasized - items that are present but should not draw
     /// the eye (e.g. a hidden file in a tree).
     pub hidden: Hsla,
     pub hidden_background: Hsla,
@@ -153,7 +153,7 @@ pub struct ThemeColors {
 
     // Ghost (transparent) interactive element backgrounds --------------------
     /// Resting background for a ghost element. Almost always fully
-    /// transparent — kept as a token so the layering reads consistently with
+    /// transparent - kept as a token so the layering reads consistently with
     /// `element_background`.
     pub ghost_element_background: Hsla,
     pub ghost_element_hover: Hsla,
