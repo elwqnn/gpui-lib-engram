@@ -36,6 +36,7 @@ pub mod skeleton;
 pub mod slider;
 pub mod spinner;
 pub mod split_button;
+pub mod squircle;
 pub mod stepper;
 pub mod switch;
 pub mod tab;

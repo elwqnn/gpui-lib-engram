@@ -736,6 +736,44 @@ impl Render for Showcase {
                 colors,
             )
             .into_any_element(),
+            // -------- Squircle --------
+            card(
+                "Squircle",
+                h_flex()
+                    .gap(Spacing::Small.pixels())
+                    .items_center()
+                    .flex_wrap()
+                    .child(Squircle::new().size(px(48.0)).bordered(true))
+                    .child(
+                        Squircle::new()
+                            .size(px(48.0))
+                            .fill(SquircleFill::Surface)
+                            .bordered(true),
+                    )
+                    .child(Squircle::new().size(px(48.0)).fill(SquircleFill::Muted))
+                    .child(Squircle::new().size(px(48.0)).fill(SquircleFill::Accent))
+                    .child(
+                        Squircle::new()
+                            .size(px(56.0))
+                            .fill(SquircleFill::Muted)
+                            .child(Icon::new(IconName::Check).color(Color::Success)),
+                    )
+                    .child(
+                        Squircle::new()
+                            .size(px(56.0))
+                            .fill(SquircleFill::Muted)
+                            .child(Label::new("Aa")),
+                    )
+                    .child(
+                        Squircle::new()
+                            .fill(SquircleFill::Transparent)
+                            .bordered(true)
+                            .width(px(72.0))
+                            .height(px(48.0)),
+                    ),
+                colors,
+            )
+            .into_any_element(),
             // -------- Disclosure --------
             card(
                 "Disclosure",

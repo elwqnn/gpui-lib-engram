@@ -293,6 +293,11 @@ pub static STORIES: &[StoryEntry] = &[
         category: StoryCategory::Layout,
         build: stories::sheet::build,
     },
+    StoryEntry {
+        name: "Squircle",
+        category: StoryCategory::Layout,
+        build: stories::squircle::build,
+    },
 ];
 
 // ---------------------------------------------------------------------------

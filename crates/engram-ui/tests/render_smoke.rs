@@ -40,7 +40,8 @@ use gpui_engram_ui::components::{
     IconSize, IconSource, Image, Indicator, KeyBinding, KeybindingHint, Label, LabelCommon,
     LabelSize, List, ListItem, ListItemSpacing, Menu, Modal, Navigable, Notification, Pagination,
     Popover, ProgressBar, Radio, Scrollbar, Severity, Sheet, SheetSide, Skeleton, Slider, Spinner,
-    SplitButton, SplitButtonStyle, Stepper, Switch, Tab, TabBar, TextField, TintColor,
+    SplitButton, SplitButtonStyle, Squircle, SquircleFill, Stepper, Switch, Tab, TabBar, TextField,
+    TintColor,
     ToggleButtonGroup, ToggleButtonGroupStyle, ToggleButtonSimple, ToggleButtonWithIcon, Tooltip,
     TreeViewItem, VariableList, VariableListScrollHandle, VirtualList, VirtualListScrollHandle,
     anchored_popover, h_flex, h_group, menu, modal_overlay, v_flex, v_group,
@@ -1172,6 +1173,35 @@ fn description_list_renders(cx: &mut TestAppContext) {
             .entry("Name", Label::new("Alice"))
             .entry("Role", Label::new("Engineer"))
             .entry("Status", Label::new("Active"))
+            .into_any_element()
+    });
+}
+
+#[gpui::test]
+fn squircle_renders(cx: &mut TestAppContext) {
+    smoke(cx, |_, _| {
+        h_flex()
+            .gap(Spacing::Small.pixels())
+            .child(Squircle::new().size(px(48.0)))
+            .child(
+                Squircle::new()
+                    .size(px(48.0))
+                    .fill(SquircleFill::Surface)
+                    .bordered(true),
+            )
+            .child(
+                Squircle::new()
+                    .size(px(64.0))
+                    .fill(SquircleFill::Accent)
+                    .child(Icon::new(IconName::Check)),
+            )
+            .child(
+                Squircle::new()
+                    .width(px(96.0))
+                    .height(px(64.0))
+                    .fill(SquircleFill::Muted),
+            )
+            .child(Squircle::new().fill(SquircleFill::Transparent).bordered(true))
             .into_any_element()
     });
 }
