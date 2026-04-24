@@ -31,19 +31,19 @@
 //! })
 //! ```
 
-use std::rc::Rc;
-
 use gpui::{
-    AnyElement, App, FocusHandle, Hsla, IntoElement, MouseButton, ParentElement, Pixels,
-    RenderOnce, SharedString, Window, deferred, div, hsla, prelude::*, px,
+    AnyElement, App, FocusHandle, Hsla, IntoElement, ParentElement, Pixels, RenderOnce,
+    SharedString, Window, hsla, prelude::*, px,
 };
 use gpui_engram_theme::{ActiveTheme, Radius, Spacing};
 use smallvec::SmallVec;
 
 use crate::components::label::{Label, LabelCommon, LabelSize};
+use crate::components::overlay::{
+    OVERLAY_PRIORITY_MODAL, OverlayConfig, OverlayPlacement, overlay_shell,
+};
 use crate::components::stack::v_flex;
 use crate::styles::ElevationIndex;
-use crate::traits::DismissHandler;
 
 fn backdrop() -> Hsla {
     hsla(0.0, 0.0, 0.0, 0.45)
@@ -139,40 +139,15 @@ pub fn modal_overlay(
     content: impl IntoElement,
     on_dismiss: impl Fn(&mut Window, &mut App) + 'static,
 ) -> impl IntoElement {
-    let on_dismiss: DismissHandler = Rc::new(on_dismiss);
-    let click_dismiss = on_dismiss.clone();
-    let key_dismiss = on_dismiss;
-    deferred(
-        div()
-            .id("engram-modal-backdrop")
-            .track_focus(&focus_handle)
-            .absolute()
-            .inset_0()
-            .size_full()
-            .flex()
-            .items_center()
-            .justify_center()
-            .bg(backdrop())
-            // Mouse-down on the backdrop dismisses. We use mouse_down rather
-            // than click so the dismiss fires even if the press and release
-            // land on different spots of the backdrop.
-            .on_mouse_down(MouseButton::Left, move |_event, window, cx| {
-                click_dismiss(window, cx);
-            })
-            .on_key_down(move |event, window, cx| {
-                if event.keystroke.key == "escape" {
-                    key_dismiss(window, cx);
-                    cx.stop_propagation();
-                }
-            })
-            .child(
-                // Any mouse_down inside the card is swallowed so the
-                // backdrop's dismiss handler never sees it.
-                div()
-                    .occlude()
-                    .on_mouse_down(MouseButton::Left, |_, _, cx| cx.stop_propagation())
-                    .child(content),
-            ),
+    overlay_shell(
+        OverlayConfig {
+            id: "engram-modal-backdrop",
+            focus_handle,
+            priority: OVERLAY_PRIORITY_MODAL,
+            backdrop: Some(backdrop()),
+            placement: OverlayPlacement::Centered,
+        },
+        on_dismiss,
+        content,
     )
-    .with_priority(2)
 }

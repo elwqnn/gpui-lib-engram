@@ -34,18 +34,18 @@
 //! For real menus (`ContextMenu` / `DropdownMenu`), use the wrappers in
 //! [`super::menu`] which package this pattern.
 
-use std::rc::Rc;
-
 use gpui::{
-    AnyElement, App, Bounds, Corner, FocusHandle, IntoElement, MouseButton, ParentElement, Pixels,
-    Point, RenderOnce, Window, anchored, deferred, div, point, prelude::*, px,
+    AnyElement, App, Bounds, Corner, FocusHandle, IntoElement, ParentElement, Pixels, Point,
+    RenderOnce, Window, point, prelude::*, px,
 };
 use gpui_engram_theme::{ActiveTheme, Radius, Spacing};
 use smallvec::SmallVec;
 
+use crate::components::overlay::{
+    OVERLAY_PRIORITY_POPOVER, OverlayConfig, OverlayPlacement, overlay_shell,
+};
 use crate::components::stack::v_flex;
 use crate::styles::ElevationIndex;
-use crate::traits::DismissHandler;
 
 /// Default vertical padding inside a popover container.
 pub const POPOVER_PADDING: Pixels = px(4.0);
@@ -149,41 +149,20 @@ pub fn anchored_popover(
         Corner::BottomLeft | Corner::BottomRight => point(px(0.0), -POPOVER_OFFSET),
     };
 
-    let on_dismiss: DismissHandler = Rc::new(on_dismiss);
-    let click_dismiss = on_dismiss.clone();
-    let key_dismiss = on_dismiss;
-
-    // Full-window backdrop: invisible but catches clicks outside the popover.
-    // We attach the focus handle and key listener here because this div
-    // wraps the entire overlay subtree.
-    deferred(
-        div()
-            .id("engram-popover-backdrop")
-            .track_focus(&focus_handle)
-            .absolute()
-            .inset_0()
-            .size_full()
-            .on_mouse_down(MouseButton::Left, move |_event, window, cx| {
-                click_dismiss(window, cx);
-            })
-            .on_key_down(move |event, window, cx| {
-                if event.keystroke.key == "escape" {
-                    key_dismiss(window, cx);
-                    cx.stop_propagation();
-                }
-            })
-            .child(
-                anchored()
-                    .anchor(corner)
-                    .position(anchor_point + offset)
-                    .snap_to_window_with_margin(px(8.0))
-                    .child(
-                        div()
-                            .occlude()
-                            .on_mouse_down(MouseButton::Left, |_, _, cx| cx.stop_propagation())
-                            .child(content),
-                    ),
-            ),
+    overlay_shell(
+        OverlayConfig {
+            id: "engram-popover-backdrop",
+            focus_handle,
+            priority: OVERLAY_PRIORITY_POPOVER,
+            backdrop: None,
+            placement: OverlayPlacement::Anchored {
+                corner,
+                origin: anchor_point,
+                offset,
+                snap_margin: px(8.0),
+            },
+        },
+        on_dismiss,
+        content,
     )
-    .with_priority(1)
 }

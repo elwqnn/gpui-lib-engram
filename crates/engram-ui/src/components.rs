@@ -25,6 +25,7 @@ pub mod list;
 pub mod menu;
 pub mod modal;
 pub mod navigable;
+pub(crate) mod overlay;
 pub mod pagination;
 pub mod popover;
 pub mod progress;

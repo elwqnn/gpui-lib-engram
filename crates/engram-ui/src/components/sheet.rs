@@ -16,19 +16,19 @@
 //! })
 //! ```
 
-use std::rc::Rc;
-
 use gpui::{
-    AnyElement, App, FocusHandle, IntoElement, MouseButton, ParentElement, Pixels, RenderOnce,
-    SharedString, Window, deferred, div, hsla, prelude::*, px,
+    AnyElement, App, FocusHandle, IntoElement, ParentElement, Pixels, RenderOnce, SharedString,
+    Window, hsla, prelude::*, px,
 };
 use gpui_engram_theme::{ActiveTheme, Spacing};
 use smallvec::SmallVec;
 
 use crate::components::label::{Label, LabelCommon, LabelSize};
+use crate::components::overlay::{
+    OVERLAY_PRIORITY_MODAL, OverlayConfig, OverlayPlacement, overlay_shell,
+};
 use crate::components::stack::v_flex;
 use crate::styles::ElevationIndex;
-use crate::traits::DismissHandler;
 
 /// Which window edge the sheet attaches to.
 #[derive(Debug, Default, Clone, Copy, PartialEq, Eq)]
@@ -132,45 +132,16 @@ pub fn sheet_overlay(
     sheet: Sheet,
     on_dismiss: impl Fn(&mut Window, &mut App) + 'static,
 ) -> impl IntoElement {
-    let on_dismiss: DismissHandler = Rc::new(on_dismiss);
-    let click_dismiss = on_dismiss.clone();
-    let key_dismiss = on_dismiss;
     let side = sheet.side;
-
-    deferred(
-        div()
-            .id("engram-sheet-backdrop")
-            .track_focus(&focus_handle)
-            .absolute()
-            .inset_0()
-            .size_full()
-            .flex()
-            // Position the panel based on the side.
-            .when(side == SheetSide::Right, |this| {
-                this.flex_row().justify_end().items_stretch()
-            })
-            .when(side == SheetSide::Left, |this| {
-                this.flex_row().justify_start().items_stretch()
-            })
-            .when(side == SheetSide::Bottom, |this| {
-                this.flex_col().justify_end().items_stretch()
-            })
-            .bg(hsla(0.0, 0.0, 0.0, 0.35))
-            .on_mouse_down(MouseButton::Left, move |_event, window, cx| {
-                click_dismiss(window, cx);
-            })
-            .on_key_down(move |event, window, cx| {
-                if event.keystroke.key == "escape" {
-                    key_dismiss(window, cx);
-                    cx.stop_propagation();
-                }
-            })
-            .child(
-                div()
-                    .occlude()
-                    .on_mouse_down(MouseButton::Left, |_, _, cx| cx.stop_propagation())
-                    .child(sheet),
-            ),
+    overlay_shell(
+        OverlayConfig {
+            id: "engram-sheet-backdrop",
+            focus_handle,
+            priority: OVERLAY_PRIORITY_MODAL,
+            backdrop: Some(hsla(0.0, 0.0, 0.0, 0.35)),
+            placement: OverlayPlacement::Edge(side),
+        },
+        on_dismiss,
+        sheet,
     )
-    .with_priority(2)
 }
