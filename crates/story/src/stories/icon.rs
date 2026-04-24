@@ -66,6 +66,20 @@ impl Render for IconStory {
                         .into_any_element(),
                 )],
             ))
+            .child(example_group(
+                "External SVGs",
+                vec![example(
+                    "Icon::from_path (story AssetSource + engram fallback)",
+                    h_flex()
+                        .gap(Spacing::Large.pixels())
+                        .child(
+                            Icon::from_path("demo/story_mark.svg").color(Color::Accent),
+                        )
+                        .child(Icon::from_path("icons/star.svg").color(Color::Warning))
+                        .child(Icon::from_path("icons/heart.svg").color(Color::Error))
+                        .into_any_element(),
+                )],
+            ))
     }
 }
 

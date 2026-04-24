@@ -3,8 +3,11 @@
 //!
 //! Run with: `cargo run -p story`
 
+mod assets;
 mod layout;
 mod stories;
+
+use assets::ComposedAssets;
 
 /// Re-exports for story files - each story just writes `use crate::prelude::*`.
 pub mod prelude {
@@ -511,7 +514,7 @@ fn register_embedded_themes(cx: &mut App) {
 // ---------------------------------------------------------------------------
 
 fn main() {
-    application().with_assets(Assets).run(|cx: &mut App| {
+    application().with_assets(ComposedAssets).run(|cx: &mut App| {
         gpui_engram::theme::init(cx);
         gpui_engram::ui::init(cx);
         register_embedded_themes(cx);
