@@ -199,7 +199,17 @@ impl Render for Showcase {
                 .justify_between()
                 .px(Spacing::Large.pixels())
                 .py(Spacing::Medium.pixels())
-                .child(Headline::new("engram showcase").size(HeadlineSize::Medium))
+                .child(
+                    h_flex()
+                        .items_center()
+                        .gap(Spacing::Small.pixels())
+                        .child(
+                            Icon::from_path("brand/engram-mark.svg")
+                                .size(IconSize::Large)
+                                .color(Color::Default),
+                        )
+                        .child(Headline::new("engram showcase").size(HeadlineSize::Medium)),
+                )
                 .child(h_flex().gap(Spacing::Small.pixels()).children(
                     theme_names.into_iter().map(|name| {
                         let is_current = name == current_theme;
@@ -1324,6 +1334,7 @@ impl Render for Showcase {
         v_flex()
             .id("showcase-root")
             .size_full()
+            .font_family("Funnel Sans")
             .bg(colors.background)
             .overflow_y_scroll()
             .child(header)

@@ -1,6 +1,12 @@
-# engram
+<p align="center">
+  <img src="assets/engram-mark-light.svg" alt="engram" width="64" height="64">
+</p>
 
-A small GPUI-based component library - a Zed-flavored UI toolkit built on `gpui` from the (unreleased) Zed source.
+<h1 align="center">engram</h1>
+
+<p align="center">
+  A small GPUI-based component library - a Zed-flavored UI toolkit built on <code>gpui</code> from the (unreleased) Zed source.
+</p>
 
 <p align="center">
   <img src="assets/showcase-default-dark.jpg" alt="engram showcase (default dark theme)" width="100%">
