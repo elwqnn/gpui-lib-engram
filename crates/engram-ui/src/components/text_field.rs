@@ -48,6 +48,7 @@
 //! div().child(field.clone())
 //! ```
 
+use std::collections::VecDeque;
 use std::ops::Range;
 use std::rc::Rc;
 
@@ -172,11 +173,15 @@ pub struct TextField {
     goal_x: Option<Pixels>,
     on_change: Option<StringHandler>,
     on_submit: Option<StringHandler>,
-    undo_stack: Vec<UndoSnapshot>,
-    redo_stack: Vec<UndoSnapshot>,
+    undo_stack: VecDeque<UndoSnapshot>,
+    redo_stack: VecDeque<UndoSnapshot>,
     /// Kind of the edit currently being grouped. A caret movement, mouse
     /// click, or undo/redo clears it, starting a fresh group.
     pending_edit_kind: Option<EditKind>,
+    /// Cached result of [`Self::line_ranges`]. Invalidated whenever
+    /// `content` changes. For long multi-line buffers, recomputing on
+    /// every Home/End/Up/Down keystroke was a measurable cost.
+    line_ranges_cache: Option<Vec<Range<usize>>>,
 }
 
 impl TextField {
@@ -198,9 +203,10 @@ impl TextField {
             goal_x: None,
             on_change: None,
             on_submit: None,
-            undo_stack: Vec::new(),
-            redo_stack: Vec::new(),
+            undo_stack: VecDeque::new(),
+            redo_stack: VecDeque::new(),
             pending_edit_kind: None,
+            line_ranges_cache: None,
         }
     }
 
@@ -209,6 +215,7 @@ impl TextField {
         let content: SharedString = value.into().into();
         this.selected_range = content.len()..content.len();
         this.content = content;
+        this.line_ranges_cache = None;
         this
     }
 
@@ -267,6 +274,7 @@ impl TextField {
         self.undo_stack.clear();
         self.redo_stack.clear();
         self.pending_edit_kind = None;
+        self.line_ranges_cache = None;
         cx.notify();
     }
 
@@ -286,6 +294,7 @@ impl TextField {
         self.selection_reversed = snap.selection_reversed;
         self.marked_range = None;
         self.pending_edit_kind = None;
+        self.line_ranges_cache = None;
     }
 
     /// Called before a mutation. Pushes a snapshot of the *pre-edit*
@@ -302,9 +311,9 @@ impl TextField {
             return;
         }
         if self.undo_stack.len() >= UNDO_CAP {
-            self.undo_stack.remove(0);
+            self.undo_stack.pop_front();
         }
-        self.undo_stack.push(self.snapshot());
+        self.undo_stack.push_back(self.snapshot());
         self.redo_stack.clear();
         self.pending_edit_kind = Some(kind);
     }
@@ -392,18 +401,24 @@ impl TextField {
     /// Byte ranges of each logical line (i.e. the span between consecutive
     /// '\n' characters), always at least one entry. The range covers the
     /// line text only - the terminating '\n' is not included.
-    fn line_ranges(&self) -> Vec<Range<usize>> {
-        let content = &self.content;
-        let mut ranges = Vec::new();
-        let mut start = 0;
-        for (i, b) in content.as_bytes().iter().enumerate() {
-            if *b == b'\n' {
-                ranges.push(start..i);
-                start = i + 1;
+    ///
+    /// The result is cached until `content` next changes; the cache is
+    /// invalidated by every site that reassigns `self.content`.
+    fn line_ranges(&mut self) -> &[Range<usize>] {
+        if self.line_ranges_cache.is_none() {
+            let content = &self.content;
+            let mut ranges = Vec::new();
+            let mut start = 0;
+            for (i, b) in content.as_bytes().iter().enumerate() {
+                if *b == b'\n' {
+                    ranges.push(start..i);
+                    start = i + 1;
+                }
             }
+            ranges.push(start..content.len());
+            self.line_ranges_cache = Some(ranges);
         }
-        ranges.push(start..content.len());
-        ranges
+        self.line_ranges_cache.as_deref().unwrap()
     }
 
     fn line_index_for_offset(&self, offset: usize) -> usize {
@@ -421,9 +436,10 @@ impl TextField {
         idx
     }
 
-    fn line_range_for_offset(&self, offset: usize) -> Range<usize> {
+    fn line_range_for_offset(&mut self, offset: usize) -> Range<usize> {
+        let line_idx = self.line_index_for_offset(offset);
         let ranges = self.line_ranges();
-        let idx = self.line_index_for_offset(offset).min(ranges.len() - 1);
+        let idx = line_idx.min(ranges.len() - 1);
         ranges[idx].clone()
     }
 
@@ -443,7 +459,7 @@ impl TextField {
 
     /// Byte offset closest to `x` on line `line_idx`, using the last
     /// shaped layout. Clamps to the first/last line if out of range.
-    fn offset_for_line_x(&self, line_idx: usize, x: Pixels) -> usize {
+    fn offset_for_line_x(&mut self, line_idx: usize, x: Pixels) -> usize {
         if self.last_rows.is_empty() {
             let ranges = self.line_ranges();
             let idx = line_idx.min(ranges.len() - 1);
@@ -821,6 +837,7 @@ impl TextField {
         out.push_str(new_text);
         out.push_str(&self.content[range.end..]);
         self.content = out.into();
+        self.line_ranges_cache = None;
         let cursor = range.start + new_text.len();
         self.selected_range = cursor..cursor;
         self.marked_range.take();
@@ -828,22 +845,22 @@ impl TextField {
     }
 
     fn on_undo(&mut self, _: &Undo, _: &mut Window, cx: &mut Context<Self>) {
-        let Some(prev) = self.undo_stack.pop() else {
+        let Some(prev) = self.undo_stack.pop_back() else {
             return;
         };
         let current = self.snapshot();
         self.restore(prev);
-        self.redo_stack.push(current);
+        self.redo_stack.push_back(current);
         cx.notify();
     }
 
     fn on_redo(&mut self, _: &Redo, _: &mut Window, cx: &mut Context<Self>) {
-        let Some(next) = self.redo_stack.pop() else {
+        let Some(next) = self.redo_stack.pop_back() else {
             return;
         };
         let current = self.snapshot();
         self.restore(next);
-        self.undo_stack.push(current);
+        self.undo_stack.push_back(current);
         cx.notify();
     }
 }
@@ -943,6 +960,7 @@ impl EntityInputHandler for TextField {
         out.push_str(new_text);
         out.push_str(&self.content[range.end..]);
         self.content = out.into();
+        self.line_ranges_cache = None;
 
         self.marked_range = if new_text.is_empty() {
             None
