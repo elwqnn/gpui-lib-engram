@@ -6,10 +6,11 @@
 use std::f32::consts::PI;
 
 use gpui::{
-    App, Hsla, IntoElement, PathBuilder, Pixels, RenderOnce, Styled, Window, canvas, div, point,
-    prelude::*, px, relative,
+    App, Hsla, IntoElement, PathBuilder, PathStyle, Pixels, RenderOnce, StrokeOptions, Styled,
+    Window, canvas, div, point, prelude::*, px, relative,
 };
 use gpui_engram_theme::ActiveTheme;
+use lyon::tessellation::LineCap;
 
 // -------------------- ProgressBar --------------------
 
@@ -173,10 +174,15 @@ impl RenderOnce for CircularProgress {
                     window.paint_path(path, bg_color);
                 }
 
-                // Progress arc
+                // Progress arc - rounded caps so the leading/trailing ends
+                // of a partial arc look like SVG `stroke-linecap="round"`.
                 let progress = (value / max_value).clamp(0.0, 1.0);
                 if progress > 0.0 {
-                    let mut pb = PathBuilder::stroke(stroke_width);
+                    let stroke_opts = StrokeOptions::default()
+                        .with_line_width(f32::from(stroke_width))
+                        .with_start_cap(LineCap::Round)
+                        .with_end_cap(LineCap::Round);
+                    let mut pb = PathBuilder::default().with_style(PathStyle::Stroke(stroke_opts));
 
                     if progress >= 0.999 {
                         pb.move_to(point(center_x + radius, center_y));

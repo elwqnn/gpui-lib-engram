@@ -19,6 +19,7 @@ anyhow.workspace = true
 gpui-engram-theme.workspace = true
 gpui.workspace = true
 image.workspace = true
+lyon = "1.0"
 rust-embed.workspace = true
 smallvec.workspace = true
 strum.workspace = true
