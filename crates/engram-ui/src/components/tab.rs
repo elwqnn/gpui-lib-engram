@@ -136,9 +136,8 @@ impl RenderOnce for Tab {
                 )
             })
             .child(Label::new(self.label).color(label_color))
-            .when_some(self.on_close.clone(), |this, _close| {
+            .when_some(self.on_close.clone(), |this, close| {
                 let id = self.id.clone();
-                let close = self.on_close.clone().unwrap();
                 this.child(
                     div()
                         .id((id, "close"))

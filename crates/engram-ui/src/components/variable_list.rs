@@ -62,6 +62,15 @@ pub struct VariableListScrollHandle {
     drag_offset: Rc<Cell<Option<Pixels>>>,
 }
 
+impl Default for VariableListScrollHandle {
+    /// Empty list, [`ListAlignment::Top`], no overdraw. Use
+    /// [`Self::new`] or [`Self::with_config`] when you know the item
+    /// count up front.
+    fn default() -> Self {
+        Self::new(0)
+    }
+}
+
 impl VariableListScrollHandle {
     /// Build a new handle. Default alignment is [`ListAlignment::Top`];
     /// no overdraw.
