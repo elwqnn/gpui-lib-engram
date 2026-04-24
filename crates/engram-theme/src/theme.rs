@@ -8,6 +8,8 @@ mod colors;
 mod default;
 pub mod hot_reload;
 mod loader;
+#[macro_use]
+mod refineable;
 mod refinement;
 mod registry;
 mod system_appearance;
