@@ -21,6 +21,10 @@ pub use components::*;
 pub use styles::ElevationIndex;
 pub use traits::*;
 
+/// Sentinel global set by [`init`] so repeat calls are no-ops.
+struct EngramUiInitialized;
+impl gpui::Global for EngramUiInitialized {}
+
 /// Initialize engram-ui's process-global state.
 ///
 /// Registers the default keybindings for components that need them - today
@@ -28,10 +32,16 @@ pub use traits::*;
 /// submit) and [`components::Menu`] (arrow navigation, Enter / Escape). Call
 /// it once per `App`, after [`gpui_engram_theme::init`] and before rendering any
 /// components that depend on those bindings.
+///
+/// Idempotent: subsequent calls are no-ops.
 pub fn init(cx: &mut gpui::App) {
+    if cx.has_global::<EngramUiInitialized>() {
+        return;
+    }
     assets::load_bundled_fonts(cx);
     components::text_field::bind_text_field_keys(cx);
     components::menu::bind_menu_keys(cx);
+    cx.set_global(EngramUiInitialized);
 }
 
 /// Re-exports of the things you almost always want when building an engram UI.

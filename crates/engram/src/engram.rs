@@ -23,17 +23,18 @@
 //!     Application::new()
 //!         .with_assets(gpui_engram::ui::Assets)
 //!         .run(|cx| {
-//!             gpui_engram::theme::init(cx);
-//!             gpui_engram::ui::init(cx);
+//!             gpui_engram::init(cx);
 //!             // ... open your window and render a view
 //!         });
 //! }
 //! ```
 //!
-//! Both `init` calls are required:
-//! [`theme::init`](gpui_engram_theme::init) installs the default dark theme as a
-//! GPUI global; [`ui::init`](gpui_engram_ui::init) registers keybindings used by
-//! [`TextField`](gpui_engram_ui::TextField) and [`Menu`](gpui_engram_ui::Menu).
+//! [`init`] runs both [`theme::init`](gpui_engram_theme::init) (which
+//! installs the default dark theme as a GPUI global) and
+//! [`ui::init`](gpui_engram_ui::init) (which registers keybindings used by
+//! [`TextField`](gpui_engram_ui::TextField) and
+//! [`Menu`](gpui_engram_ui::Menu)). Both sub-inits are idempotent, so apps
+//! with a more bespoke startup can still call them individually.
 //!
 //! # Stability
 //!
@@ -45,6 +46,16 @@
 
 pub use gpui_engram_theme as theme;
 pub use gpui_engram_ui as ui;
+
+/// Initialize engram in one call.
+///
+/// Equivalent to calling [`theme::init`](gpui_engram_theme::init) followed
+/// by [`ui::init`](gpui_engram_ui::init). Both sub-inits are idempotent, so
+/// it is safe to combine this with manual sub-init calls.
+pub fn init(cx: &mut gpui::App) {
+    theme::init(cx);
+    ui::init(cx);
+}
 
 /// Everything you almost always want when building an engram UI.
 ///

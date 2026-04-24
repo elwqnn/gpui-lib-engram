@@ -89,7 +89,14 @@ pub fn set_theme(theme: Theme, cx: &mut App) {
 /// different default can call [`activate_theme`] (or [`set_theme`]) right
 /// after.
 ///
+/// Idempotent: if a [`ThemeRegistry`] and [`GlobalTheme`] are already
+/// installed, the call is a no-op. This lets
+/// [`gpui_engram::init`](../gpui_engram/fn.init.html) and a caller's own
+/// `theme::init` coexist without clobbering each other.
 pub fn init(cx: &mut App) {
+    if cx.has_global::<ThemeRegistry>() && cx.has_global::<GlobalTheme>() {
+        return;
+    }
     let mut registry = ThemeRegistry::new();
     registry.insert(default_dark());
     registry.insert(default_light());
