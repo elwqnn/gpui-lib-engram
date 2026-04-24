@@ -16,6 +16,7 @@ path = "src/theme.rs"
 
 [dependencies]
 anyhow.workspace = true
+async-channel.workspace = true
 gpui.workspace = true
 notify.workspace = true
 serde.workspace = true

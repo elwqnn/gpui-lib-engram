@@ -9,15 +9,14 @@
 //! new colors.
 //!
 //! The actual filesystem notifications are delivered by `notify` on a
-//! background thread. A GPUI foreground task polls the events and invokes
-//! the update logic on the main thread, so reloads are always observed
-//! with a live `App`.
+//! background thread. They are forwarded over an async channel to a GPUI
+//! foreground task that `.await`s them and runs the update on the main
+//! thread, so reloads are always observed with a live `App`.
 
 use std::path::{Path, PathBuf};
-use std::sync::mpsc::{Receiver, channel};
-use std::time::Duration;
 
 use anyhow::Result;
+use async_channel::{Receiver, unbounded};
 use gpui::{App, Task};
 use notify::{Event, EventKind, RecommendedWatcher, RecursiveMode, Watcher};
 
@@ -26,17 +25,26 @@ use crate::{ActiveTheme, Theme};
 
 /// Handle returned by [`watch_themes_dir`]. Keep it alive for as long as
 /// hot reload should run - dropping it tears down the watcher and the
-/// polling task.
+/// reload task.
+#[must_use = "dropping ThemeWatcher immediately stops hot reload; bind it for as long as you want reloads to run"]
 pub struct ThemeWatcher {
     _watcher: RecommendedWatcher,
-    _poll_task: Task<()>,
+    _reload_task: Task<()>,
 }
 
 /// Start watching `dir` for JSON theme changes. Any pre-existing `.json`
 /// files are loaded immediately; new files are picked up as they appear.
 ///
-/// Errors if `dir` does not exist, is not a directory, or if the watcher
-/// cannot be installed (e.g. on platforms without an inotify backend).
+/// The returned [`ThemeWatcher`] must be held alive for as long as hot
+/// reload should run - dropping it tears down the underlying `notify`
+/// watcher and the GPUI reload task.
+///
+/// # Errors
+///
+/// Returns an error if `dir` does not exist, is not a directory, or if
+/// the watcher cannot be installed (e.g. on platforms without an inotify
+/// backend or equivalent).
+#[must_use = "the returned ThemeWatcher must be kept alive; dropping it immediately stops hot reload"]
 pub fn watch_themes_dir(dir: impl AsRef<Path>, cx: &mut App) -> Result<ThemeWatcher> {
     let dir = dir.as_ref().to_path_buf();
     if !dir.is_dir() {
@@ -48,26 +56,33 @@ pub fn watch_themes_dir(dir: impl AsRef<Path>, cx: &mut App) -> Result<ThemeWatc
     load_all_themes(&dir, cx);
 
     // notify fires events from a background thread - forward them onto an
-    // mpsc channel that the foreground poll task drains.
-    let (tx, rx) = channel::<notify::Result<Event>>();
+    // async channel that the foreground reload task awaits.
+    let (tx, rx) = unbounded::<notify::Result<Event>>();
     let mut watcher = notify::recommended_watcher(move |res| {
-        let _ = tx.send(res);
+        let _ = tx.send_blocking(res);
     })?;
     watcher.watch(&dir, RecursiveMode::NonRecursive)?;
 
-    let poll_task = spawn_poll_task(dir, rx, cx);
+    let reload_task = spawn_reload_task(dir, rx, cx);
 
     Ok(ThemeWatcher {
         _watcher: watcher,
-        _poll_task: poll_task,
+        _reload_task: reload_task,
     })
 }
 
-fn spawn_poll_task(dir: PathBuf, rx: Receiver<notify::Result<Event>>, cx: &mut App) -> Task<()> {
+fn spawn_reload_task(
+    dir: PathBuf,
+    rx: Receiver<notify::Result<Event>>,
+    cx: &mut App,
+) -> Task<()> {
     cx.spawn(async move |cx| {
-        loop {
-            // Drain every event that's queued up since the last tick.
-            let mut touched = false;
+        // Block on the next event; once one arrives, coalesce any siblings
+        // that are already queued before doing a single reload pass. This
+        // avoids thrashing the registry when an editor emits a burst of
+        // Create/Modify events for the same save.
+        while let Ok(first) = rx.recv().await {
+            let mut touched = matches!(first, Ok(ref ev) if is_relevant(ev));
             while let Ok(event) = rx.try_recv() {
                 if let Ok(ev) = event
                     && is_relevant(&ev)
@@ -80,10 +95,6 @@ fn spawn_poll_task(dir: PathBuf, rx: Receiver<notify::Result<Event>>, cx: &mut A
                 #[allow(clippy::let_unit_value, unused_must_use)]
                 let _ = cx.update(|cx| load_all_themes(&dir, cx));
             }
-
-            cx.background_executor()
-                .timer(Duration::from_millis(150))
-                .await;
         }
     })
 }
